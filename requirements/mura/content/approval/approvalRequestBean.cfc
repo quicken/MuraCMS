@@ -1,13 +1,9 @@
-component persistent="true" extends="mura.bean.beanORM" table="tapprovalrequests" {
+component persistent="true" extends="mura.bean.bean" {
 
-	property name="requestID" ormtype="string" length="35" fieldtype="id";
-	property name="chainID" ormtype="string" length="35";
-    property name="contentHistID" ormtype="string" length="35";
-    property name="siteID" ormtype="string" length="25" default="" required=true;
-
-    property name="actions" fieldtype="one-to-many" cfc="approvalActionBean"
-		fkcolumn="requestID" type="array" singularname="action" orderby="created asc"
-		inverse="true" cascade="delete";
+	property name="requestID" type="string" length="35";
+	property name="chainID" type="string" length="35";
+    property name="contentHistID" type="string" length="35";
+    property name="siteID" type="string" length="25" default="" required=true;
 
     function init() {
     	super.init();

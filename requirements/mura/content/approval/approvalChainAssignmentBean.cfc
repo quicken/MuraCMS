@@ -1,11 +1,11 @@
-component persistent="true" extends="mura.bean.beanORM" table="tapprovalassignments" {
+component persistent="true" extends="mura.bean.bean" {
 
-	property name="assignmentID" ormtype="string" length="35" fieldtype="id" generator="assigned";
-	property name="chainID" ormtype="string" length="35";
-    property name="groupID" ormtype="string" length="35";
-    property name="siteID" ormtype="string" length="25" default="" required=true;
-    property name="orderno" ormtype="int";
-    property name="created" ormtype="timestamp";
+	property name="assignmentID" type="string" length="35";
+	property name="chainID" type="string" length="35";
+    property name="groupID" type="string" length="35";
+    property name="siteID" type="string" length="25" default="" required=true;
+    property name="orderno" type="int";
+    property name="created" type="timestamp";
 
     function init() {
     	super.init();

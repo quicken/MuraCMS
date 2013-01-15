@@ -1,0 +1,56 @@
+<cfscript>
+	dbUtility.setTable("tapprovalchains")
+	.addColumn(column="chainID",dataType="char",length="35",nullable=false,default='')
+	.addColumn(column="siteID",dataType="varchar",length="25")
+	.addColumn(column="name",dataType="varchar",length="50")
+	.addColumn(column="description",dataType="longtext")
+	.addPrimaryKey('chainID')
+	.addIndex('siteID');
+
+	dbUtility.setTable("tapprovalrequests")
+	.addColumn(column="requestID",dataType="char",length="35",nullable=false,default='')
+	.addColumn(column="chainID",dataType="char",length="35")
+	.addColumn(column="userID",dataType="char",length="35")
+	.addColumn(column="siteID",dataType="varchar",length="25")
+	.addColumn(column="contentHistID",dataType="char",length="35")
+	.addColumn(column="status",dataType="varchar",length="50")
+	.addColumn(column="created",dataType="datetime")
+	.addColumn(column="lastUpdateBy",dataType="varchar",length="50")
+	.addColumn(column="lastUpdateBy",dataType="datetime")
+	.addColumn(column="lastUpdateByID",dataType="char",length="35")
+	.addPrimaryKey('requestID')
+	.addIndex('chainID')
+	.addIndex('userID')
+	.addIndex('siteID')
+	.addIndex('contentHistID');
+
+	dbUtility.setTable("tapprovalassignments")
+	.addColumn(column="assignmentID",dataType="char",length="35",nullable=false,default='')
+	.addColumn(column="chainID",dataType="char",length="35")
+	.addColumn(column="groupID",dataType="char",length="35")
+	.addColumn(column="siteID",dataType="varchar",length="25")
+	.addPrimaryKey('assignmentID')
+	.addIndex('chainID')
+	.addIndex('groupID')
+	.addIndex('siteID');
+
+	dbUtility.setTable("tapprovalactions")
+	.addColumn(column="actionID",dataType="char",length="35",nullable=false,default='')
+	.addColumn(column="parentID",dataType="char",length="35")
+	.addColumn(column="requestID",dataType="char",length="35")
+	.addColumn(column="chainID",dataType="char",length="35")
+	.addColumn(column="userID",dataType="char",length="35")
+	.addColumn(column="grouID",dataType="char",length="35")
+	.addColumn(column="siteID",dataType="varchar",length="25")
+	.addColumn(column="actionType",dataType="varchar",length="50")
+	.addColumn(column="created",dataType="datetime")
+	.addColumn(column="comments",dataType="longtext")
+	.addPrimaryKey('actionID')
+	.addIndex('parentID')
+	.addIndex('requestID')
+	.addIndex('chainID')
+	.addIndex('userID')
+	.addIndex('groupID')
+	.addIndex('siteID');
+
+</cfscript>

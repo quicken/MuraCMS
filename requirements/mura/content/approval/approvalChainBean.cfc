@@ -1,22 +1,13 @@
-component persistent="true" extends="mura.bean.beanORM" table="tapprovalchains" {
+component persistent="true" extends="mura.bean.bean" {
 
-	property name="chainID" ormtype="string" length="35" fieldtype="id" generator="assigned";
-    property name="siteID" ormtype="string" length="25" default="" required=true;
-    property name="name" ormtype="string" length="100" required=true;
-    property name="description" ormtype="text";
-    property name="created" ormtype="timestamp";
-    property name="lastupdate" ormtype="timestamp";
-    property name="lastupdateby" ormtype="string" length="50";
-    property name="lastupdatebyid" ormtype="string" length="35";
-
-    property name="assignments" fieldtype="one-to-many" cfc="approvalChainAssignmentBean"
-		fkcolumn="chainID" type="array" singularname="assignment" orderby="orderno asc"
-		inverse="true" cascade="delete";
-
-	property name="requests" fieldtype="one-to-many" cfc="approvalRequestBean"
-		fkcolumn="chainID" type="array" singularname="request" orderby="created asc"
-		inverse="true" cascade="delete";
-
+	property name="chainID" type="string" length="35" fieldtype="id";
+    property name="siteID" type="string" length="25" default="" required=true;
+    property name="name" type="string" length="100" required=true;
+    property name="description" type="text";
+    property name="created" type="timestamp";
+    property name="lastupdate" type="timestamp";
+    property name="lastupdateby" type="string" length="50";
+    property name="lastupdatebyid" type="string" length="35";
     function init() {
     	super.init();
     	variables.chainID=createUUID();

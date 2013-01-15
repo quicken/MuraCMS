@@ -1,4 +1,4 @@
-component persistent="true" extends="mura.bean.beanORM" table="tapprovalactions" {
+component persistent="true" extends="mura.bean.bean" {
 
 	property name="actiontID" ormtype="string" length="35" fieldtype="id" generator="assigned";
     property name="parentID" ormtype="string" length="35";
