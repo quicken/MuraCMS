@@ -48,7 +48,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfproperty name="errors" type="struct" persistent="false" />
 <cfproperty name="siteID" type="String" persistent="false" default="" ormType="varchar" length="25"required="true" />
-<cfproperty name="fromMuraCache" type="boolean" default="false" />
+<cfproperty name="fromMuraCache" type="boolean" default="false" persistent="false"/>
 
 <cffunction name="init" output="false">
 	<cfset super.init(argumentCollection=arguments)>

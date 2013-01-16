@@ -546,7 +546,7 @@
 	<cfswitch expression="#variables.configBean.getDbType()#">
 		<cfcase value="mssql">
 			<cfswitch expression="#arguments.datatype#">
-				<cfcase value="varchar">
+				<cfcase value="varchar,string">
 					<cfreturn "nvarchar(#arguments.length#)">
 				</cfcase>
 				<cfcase value="char">
@@ -558,7 +558,7 @@
 				<cfcase value="tinyint">
 					<cfreturn "tinyint">
 				</cfcase>
-				<cfcase value="date,datetime">
+				<cfcase value="date,datetime,timestamp">
 					<cfreturn "datetime">
 				</cfcase>
 				<cfcase value="text,longtext">
@@ -605,7 +605,7 @@
 		</cfcase>
 		<cfcase value="mysql">
 			<cfswitch expression="#arguments.datatype#">
-				<cfcase value="varchar">
+				<cfcase value="varchar,string">
 					<cfreturn "varchar(#arguments.length#)">
 				</cfcase>
 				<cfcase value="char">
@@ -617,7 +617,7 @@
 				<cfcase value="tinyint">
 					<cfreturn "tinyint">
 				</cfcase>
-				<cfcase value="date,datetime">
+				<cfcase value="date,datetime,timestamp">
 					<cfreturn "datetime">
 				</cfcase>
 				<cfcase value="text">
@@ -636,7 +636,7 @@
 		</cfcase>
 		<cfcase value="nuodb">
 			<cfswitch expression="#arguments.datatype#">
-				<cfcase value="varchar">
+				<cfcase value="varchar,string">
 					<cfreturn "varchar(#arguments.length#)">
 				</cfcase>
 				<cfcase value="char">
@@ -648,7 +648,7 @@
 				<cfcase value="tinyint">
 					<cfreturn "smallint">
 				</cfcase>
-				<cfcase value="date,datetime">
+				<cfcase value="date,datetime,timestamp">
 					<cfreturn "timestamp">
 				</cfcase>
 				<cfcase value="text">
@@ -667,7 +667,7 @@
 		</cfcase>
 		<cfcase value="oracle">
 			<cfswitch expression="#arguments.datatype#">
-				<cfcase value="varchar">
+				<cfcase value="varchar,string">
 					<cfreturn "varchar2(#arguments.length#)">
 				</cfcase>
 				<cfcase value="char">
@@ -679,7 +679,7 @@
 				<cfcase value="tinyint">
 					<cfreturn "number(3,0)">
 				</cfcase>
-				<cfcase value="date,datetime">
+				<cfcase value="date,datetime,timestamp">
 					<cfreturn "date">
 				</cfcase>
 				<cfcase value="text,longtext">
@@ -1254,6 +1254,12 @@ function _parseInt(String){
 			</cfcase>
 		</cfswitch>
 
+</cffunction>
+
+<cffunction name="buildSchemaFromProperties" output="false">
+	<cfargument name="obj">
+	<cfset var properties=getMetaData(arguments.obj)>
+	<cfdump var="#properties#" abort="true">
 </cffunction>
 
 </cfcomponent>

@@ -1,6 +1,6 @@
-component persistent="true" extends="mura.bean.bean" {
+component extends="mura.bean.beanMuraORM"  table="tapprovalassignments" {
 
-	property name="assignmentID" type="string" length="35";
+	property name="assignmentID" type="string" length="35" fieldtype="id";
 	property name="chainID" type="string" length="35";
     property name="groupID" type="string" length="35";
     property name="siteID" type="string" length="25" default="" required=true;
@@ -9,7 +9,7 @@ component persistent="true" extends="mura.bean.bean" {
 
     function init() {
     	super.init();
-    	variables.assignmentID=createUUID();
+    	variables.instance.assignmentID=createUUID();
     }
 
 

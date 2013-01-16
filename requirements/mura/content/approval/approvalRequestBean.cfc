@@ -1,13 +1,13 @@
-component persistent="true" extends="mura.bean.bean" {
+component extends="mura.bean.bean"  table="tapprovalrequests"{
 
-	property name="requestID" type="string" length="35";
-	property name="chainID" type="string" length="35";
-    property name="contentHistID" type="string" length="35";
-    property name="siteID" type="string" length="25" default="" required=true;
+	property name="requestID" ormtype="char" length="35" fieldtype="id";
+	property name="chainID" ormtype="char" length="35";
+    property name="contentHistID" ormtype="char" length="35";
+    property name="siteID" ormtype="vachar" length="25" default="" required=true;
 
     function init() {
     	super.init();
-    	variables.requestID=createUUID();
+    	variables.instance.requestID=createUUID();
     }
 
 }
