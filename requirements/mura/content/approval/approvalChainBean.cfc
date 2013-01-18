@@ -9,11 +9,11 @@ component extends="mura.bean.beanMuraORM"  table="tapprovalchains"{
     property name="lastupdateby" type="string" length=50;
     property name="lastupdatebyid" type="string" dataType="char" length=35;
 
-    property name="assignments" fieldtype="one-to-many" cfc="approvalChainAssignmentBean"
+    property name="assignments" singularname="assignment" fieldtype="one-to-many" cfc="approvalChainAssignmentBean"
         fkcolumn="chainID" orderby="orderno asc"
         cascade="delete";
 
-    property name="requests" fieldtype="one-to-many" cfc="approvalRequestBean"
+    property name="requests" singularname="assignment" fieldtype="one-to-many" cfc="approvalRequestBean"
         fkcolumn="chainID" orderby="created asc"
         cascade="delete";
     
