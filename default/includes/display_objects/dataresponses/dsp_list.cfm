@@ -78,7 +78,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cftry><cfset fValue=variables.info['#variables.f#']><cfcatch><cfset variables.fValue=""></cfcatch></cftry>
 <td><a href="?fuseaction=detail&responseid=#variables.rsdata.responseid#">#HTMLEditFormat(variables.fvalue)#</a></td>
 </cfloop>
-
 </tr>
 </cfoutput>
 </table>
@@ -98,6 +97,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</div>
 </cfif>
 <cfelse>
-<em>There is currently no variables.data collected</em>
+<em>There is currently no data collected</em>
 </cfif>
 </div>
