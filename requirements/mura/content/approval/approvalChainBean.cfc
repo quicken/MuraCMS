@@ -17,6 +17,4 @@ component extends="mura.bean.beanMuraORM"  table="tapprovalchains"{
         fkcolumn="chainID" orderby="created asc"
         cascade="delete";
     
-
-
 }
