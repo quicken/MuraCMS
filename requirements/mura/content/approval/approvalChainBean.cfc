@@ -10,16 +10,13 @@ component extends="mura.bean.beanMuraORM"  table="tapprovalchains"{
     property name="lastupdatebyid" type="string" dataType="char" length=35;
 
     property name="assignments" fieldtype="one-to-many" cfc="approvalChainAssignmentBean"
-        fkcolumn="chainID" type="array" singularname="assignment" orderby="orderno asc"
-        inverse="true" cascade="delete";
+        fkcolumn="chainID" orderby="orderno asc"
+        cascade="delete";
 
     property name="requests" fieldtype="one-to-many" cfc="approvalRequestBean"
-        fkcolumn="chainID" type="array" singularname="request" orderby="created asc"
-        inverse="true" cascade="delete";
+        fkcolumn="chainID" orderby="created asc"
+        cascade="delete";
     
-    function init() {
-    	super.init();
-    	//variables.instance.chainID=createUUID();
-    }
+
 
 }
