@@ -1,4 +1,4 @@
-component extends="mura.bean.bean" table="tapprovalactions" {
+component extends="mura.bean.beanORM" table="tapprovalactions" {
 
 	property name="actiontID" ormtype="char" length="35" fieldtype="id";
     property name="parentID" ormtype="char" length="35";
@@ -11,14 +11,16 @@ component extends="mura.bean.bean" table="tapprovalactions" {
     property name="created" ormtype="timestamp";
     property name="comments" ormtype="text";
 
-    function init() {
-    	super.init();
-    	variables.actiontID=createUUID();
-
-    	if(not isDate(variables.created)){
-    		variables.instance.created=now();
-    	}
-  
-    }
+    property name="approvalChain" fieldtype="many-to-one" 
+        cfc="approvalChainBean" column="chainID" fkcolumn="chainID";
+    
+    property name="request" fieldtype="many-to-one" 
+        cfc="approvalRequestBean" column="requestID" fkcolumn="requestID";
+    
+    property name="parent" fieldtype="many-to-one" 
+        cfc="approvalActionBean" column="parentID" fkcolumn="actionID";
+    
+    property name="actions" singularname="action" fieldtype="one-to-many" 
+        cfc="approvalActionBean" column="actionID" fkcolumn="parentID";
 
 }
