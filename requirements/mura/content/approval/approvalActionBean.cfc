@@ -19,8 +19,15 @@ component extends="mura.bean.beanORM" table="tapprovalactions" {
     
     property name="parent" fieldtype="many-to-one" 
         cfc="approvalActionBean" column="parentID" fkcolumn="actionID";
-    
-    property name="actions" singularname="action" fieldtype="one-to-many" 
+
+    property name="kids" singularname='kid' fieldtype="one-to-many" 
         cfc="approvalActionBean" column="actionID" fkcolumn="parentID";
+
+    property name="group" fieldtype="many-to-one" cfc="user" 
+        column="groupID" fkcolumn="userID";
+
+    property name="user" fieldtype="many-to-one" cfc="user" 
+        column="userID" fkcolumn="userID";
+    
 
 }

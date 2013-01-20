@@ -7,8 +7,11 @@ component extends="mura.bean.beanORM"  table="tapprovalassignments" {
     property name="orderno" type="int" default="1";
     property name="created" type="timestamp";
 
-    property name="approvalChain" fieldtype="many-to-one" cfc="approvalChainBean";
-    property name="group" fieldtype="many-to-one" cfc="user" column="groupID" fkcolumn="userID";
+    property name="approvalChain" fieldtype="many-to-one" cfc="approvalChainBean" 
+    	column="chainID" fkcolumn="chainID";
+    
+    property name="group" fieldtype="many-to-one" cfc="user" 
+    	column="groupID" fkcolumn="userID";
 
 
 }
