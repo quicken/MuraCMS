@@ -1,6 +1,6 @@
 component extends="mura.bean.beanORM"  table="tapprovalrequests"{
 
-	property name="requestID" type="string" ormtype="char" length="35" fieldtype="id";
+	property name="requestID" fieldtype="id";
 	property name="chainID" type="string" ormtype="char" length="35" fieldtype="index";
     property name="contentHistID" type="string" ormtype="char" length="35" fieldtype="index";
     property name="siteID" type="string" ormtype="varchar" length="25" fieldtype="index";

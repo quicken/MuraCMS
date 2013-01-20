@@ -1,6 +1,6 @@
 component extends="mura.bean.beanORM"  table="tapprovalchains"{
 
-	property name="chainID" type="string" ormtype="char" length=35 nullable=false default="" fieldtype="id";
+	property name="chainID" fieldtype="id";
     property name="siteID" type="string" length=25 fieldtype="index";
     property name="name" type="string" length="100";
     property name="description" type="text";

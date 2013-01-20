@@ -1,6 +1,6 @@
 component extends="mura.bean.beanORM" table="tapprovalactions" {
 
-	property name="actiontID" ormtype="char" length="35" fieldtype="id";
+	property name="actiontID" fieldtype="id";
     property name="parentID" ormtype="char" length="35";
     property name="requestID" ormtype="char" length="35";
     property name="chainID" ormtype="char" length="35";
