@@ -12,7 +12,7 @@ component extends="mura.bean.beanORM"  table="tapprovalchains"{
     property name="assignments" singularname="assignment" fieldtype="one-to-many" 
         cfc="approvalChainAssignmentBean" orderby="orderno asc" cascade="delete";
 
-    property name="requests" singularname="assignment" fieldtype="one-to-many" 
+    property name="requests" singularname="request" fieldtype="one-to-many" 
         cfc="approvalRequestBean" orderby="created asc" cascade="delete";
     
 }
