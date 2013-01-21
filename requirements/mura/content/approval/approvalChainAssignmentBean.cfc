@@ -3,7 +3,7 @@ component extends="mura.bean.beanORM"  table="tapprovalassignments" {
 	property name="assignmentID" fieldtype="id";
 	property name="chainID" type="string" ormtype="char" length="35" fieldtype="index";
     property name="groupID" type="string" ormtype="char" length="35" fieldtype="index";
-    property name="siteID" type="string" length="25";
+    property name="siteID" type="string" length="25" fieldtype="index";
     property name="orderno" type="int" default="1";
     property name="created" type="timestamp";
 
