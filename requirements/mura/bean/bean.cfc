@@ -47,6 +47,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfcomponent extends="mura.cfobject" output="false">
 
 <cfproperty name="errors" type="struct" persistent="false" />
+<cfproperty name="isNew" type="numeric" persistent="false" default="0"/>
 <cfproperty name="siteID" type="String" persistent="false" default="" ormType="varchar" length="25"required="true" />
 <cfproperty name="fromMuraCache" type="boolean" default="false" persistent="false"/>
 
@@ -54,6 +55,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset super.init(argumentCollection=arguments)>
 	<cfset variables.instance=structNew()>
 	<cfset variables.instance.siteID=""/>
+	<cfset variables.instance.isNew=1/>
 	<cfset variables.instance.errors=structNew()/>
 	<cfset variables.instance.fromMuraCache = false />
 	<cfreturn this>
@@ -119,7 +121,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfloop list="#arguments.data.columnlist#" index="prop">
 				<cfset setValue(prop,arguments.data[prop][1]) />
 			</cfloop>
-			
+			<cfset variables.instance.isNew=0>
 		<cfelseif isStruct(arguments.data)>
 			<cfloop collection="#arguments.data#" item="prop">
 				<cfset setValue(prop,arguments.data[prop]) />

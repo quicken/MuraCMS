@@ -70,7 +70,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var bean="">
 		
 	<cfif isQuery(variables.records)>
-		<cfreturn getBean(variables.beanClass).set(queryRowToStruct(variables.records,arguments.recordIndex))>
+		<cfreturn getBean(variables.beanClass).set(queryRowToStruct(variables.records,arguments.recordIndex)).setIsNew(0)>
 	<cfelseif isArray(variables.records)>
 		<cfset bean=variables.records[arguments.recordIndex]>
 		<cfif isObject(bean)>
