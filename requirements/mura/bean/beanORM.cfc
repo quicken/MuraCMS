@@ -413,6 +413,7 @@ component extends="mura.bean.bean" {
 		}
 		
 		pluginManager.announceEvent('onAfter#variables.beanClass#Save',event);
+		pluginManager.announceEvent('on#variables.beanClass#Save',event);
 
 		return this;
 	}
