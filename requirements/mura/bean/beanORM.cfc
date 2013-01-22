@@ -27,6 +27,20 @@ component extends="mura.bean.bean" {
 				variables.instance[prop.name]=now();
 			} else if(structKeyExists(prop,"default")){
 				variables.instance[prop.name]=prop.default;
+			} 
+
+			if (prop.name eq 'lastupdateby'){
+				if(isDefined("session.mura") and session.mura.isLoggedIn){
+					variables.instance.LastUpdateBy = left(session.mura.fname & " " & session.mura.lname,50);
+				} else {
+					variables.instance.LastUpdateBy='';
+				}
+			} else if (prop.name eq 'lastupdatebyid'){
+				if(isDefined("session.mura") and session.mura.isLoggedIn){
+					variables.instance.LastUpdateById = session.mura.userID;
+				} else {
+					variables.instance.LastUpdateById='';
+				}
 			}
 		}
 	}
