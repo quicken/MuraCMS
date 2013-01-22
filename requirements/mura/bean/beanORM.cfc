@@ -37,7 +37,18 @@ component extends="mura.bean.bean" {
 		if(len(arguments.MissingMethodName)){
 
 			if(structKeyExists(variables.synthedFunctions,arguments.MissingMethodName)){
-				return evaluate(variables.synthedFunctions[arguments.MissingMethodName]);
+				try{
+					if(structKeyExists(variables.synthedFunctions[arguments.MissingMethodName],'args')){
+						if(not structKeyExists(arguments,'MissingMethodArguments')){
+							arguments.MissingMethodArguments={};
+						}
+						structAppend(arguments.MissingMethodArguments,synthArgs(variables.synthedFunctions[arguments.MissingMethodName].args),true);
+					}
+					return evaluate(variables.synthedFunctions[arguments.MissingMethodName].exp);
+				} catch(any err){					
+					writeDump(var=variables.synthedFunctions[arguments.MissingMethodName]);
+					writeDump(var=err,abort=true);
+				}
 			} 
 
 			if(listFindNoCase("set,get",prefix) and len(arguments.MissingMethodName) gt 3){
@@ -196,11 +207,12 @@ component extends="mura.bean.bean" {
 			       	 		}
 
 			       	 		if(prop.fieldtype eq 'one-to-many'){
-				       	 		variables.synthedFunctions['get#prop.name#Iterator']='getBean("#prop.cfc#").loadBy(argumentCollection={"#prop.fkcolumn#"=getValue(translatePropKey("#prop.column#")),returnFormat="iterator"})';
-				       	 		variables.synthedFunctions['get#prop.name#Query']='getBean("#prop.cfc#").loadBy(argumentCollection={"#prop.fkcolumn#"=getValue(translatePropKey("#prop.column#")),returnFormat="query"})';
-				       	 		variables.synthedFunctions['has#prop.name#']='getBean("#prop.cfc#").loadBy(argumentCollection={"#prop.fkcolumn#"=getValue(translatePropKey("#prop.column#")),returnFormat="query"}).recordcount';
-				       	 		variables.synthedFunctions['add#prop.name#']='_addObject(arguments.MissingMethodArguments[1])';
-				       	 		variables.synthedFunctions['remove#prop.name#']='_removeObject(arguments.MissingMethodArguments[1])';
+			       	 			//getBean("#prop.cfc#").loadBy(argumentCollection=structAppend(arguments.MissingMethodArguments,synthArgs(variables.synthedFunctions["has#prop.name#"].args),false)).recordcount
+				       	 		variables.synthedFunctions['get#prop.name#Iterator']={exp='getBean("#prop.cfc#").loadBy(argumentCollection=arguments.MissingMethodArguments)',args={fkcolumn="#prop.fkcolumn#",column="#prop.column#",returnFormat="iterator"}};
+				       	 		variables.synthedFunctions['get#prop.name#Query']={exp='getBean("#prop.cfc#").loadBy(argumentCollection=arguments.MissingMethodArguments)',args={fkcolumn="#prop.fkcolumn#",column="#prop.column#",returnFormat="query"}};
+				       	 		variables.synthedFunctions['has#prop.name#']={exp='getBean("#prop.cfc#").loadBy(argumentCollection=arguments.MissingMethodArguments).recordcount',args={fkcolumn="#prop.fkcolumn#",column="#prop.column#",returnFormat="query"}};
+				       	 		variables.synthedFunctions['add#prop.name#']={exp='addObject(arguments.MissingMethodArguments[1])'};
+				       	 		variables.synthedFunctions['remove#prop.name#']={exp='removeObject(arguments.MissingMethodArguments[1])'};
 
 					       	 	if(structKeyExists(prop,"singularname")){
 					       	 		variables.synthedFunctions['get#prop.singularname#Iterator']=variables.synthedFunctions['get#prop.name#Iterator'];
@@ -210,7 +222,7 @@ component extends="mura.bean.bean" {
 					       	 		variables.synthedFunctions['remove#prop.singularname#']=variables.synthedFunctions['remove#prop.name#'];
 					       	 	}
 			       	 		} else if (prop.fieldtype eq 'many-to-one'){
-			       	 			variables.synthedFunctions['get#prop.name#']='getBean("#prop.cfc#").loadBy(argumentCollection={"#prop.fkcolumn#"=getValue(translatePropKey("#prop.column#"))})';
+			       	 			variables.synthedFunctions['get#prop.name#']={exp='getBean("#prop.cfc#").loadBy(argumentCollection=arguments.MissingMethodArguments)',args={fkcolumn="#prop.fkcolumn#",column="#prop.column#",returnFormat="this"}};
 			       	 		}
 
 			       	 		if(not structKeyExists(prop,'cascade')){
@@ -239,14 +251,19 @@ component extends="mura.bean.bean" {
 		return variables.properties;
 	}
 
-	private function _addObject(obj){
+	private function synthArgs(args){
+		return {"#args.fkcolumn#"=getValue(translatePropKey(args.column)),returnFormat=args.returnFormat};
+
+	}
+
+	private function addObject(obj){
 		//writeDump(var='arguments.obj.set#getPrimaryKey()#(getValue("#getPrimaryKey()#"))',abort=true);
 		evaluate('arguments.obj.set#getPrimaryKey()#(getValue("#getPrimaryKey()#"))');
 		arrayAppend(variables.addObjects,arguments.obj);
 		return this;
 	}
 
-	private function _removeObject(obj){
+	private function removeObject(obj){
 		//writeDump(var='arguments.obj.set#getPrimaryKey()#(getValue("#getPrimaryKey()#"))',abort=true);
 		arrayAppend(variables.removeObjects,arguments.obj);
 		return this;
