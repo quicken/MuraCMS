@@ -86,6 +86,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfif>
 				<cfset application.setupComplete = false />
 			</cfif>	
+		<cfelse>
+			<cfset application.setupComplete = true />
 		</cfif>
 	<cfelse>		
 		<cfset application.setupComplete=true>
