@@ -171,4 +171,8 @@
 	<cfset variables.changesetManager.delete(getChangesetID()) />
 </cffunction>
 
+<cffunction name="getPrimaryKey" output="false">
+	<cfreturn "changesetID">
+</cffunction>
+
 </cfcomponent>

@@ -521,5 +521,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfloop>
 	<cfreturn returnList>
 </cffunction>
+
+<cffunction name="getPrimaryKey" output="false">
+	<cfreturn "feedID">
+</cffunction>
 	
 </cfcomponent>

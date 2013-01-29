@@ -138,4 +138,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="delete" output="false">
 <cfset variables.emailManager.delete(getEmailID())>
 </cffunction>
+
+<cffunction name="getPrimaryKey" output="false">
+	<cfreturn "emailID">
+</cffunction>
 </cfcomponent>

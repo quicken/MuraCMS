@@ -1143,4 +1143,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfreturn getContentHistID()>
 </cffunction>
 
+<cffunction name="getPrimaryKey" output="false">
+	<cfreturn "contentHistID">
+</cffunction>
+
 </cfcomponent>

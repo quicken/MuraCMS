@@ -251,13 +251,18 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfreturn returnStr>
 </cffunction> 
 
-	<cffunction name="hasParent" output="false">
+<cffunction name="hasParent" output="false">
 	<cfreturn listLen(variables.instance.path) gt 1>
-	</cffunction>
+</cffunction>
 	
-	<cffunction name="clone" output="false">
+<cffunction name="clone" output="false">
 	<cfreturn getBean("category").setAllValues(structCopy(getAllValues()))>
-	</cffunction>
+</cffunction>
+
+<cffunction name="getPrimaryKey" output="false">
+	<cfreturn "categoryID">
+</cffunction>
+
 </cfcomponent>
 
 

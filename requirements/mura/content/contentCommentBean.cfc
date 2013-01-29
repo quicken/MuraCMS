@@ -547,4 +547,9 @@ To Unsubscribe Click Here:
 <cffunction name="clone" output="false">
 	<cfreturn getBean("comment").setAllValues(structCopy(getAllValues()))>
 </cffunction>
+
+<cffunction name="getPrimaryKey" output="false">
+	<cfreturn "commentID">
+</cffunction>
+
 </cfcomponent>
