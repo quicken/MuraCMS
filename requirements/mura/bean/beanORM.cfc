@@ -82,7 +82,10 @@ component extends="mura.bean.bean" {
 
 					return evaluate(variables.synthedFunctions[arguments.MissingMethodName].exp);
 
-				} catch(any err){					
+				} catch(any err){
+					if(request.muraORMtransaction){
+						transactionRollback();
+					}				
 					writeDump(var=variables.synthedFunctions[arguments.MissingMethodName]);
 					writeDump(var=err,abort=true);
 				}
@@ -111,6 +114,20 @@ component extends="mura.bean.bean" {
 
 	private function synthArgs(args){
 		return {"#translatePropKey(args.loadkey)#"=getValue(translatePropKey(args.fkcolumn)),returnFormat=args.returnFormat};
+	}
+
+	function set(data){
+		if(isdefined('preLoad')){
+			evaluate('preLoad()');
+		}
+
+		super.set(argumentCollection=arguments);
+
+		if(isdefined('postLoad')){
+			evaluate('postLoad()');
+		}
+
+		return this;
 	}
 
 
@@ -353,30 +370,6 @@ component extends="mura.bean.bean" {
 		}
 
 	}
-	
-	/*
-	function save(){
-		if(request.muraORMtransaction){
-			_save();
-		} else {
-			request.muraORMtransaction=true;
-			transaction {
-				try{
-					_save();
-					if(request.muraORMtransaction){
-						transactionCommit();
-					} else {
-						transactionRollback();
-					}
-				} 
-				catch(err){
-					transactionRollback();
-				}
-			}
-			request.muraORMtransaction=false;
-		}
-	}
-	*/
 
 	function save(){
 		var pluginManager=getBean('pluginManager');
@@ -401,6 +394,10 @@ component extends="mura.bean.bean" {
 
 			if(qs.execute(sql='select #getPrimaryKey()# from #getTable()# where #getPrimaryKey()# = :primarykey').getResult().recordcount){
 				
+				if(isdefined('preUpdate')){
+					evaluate('preUpdate()');
+				}
+
 				pluginManager.announceEvent('onBefore#variables.beanClass#Update',event);
 
 				if(!hasErrors()){
@@ -435,10 +432,22 @@ component extends="mura.bean.bean" {
 						
 					qs.execute(sql=sql);
 
+					if(isdefined('postUpdate')){
+						evaluate('postUpdate()');
+					}
+
 					pluginManager.announceEvent('onAfter#variables.beanClass#Update',event);
 				}
 				
 			} else{
+
+				if(isdefined('preCreate')){
+					evaluate('preCreate()');
+				}
+
+				if(isdefined('preInsert')){
+					evaluate('preInsert()');
+				}
 
 				pluginManager.announceEvent('onBefore#variables.beanClass#Create',event);
 
@@ -485,21 +494,51 @@ component extends="mura.bean.bean" {
 
 					qs.execute(sql=sql);
 
+					if(isdefined('postCreate')){
+						evaluate('postCreate()');
+					}
+
+
+					if(isdefined('postInsert')){
+						evaluate('postInsert()');
+					}
+
 					pluginManager.announceEvent('onAfter#variables.beanClass#Create',event);
 				}
 			}
+
+			pluginManager.announceEvent('onAfter#variables.beanClass#Save',event);
+			pluginManager.announceEvent('on#variables.beanClass#Save',event);
 		
 		} else {
 			request.muraORMtransaction=false;
 		}
-		
-		pluginManager.announceEvent('onAfter#variables.beanClass#Save',event);
-		pluginManager.announceEvent('on#variables.beanClass#Save',event);
 
 		return this;
 	}
 
 	/*
+	function save(){
+		if(request.muraORMtransaction){
+			_save();
+		} else {
+			request.muraORMtransaction=true;
+			transaction {
+				try{
+					_save();
+					if(request.muraORMtransaction){
+						transactionCommit();
+					} else {
+						transactionRollback();
+					}
+				} catch(any err){
+					transactionRollback();
+				}
+			}
+			request.muraORMtransaction=false;
+		}
+	}
+		
 	function delete(){
 		if(request.muraORMtransaction){
 			_delete();
@@ -514,7 +553,7 @@ component extends="mura.bean.bean" {
 						transactionRollback();
 					}
 				} 
-				catch(err){
+				catch(any err){
 					transactionRollback();
 				}
 			}
@@ -526,6 +565,11 @@ component extends="mura.bean.bean" {
 		var props=getProperties();
 		var pluginManager=getBean('pluginManager');
 		var event=new mura.event({siteID=variables.instance.siteid,bean=this});
+
+		if(isdefined('preDelete')){
+			evaluate('preDelete()');
+		}
+
 		pluginManager.announceEvent('onBefore#variables.beanClass#Delete',event);
 
 		for(var prop in props){
@@ -541,6 +585,10 @@ component extends="mura.bean.bean" {
 		var qs=new Query();
 		qs.addParam(name='primarykey',value=variables.instance[getPrimaryKey()],cfsqltype='cf_sql_varchar');
 		qs.execute(sql='delete from #getTable()# where #getPrimaryKey()# = :primarykey');
+
+		if(isdefined('postDelete')){
+			evaluate('postDelete()');
+		}
 
 		pluginManager.announceEvent('onAfter#variables.beanClass#Delete',event);
 

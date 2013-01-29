@@ -45,6 +45,9 @@ modified version; it is your choice whether to do so, or to make such modified v
 version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS.
 --->
 <cfparam name="local" default="#structNew()#">
+<cfif request.muraORMtransaction>
+	<cfset transactionRollback()>
+</cfif>
 <cfif isDefined("request.servletEvent")>
 	<cfset application.eventManager.announceEvent("onGlobalRequestEnd",request.servletEvent)>
 <cfelseif isDefined("request.event")>
