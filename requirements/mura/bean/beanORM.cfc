@@ -188,6 +188,10 @@ component extends="mura.bean.bean" {
 			
 			variables.table=md.table;
 			variables.beanClass=listLast(md.name,'.');
+
+			if(right(variables.beanClass,4) eq "bean"){
+				variables.beanClass=left(variables.beanClass,len(variables.beanClass)-4);
+			}
 			
 			//writeDump(var=md,abort=true);
 
