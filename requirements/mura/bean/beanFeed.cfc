@@ -71,6 +71,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.maxItems=0>
 	<cfset variables.instance.additionalColumns=""/>
 	<cfset variables.instance.sortTable=""/>
+	<cfset variables.instance.orderby=""/>
 
 	
 	<cfset variables.instance.params=queryNew("param,relationship,field,condition,criteria,dataType","integer,varchar,varchar,varchar,varchar,varchar" )  />
@@ -203,6 +204,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="condition" type="string" default="EQUALS" required="true">
 	<cfargument name="datatype" type="string"  default="varchar" required="true">
 		<cfset var rows=1/>
+
+		<cfif structKeyExists(arguments,'column')>
+			<cfset arguments.field=arguments.column>
+		</cfif>
 		
 		<cfset queryAddRow(variables.instance.params,1)/>
 		<cfset rows = variables.instance.params.recordcount />
@@ -287,10 +292,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var jointableS="">
 	<cfset var dbType=variables.configBean.getDBType()>
 
-	<cfif not len(variables.instance.siteID)>
-		<cfthrow message="The 'SITEID' value must be set in order to search users.">
-	</cfif>
-
 	<cfloop query="variables.instance.params">
 		<cfif listLen(variables.instance.params.field,".") eq 2>
 			<cfset jointable=listFirst(variables.instance.params.field,".") >
@@ -309,7 +310,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			inner join #jointable# on (#variables.instance.table#.#variables.instance.keyField#=#jointable#.#variables.instance.keyField#)
 		</cfloop>
 
-		where siteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#variables.instance.siteID#"/>
+		
+		where
+		siteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#variables.instance.siteID#"/>
+		
 
 		<cfif variables.instance.params.recordcount>
 		<cfset started = false />
@@ -353,9 +357,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfif started>)</cfif>
 	</cfif> 
 
-	order by
-		
-	#variables.instance.table#.#variables.instance.sortBy# #variables.instance.sortDirection#
+	<cfif len(variables.instance.orderby)>
+		order by #variables.instance.orderby#
+	<cfelseif len(variables.instance.sortBy)>
+		order by #variables.instance.table#.#variables.instance.sortBy# #variables.instance.sortDirection#
+	</cfif>
 	
 	<cfif dbType eq "mysql" and variables.instance.maxItems>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#variables.instance.maxItems#" /> </cfif>
 	<cfif dbType eq "oracle" and variables.instance.maxItems>) where ROWNUM <= <cfqueryparam cfsqltype="cf_sql_integer" value="#variables.instance.maxItems#" /> </cfif>
@@ -367,13 +373,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="getIterator" returntype="any" output="false">
 	<cfset var rs=getQuery()>
-	<cfset var it=getBean("#variables.instance.bean#Iterator")>
+	<cfset var it=''>
+
+	<cfif getServiceFactory().containsBean("#variables.instance.bean#Iterator")>
+		<cfset it=getBean("#variables.instance.bean#Iterator")>
+	<cfelse>
+		<cfset it=getBean("beanIterator")>
+	</cfif>
+
 	<cfset it.setQuery(rs,variables.instance.nextN)>
 	<cfreturn it>
 </cffunction>
 
-
-  
-
- 
 </cfcomponent>
