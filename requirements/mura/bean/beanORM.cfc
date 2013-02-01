@@ -649,4 +649,27 @@ component extends="mura.bean.bean" {
 		return getBean(variables.beanClass).setAllValues(structCopy(getAllValues()));
 	}
 
+	function hasProperty(property){
+		var props=getProperties();
+
+		for(var prop in props){
+			if(props[prop].column eq arguments.property){
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	function getFeed(){		
+		var feed=getBean('beanFeed').setBean(variables.beanClass).setTable(getTable());
+
+		if(hasProperty('siteid')){
+			feed.setSiteID(getValue('siteID'));
+		}
+
+		return feed;
+		
+	}
+
 }

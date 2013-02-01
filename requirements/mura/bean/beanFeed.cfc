@@ -310,10 +310,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			inner join #jointable# on (#variables.instance.table#.#variables.instance.keyField#=#jointable#.#variables.instance.keyField#)
 		</cfloop>
 
-		
 		where
-		siteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#variables.instance.siteID#"/>
-		
+
+		<cfif len(variables.instance.siteID)>
+			siteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#variables.instance.siteID#"/>
+		<cfelse>
+			1=1
+		</cfif>
 
 		<cfif variables.instance.params.recordcount>
 		<cfset started = false />

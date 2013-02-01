@@ -307,7 +307,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	order by
 	
-	<cfif len(params.getSortTable())>
+	<cfif len(params.getOrderBy())>
+		#params.getOrderBy()#
+	<cfelseif len(params.getSortTable())>
 		#params.getSortTable()#.#params.getSortBy()# #params.getSortDirection()#
 	<cfelseif isExtendedSort>
 		qExtendedSort.extendedSort #params.getSortDirection()#

@@ -603,37 +603,41 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						
 	order by
 	
-	<cfswitch expression="#arguments.feedBean.getSortBy()#">
-	<cfcase value="menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,credits,type,subtype">
-		<cfif dbType neq "oracle" or listFindNoCase("orderno,releaseDate,lastUpdate,created,displayStart,displayStop",arguments.feedBean.getSortBy())>
-			tcontent.#arguments.feedBean.getSortBy()# #arguments.feedBean.getSortDirection()#
-		<cfelse>
-			lower(tcontent.#arguments.feedBean.getSortBy()#) #arguments.feedBean.getSortDirection()#
-		</cfif>
-	</cfcase>
-	<cfcase value="rating">
-	 tcontentstats.rating #arguments.feedBean.getSortDirection()#, tcontentstats.totalVotes #arguments.feedBean.getSortDirection()#
-	</cfcase>
-	<cfcase value="comments">
-	 tcontentstats.comments #arguments.feedBean.getSortDirection()#
-	</cfcase>
-	<cfcase value="random">
-		<cfif dbType eq "mysql">
-	          rand()
-	    <cfelseif dbType eq "mssql">
-	          newID()
-	    <cfelseif dbType eq "oracle">
-	          dbms_random.value
-	    </cfif>
-	</cfcase>
-	<cfdefaultcase>
-		<cfif isExtendedSort>
-			qExtendedSort.extendedSort #arguments.feedBean.getSortDirection()#
-		<cfelse>
-			tcontent.releaseDate desc,tcontent.lastUpdate desc,tcontent.menutitle
-		</cfif>
-	</cfdefaultcase>
-	</cfswitch>
+	<cfif len(arguments.feedBean.getOrderBy())>
+		#arguments.feedBean.getOrderBy()#
+	<cfelse>	
+		<cfswitch expression="#arguments.feedBean.getSortBy()#">
+		<cfcase value="menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,credits,type,subtype">
+			<cfif dbType neq "oracle" or listFindNoCase("orderno,releaseDate,lastUpdate,created,displayStart,displayStop",arguments.feedBean.getSortBy())>
+				tcontent.#arguments.feedBean.getSortBy()# #arguments.feedBean.getSortDirection()#
+			<cfelse>
+				lower(tcontent.#arguments.feedBean.getSortBy()#) #arguments.feedBean.getSortDirection()#
+			</cfif>
+		</cfcase>
+		<cfcase value="rating">
+		 tcontentstats.rating #arguments.feedBean.getSortDirection()#, tcontentstats.totalVotes #arguments.feedBean.getSortDirection()#
+		</cfcase>
+		<cfcase value="comments">
+		 tcontentstats.comments #arguments.feedBean.getSortDirection()#
+		</cfcase>
+		<cfcase value="random">
+			<cfif dbType eq "mysql">
+		          rand()
+		    <cfelseif dbType eq "mssql">
+		          newID()
+		    <cfelseif dbType eq "oracle">
+		          dbms_random.value
+		    </cfif>
+		</cfcase>
+		<cfdefaultcase>
+			<cfif isExtendedSort>
+				qExtendedSort.extendedSort #arguments.feedBean.getSortDirection()#
+			<cfelse>
+				tcontent.releaseDate desc,tcontent.lastUpdate desc,tcontent.menutitle
+			</cfif>
+		</cfdefaultcase>
+		</cfswitch>
+	</cfif>
 	<cfif dbType eq "nuodb" and arguments.feedBean.getMaxItems()>fetch <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.feedBean.getMaxItems()#" /> </cfif>
 	<cfif dbType eq "mysql" and arguments.feedBean.getMaxItems()>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.feedBean.getMaxItems()#" /> </cfif>
 	<cfif dbType eq "oracle" and arguments.feedBean.getMaxItems()>) where ROWNUM <= <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.feedBean.getMaxItems()#" /> </cfif>
