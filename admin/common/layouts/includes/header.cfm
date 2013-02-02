@@ -264,11 +264,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		 						</a>
 		 					</li>
 		 					</cfif>
-		 					   <li <cfif (rc.originalcircuit eq 'cPerm' and  rc.moduleid eq '00000000000000000000000000000000000')>class='active'</cfif>>
-		 					   		<a href="#application.configBean.getContext()#/admin/index.cfm?muraAction=cPerm.module&contentid=00000000000000000000000000000000000&siteid=#session.siteid#&moduleid=00000000000000000000000000000000000">
-		 					   			<i class="icon-group"></i> #application.rbFactory.getKeyValue(session.rb,"layout.permissions")#
-		 					   		</a>
-		 					   	</li>
+		 					<li <cfif (rc.originalcircuit eq 'cPerm' and  rc.moduleid eq '00000000000000000000000000000000000')>class='active'</cfif>>
+		 					   	<a href="#application.configBean.getContext()#/admin/index.cfm?muraAction=cPerm.module&contentid=00000000000000000000000000000000000&siteid=#session.siteid#&moduleid=00000000000000000000000000000000000">
+		 					   		<i class="icon-group"></i> #application.rbFactory.getKeyValue(session.rb,"layout.permissions")#
+		 					   	</a>
+		 					</li>
+		 					<li <cfif rc.originalcircuit eq 'cChain'>class='active'</cfif>>
+		 					   	<a href="#application.configBean.getContext()#/admin/index.cfm?muraAction=cChain.list&siteid=#session.siteid#">
+		 					   		<i class="icon-group"></i> #application.rbFactory.getKeyValue(session.rb,"layout.approvalchains")#
+		 					   	</a>
+		 					</li>
 		 				 
 		 					<cfif listFind(session.mura.memberships,'S2')>
 

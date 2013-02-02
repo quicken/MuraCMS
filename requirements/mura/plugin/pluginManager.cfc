@@ -606,15 +606,19 @@ select * from tplugins order by #arguments.orderby#
 		<cfif rsRequirements.type eq "dir" and rsRequirements.name neq '.svn'>	
 			<cfset m=listFirst(rsRequirements.name,"_")>
 			<cfset mHash=hash(m)>
-			<cfif not isNumeric(m) and not structKeyExists(done,mHash)>
-				<cfset variables.fileWriter.appendFile(file="#baseDir#/mappings.cfm", output='<cfset this.mappings["/#m#"] = variables.BaseDir & "/plugins/#rsRequirements.name#">')>
-				<cfset done[mHash]=true>
+			<cfset currentConfig=getPluginXML(listLast(rsRequirements.name,"_"))>
+
+			<cfif not isDefined("currentConfig.plugin.createmapping.xmlText")
+				or yesNoFormat(currentConfig.plugin.createmapping.xmlText)>
+				<cfif not isNumeric(m) and not structKeyExists(done,mHash)>
+					<cfset variables.fileWriter.appendFile(file="#baseDir#/mappings.cfm", output='<cfset this.mappings["/#m#"] = variables.BaseDir & "/plugins/#rsRequirements.name#">')>
+					<cfset done[mHash]=true>
+				</cfif>
 			</cfif>
 		
 			<cfset currentDir="#baseDir#/#rsRequirements.name#">
 			<cftry>
-			<cfset currentConfig=getPluginXML(listLast(rsRequirements.name,"_"))>
-					<cfif isDefined("currentConfig.plugin.mappings.mapping") and arrayLen(currentConfig.plugin.mappings.mapping)>
+				<cfif isDefined("currentConfig.plugin.mappings.mapping") and arrayLen(currentConfig.plugin.mappings.mapping)>
 				<cfloop from="1" to="#arrayLen(currentConfig.plugin.mappings.mapping)#" index="m">
 				<cfif structkeyExists(currentConfig.plugin.mappings.mapping[m].xmlAttributes,"directory")
 				and len(currentConfig.plugin.mappings.mapping[m].xmlAttributes.directory)

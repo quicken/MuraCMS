@@ -28,7 +28,11 @@ component extends="mura.bean.bean" {
 				}else if (listFindNoCase("date,datetime,timestamp",prop.datatype)){
 					variables.instance[prop.column]=now();
 				} else if(structKeyExists(prop,"default")){
-					variables.instance[prop.column]=prop.default;
+					if(prop.default neq 'null'){
+						variables.instance[prop.column]=prop.default;
+					} else {
+						variables.instance[prop.column]='';
+					}
 				} 
 
 				if (prop.name eq 'lastupdateby'){
