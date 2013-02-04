@@ -217,8 +217,8 @@
     <!--[if lt IE 9]>
       <script src="#application.configBean.getContext()#/admin/assets/js/html5.js"></script>
     <![endif]-->
-	<!--- </cfif> --->
-    
+	<!--- </cfif> --->    
+    #rc.$.renderEvent('onAdminHTMLHeadRender')#
   </head>
   <body id="#rc.originalcircuit#">
     <cfinclude template="includes/header.cfm">
@@ -303,6 +303,7 @@
 	<cfinclude template="/muraWRM/admin/core/views/carch/dsp_content_nav.cfm">
 	</cfif>
 	<cfinclude template="includes/dialog.cfm">
+	#rc.$.renderEvent('onAdminHTMLFootRender')#
   </body>
 </html>
 </cfoutput>
