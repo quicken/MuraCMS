@@ -137,8 +137,6 @@
 		</cfif>
 	}
 	
-	
-
 	function toggleAdminToolbar(){
 		$("##frontEndTools").animate({opacity: "toggle"});
 		$('HTML').toggleClass('mura-edit-mode');
@@ -187,7 +185,7 @@
 					}
 				);
 			});
-			
+
 			resizeEditableObjects();
 			checkToolbarDisplay();
 			initAdminProxy();
