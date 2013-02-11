@@ -1,5 +1,4 @@
 <cfset rc.chain=$.getBean('approvalChain').loadBy(chainid=rc.chainID)/>
-<cfinclude template="js.cfm">
 <cfoutput>
 <cfif not len(rc.chainid)>
 	<h1>#application.rbFactory.getKeyValue(session.rb,"approvalchains.addapprovalchain")#</h1>
@@ -35,7 +34,36 @@
   </div>
 </div>
 
-
+<div class="control-group" id="availableGroups">
+  <label class="control-label">
+    <span class="span6">Available Groups</span> <span class="span6">Selected Groups</span>
+  </label>
+          
+  <div id="sortableGroups" class="controls">
+    <p class="dragMsg">
+      <span class="dragFrom span6">Drag Groups from Here&hellip;</span><span class="span6">&hellip;and Drop Them Here.</span>
+    </p>              
+          
+    <ul id="groupAvailableListSort" class="groupDisplayListSortOptions">
+      <cfloop list="test" index="i">
+        <li class="ui-state-default">#trim(i)#</li>
+      </cfloop>
+    </ul>
+                        
+    <ul id="groupAssignmentListSort" class="groupDisplayListSortOptions">
+      <cfloop list="test" index="i">
+        <li class="ui-state-highlight">#trim(i)#</li>
+      </cfloop>
+    </ul>
+                    
+    <input type="hidden" id="assignedGroups" value="test" name="assignedGroups"/>
+              
+    <script>
+      $(function(){
+          chainManager.setGroupAssignmentSort();
+        });
+    </script>
+  </div>
 </div>
 <div class="form-actions">
   <cfif rc.chainID eq ''>
@@ -49,5 +77,5 @@
   <input type="hidden" name="siteid" value="#rc.chain.getSiteID()#">
 </div>
 </form>
-
+<cfinclude template="js.cfm">
 </cfoutput>
