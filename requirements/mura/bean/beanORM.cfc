@@ -676,4 +676,8 @@ component extends="mura.bean.bean" {
 		
 	}
 
+	function getIterator(){		
+		return getBean('beanIterator').setBean(variables.beanClass);
+	}
+
 }

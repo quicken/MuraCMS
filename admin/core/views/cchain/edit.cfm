@@ -38,25 +38,33 @@
   <label class="control-label">
     <span class="span6">Available Groups</span> <span class="span6">Selected Groups</span>
   </label>
-          
+
   <div id="sortableGroups" class="controls">
     <p class="dragMsg">
       <span class="dragFrom span6">Drag Groups from Here&hellip;</span><span class="span6">&hellip;and Drop Them Here.</span>
     </p>              
           
     <ul id="groupAvailableListSort" class="groupDisplayListSortOptions">
-      <cfloop list="test" index="i">
-        <li class="ui-state-default">#trim(i)#</li>
+      <cfset it=rc.chain.getAvailableGroupsIterator()>
+      <cfloop condition="it.hasNext()">
+        <cfset item=it.next()>
+        <li class="ui-state-default" data-groupid="#item.getUserID()#">
+          #HTMLEditFormat(item.getGroupName())#
+          <input name="availableID" type="hidden" value="#item.getUserID()#">
+        </li>
       </cfloop>
     </ul>
                         
-    <ul id="groupAssignmentListSort" class="groupDisplayListSortOptions">
-      <cfloop list="test" index="i">
-        <li class="ui-state-highlight">#trim(i)#</li>
+    <ul id="groupAssignmentListSort" class="groupDisplayListSortOptions">  
+      <cfset it=rc.chain.getAssignmentsIterator()>
+      <cfloop condition="it.hasNext()">
+        <cfset item=it.next()>
+        <li class="ui-state-highlight">
+          #HTMLEditFormat(item.getGroupName())#
+          <input name="assignmentID" type="hidden" value="#item.getUserID()#">
+        </li>
       </cfloop>
     </ul>
-                    
-    <input type="hidden" id="assignedGroups" value="test" name="assignedGroups"/>
               
     <script>
       $(function(){
