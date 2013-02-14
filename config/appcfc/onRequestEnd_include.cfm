@@ -45,21 +45,12 @@ modified version; it is your choice whether to do so, or to make such modified v
 version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS.
 --->
 <cfparam name="local" default="#structNew()#">
-<cfif request.muraORMtransaction>
-	<cfset transactionRollback()>
+<cfif isDefined("application.eventManager")>
+	<cfif isDefined("request.servletEvent")>
+		<cfset application.eventManager.announceEvent("onGlobalRequestEnd",request.servletEvent)>
+	<cfelseif isDefined("request.event")>
+		<cfset application.eventManager.announceEvent("onGlobalRequestEnd",request.event)>
+	<cfelse>
+		<cfset application.eventManager.announceEvent("onGlobalRequestEnd",createObject("component","mura.cfobject"))>
+	</cfif>
 </cfif>
-<cfif isDefined("request.servletEvent")>
-	<cfset application.eventManager.announceEvent("onGlobalRequestEnd",request.servletEvent)>
-<cfelseif isDefined("request.event")>
-	<cfset application.eventManager.announceEvent("onGlobalRequestEnd",request.event)>
-<cfelse>
-	<cfset application.eventManager.announceEvent("onGlobalRequestEnd",createObject("component","mura.cfobject"))>
-</cfif>
-<!---
-<cfif not request.muraORMError>
-	<cfset ormFlush()>
-	<cfset ormFlush()>
-<cfelse>
-	<cfset ormClearSession()>
-</cfif>
---->
