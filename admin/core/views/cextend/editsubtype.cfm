@@ -72,6 +72,279 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<input class="span12" name="subType" id="subType" type="text" value="#HTMLEditFormat(subType.getSubType())#" required="true" maxlength="25"/>
 			</div>
 		</div>
+		
+		
+	</div>
+	
+	<div class="control-group"<cfif subtype.getType() eq "Site"> style="display:none;"</cfif>>
+		<div class="span4 SubTypeIconSelect">
+			<label class="control-label">Icon</label>
+              <div class="btn-group">
+                <button class="btn"><i class="icon-flag icon-large"></i></button>
+                <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+
+				    <ul class="dropdown-menu">
+				      <li><i class="icon-adjust icon-2x icon-border icon-2x icon-border"></i></li>
+				      <li><i class="icon-asterisk icon-2x icon-border"></i></li>
+				      <li><i class="icon-ban-circle icon-2x icon-border"></i></li>
+				      <li><i class="icon-bar-chart icon-2x icon-border"></i></li>
+				      <li><i class="icon-barcode icon-2x icon-border"></i></li>
+				      <li><i class="icon-beaker icon-2x icon-border"></i></li>
+				      <li><i class="icon-beer icon-2x icon-border"></i></li>
+				      <li><i class="icon-bell icon-2x icon-border"></i></li>
+				      <li><i class="icon-bell-alt icon-2x icon-border"></i></li>
+				      <li><i class="icon-bolt icon-2x icon-border"></i></li>
+				      <li><i class="icon-book icon-2x icon-border"></i></li>
+				      <li><i class="icon-bookmark icon-2x icon-border"></i></li>
+				      <li><i class="icon-bookmark-empty icon-2x icon-border"></i></li>
+				      <li><i class="icon-briefcase icon-2x icon-border"></i></li>
+				      <li><i class="icon-bullhorn icon-2x icon-border"></i></li>
+				      <li><i class="icon-calendar icon-2x icon-border"></i></li>
+				      <li><i class="icon-camera icon-2x icon-border"></i></li>
+				      <li><i class="icon-camera-retro icon-2x icon-border"></i></li>
+				      <li><i class="icon-certificate icon-2x icon-border"></i></li>
+				      <li><i class="icon-check icon-2x icon-border"></i></li>
+				      <li><i class="icon-check-empty icon-2x icon-border"></i></li>
+				      <li><i class="icon-circle icon-2x icon-border"></i></li>
+				      <li><i class="icon-circle-blank icon-2x icon-border"></i></li>
+				      <li><i class="icon-cloud icon-2x icon-border"></i></li>
+				      <li><i class="icon-cloud-download icon-2x icon-border"></i></li>
+				      <li><i class="icon-cloud-upload icon-2x icon-border"></i></li>
+				      <li><i class="icon-coffee icon-2x icon-border"></i></li>
+				      <li><i class="icon-cog icon-2x icon-border"></i></li>
+				      <li><i class="icon-cogs icon-2x icon-border"></i></li>
+				      <li><i class="icon-comment icon-2x icon-border"></i></li>
+				      <li><i class="icon-comment-alt icon-2x icon-border"></i></li>
+				      <li><i class="icon-comments icon-2x icon-border"></i></li>
+				      <li><i class="icon-comments-alt icon-2x icon-border"></i></li>
+				      <li><i class="icon-credit-card icon-2x icon-border"></i></li>
+				      <li><i class="icon-dashboard icon-2x icon-border"></i></li>
+				      <li><i class="icon-desktop icon-2x icon-border"></i></li>
+				      <li><i class="icon-download icon-2x icon-border"></i></li>
+				      <li><i class="icon-download-alt icon-2x icon-border"></i></li>
+				      <li><i class="icon-edit icon-2x icon-border"></i></li>
+				      <li><i class="icon-envelope icon-2x icon-border"></i></li>
+				      <li><i class="icon-envelope-alt icon-2x icon-border"></i></li>
+				      <li><i class="icon-exchange icon-2x icon-border"></i></li>
+				      <li><i class="icon-exclamation-sign icon-2x icon-border"></i></li>
+				      <li><i class="icon-external-link icon-2x icon-border"></i></li>
+				      <li><i class="icon-eye-close icon-2x icon-border"></i></li>
+				      <li><i class="icon-eye-open icon-2x icon-border"></i></li>
+				      <li><i class="icon-facetime-video icon-2x icon-border"></i></li>
+				      <li><i class="icon-fighter-jet icon-2x icon-border"></i></li>
+				      <li><i class="icon-film icon-2x icon-border"></i></li>
+				      <li><i class="icon-filter icon-2x icon-border"></i></li>
+				      <li><i class="icon-fire icon-2x icon-border"></i></li>
+				      <li><i class="icon-flag icon-2x icon-border"></i></li>
+				      <li><i class="icon-folder-close icon-2x icon-border"></i></li>
+				      <li><i class="icon-folder-open icon-2x icon-border"></i></li>
+				      <li><i class="icon-folder-close-alt icon-2x icon-border"></i></li>
+				      <li><i class="icon-folder-open-alt icon-2x icon-border"></i></li>
+				      <li><i class="icon-food icon-2x icon-border"></i></li>
+				      <li><i class="icon-gift icon-2x icon-border"></i></li>
+				      <li><i class="icon-glass icon-2x icon-border"></i></li>
+				      <li><i class="icon-globe icon-2x icon-border"></i></li>
+				      <li><i class="icon-group icon-2x icon-border"></i></li>
+				      <li><i class="icon-hdd icon-2x icon-border"></i></li>
+				      <li><i class="icon-headphones icon-2x icon-border"></i></li>
+				      <li><i class="icon-heart icon-2x icon-border"></i></li>
+				      <li><i class="icon-heart-empty icon-2x icon-border"></i></li>
+				      <li><i class="icon-home icon-2x icon-border"></i></li>
+				      <li><i class="icon-inbox icon-2x icon-border"></i></li>
+				      <li><i class="icon-info-sign icon-2x icon-border"></i></li>
+				      <li><i class="icon-key icon-2x icon-border"></i></li>
+				      <li><i class="icon-leaf icon-2x icon-border"></i></li>
+				      <li><i class="icon-laptop icon-2x icon-border"></i></li>
+				      <li><i class="icon-legal icon-2x icon-border"></i></li>
+				      <li><i class="icon-lemon icon-2x icon-border"></i></li>
+				      <li><i class="icon-lightbulb icon-2x icon-border"></i></li>
+				      <li><i class="icon-lock icon-2x icon-border"></i></li>
+				      <li><i class="icon-unlock icon-2x icon-border"></i></li>
+				      <li><i class="icon-magic icon-2x icon-border"></i></li>
+				      <li><i class="icon-magnet icon-2x icon-border"></i></li>
+				      <li><i class="icon-map-marker icon-2x icon-border"></i></li>
+				      <li><i class="icon-minus icon-2x icon-border"></i></li>
+				      <li><i class="icon-minus-sign icon-2x icon-border"></i></li>
+				      <li><i class="icon-mobile-phone icon-2x icon-border"></i></li>
+				      <li><i class="icon-money icon-2x icon-border"></i></li>
+				      <li><i class="icon-move icon-2x icon-border"></i></li>
+				      <li><i class="icon-music icon-2x icon-border"></i></li>
+				      <li><i class="icon-off icon-2x icon-border"></i></li>
+				      <li><i class="icon-ok icon-2x icon-border"></i></li>
+				      <li><i class="icon-ok-circle icon-2x icon-border"></i></li>
+				      <li><i class="icon-ok-sign icon-2x icon-border"></i></li>
+				      <li><i class="icon-pencil icon-2x icon-border"></i></li>
+				      <li><i class="icon-picture icon-2x icon-border"></i></li>
+				      <li><i class="icon-plane icon-2x icon-border"></i></li>
+				      <li><i class="icon-plus icon-2x icon-border"></i></li>
+				      <li><i class="icon-plus-sign icon-2x icon-border"></i></li>
+				      <li><i class="icon-print icon-2x icon-border"></i></li>
+				      <li><i class="icon-pushpin icon-2x icon-border"></i></li>
+				      <li><i class="icon-qrcode icon-2x icon-border"></i></li>
+				      <li><i class="icon-question-sign icon-2x icon-border"></i></li>
+				      <li><i class="icon-quote-left icon-2x icon-border"></i></li>
+				      <li><i class="icon-quote-right icon-2x icon-border"></i></li>
+				      <li><i class="icon-random icon-2x icon-border"></i></li>
+				      <li><i class="icon-refresh icon-2x icon-border"></i></li>
+				      <li><i class="icon-remove icon-2x icon-border"></i></li>
+				      <li><i class="icon-remove-circle icon-2x icon-border"></i></li>
+				      <li><i class="icon-remove-sign icon-2x icon-border"></i></li>
+				      <li><i class="icon-reorder icon-2x icon-border"></i></li>
+				      <li><i class="icon-reply icon-2x icon-border"></i></li>
+				      <li><i class="icon-resize-horizontal icon-2x icon-border"></i></li>
+				      <li><i class="icon-resize-vertical icon-2x icon-border"></i></li>
+				      <li><i class="icon-retweet icon-2x icon-border"></i></li>
+				      <li><i class="icon-road icon-2x icon-border"></i></li>
+				      <li><i class="icon-rss icon-2x icon-border"></i></li>
+				      <li><i class="icon-screenshot icon-2x icon-border"></i></li>
+				      <li><i class="icon-search icon-2x icon-border"></i></li>
+				      <li><i class="icon-share icon-2x icon-border"></i></li>
+				      <li><i class="icon-share-alt icon-2x icon-border"></i></li>
+				      <li><i class="icon-shopping-cart icon-2x icon-border"></i></li>
+				      <li><i class="icon-signal icon-2x icon-border"></i></li>
+				      <li><i class="icon-signin icon-2x icon-border"></i></li>
+				      <li><i class="icon-signout icon-2x icon-border"></i></li>
+				      <li><i class="icon-sitemap icon-2x icon-border"></i></li>
+				      <li><i class="icon-sort icon-2x icon-border"></i></li>
+				      <li><i class="icon-sort-down icon-2x icon-border"></i></li>
+				      <li><i class="icon-sort-up icon-2x icon-border"></i></li>
+				      <li><i class="icon-spinner icon-2x icon-border"></i></li>
+				      <li><i class="icon-star icon-2x icon-border"></i></li>
+				      <li><i class="icon-star-empty icon-2x icon-border"></i></li>
+				      <li><i class="icon-star-half icon-2x icon-border"></i></li>
+				      <li><i class="icon-tablet icon-2x icon-border"></i></li>
+				      <li><i class="icon-tag icon-2x icon-border"></i></li>
+				      <li><i class="icon-tags icon-2x icon-border"></i></li>
+				      <li><i class="icon-tasks icon-2x icon-border"></i></li>
+				      <li><i class="icon-thumbs-down icon-2x icon-border"></i></li>
+				      <li><i class="icon-thumbs-up icon-2x icon-border"></i></li>
+				      <li><i class="icon-time icon-2x icon-border"></i></li>
+				      <li><i class="icon-tint icon-2x icon-border"></i></li>
+				      <li><i class="icon-trash icon-2x icon-border"></i></li>
+				      <li><i class="icon-trophy icon-2x icon-border"></i></li>
+				      <li><i class="icon-truck icon-2x icon-border"></i></li>
+				      <li><i class="icon-umbrella icon-2x icon-border"></i></li>
+				      <li><i class="icon-upload icon-2x icon-border"></i></li>
+				      <li><i class="icon-upload-alt icon-2x icon-border"></i></li>
+				      <li><i class="icon-user icon-2x icon-border"></i></li>
+				      <li><i class="icon-user-md icon-2x icon-border"></i></li>
+				      <li><i class="icon-volume-off icon-2x icon-border"></i></li>
+				      <li><i class="icon-volume-down icon-2x icon-border"></i></li>
+				      <li><i class="icon-volume-up icon-2x icon-border"></i></li>
+				      <li><i class="icon-warning-sign icon-2x icon-border"></i></li>
+				      <li><i class="icon-wrench icon-2x icon-border"></i></li>
+				      <li><i class="icon-zoom-in icon-2x icon-border"></i></li>
+				      <li><i class="icon-zoom-out icon-2x icon-border"></i></li>
+				      
+				      <li><i class="icon-file icon-2x icon-border"></i></li>
+				      <li><i class="icon-file-alt icon-2x icon-border"></i></li>
+				      <li><i class="icon-cut icon-2x icon-border"></i></li>
+				      <li><i class="icon-copy icon-2x icon-border"></i></li>
+				      <li><i class="icon-paste icon-2x icon-border"></i></li>
+				      <li><i class="icon-save icon-2x icon-border"></i></li>
+				      <li><i class="icon-undo icon-2x icon-border"></i></li>
+				      <li><i class="icon-repeat icon-2x icon-border"></i></li>
+				      <li><i class="icon-text-height icon-2x icon-border"></i></li>
+				      <li><i class="icon-text-width icon-2x icon-border"></i></li>
+				      <li><i class="icon-align-left icon-2x icon-border"></i></li>
+				      <li><i class="icon-align-center icon-2x icon-border"></i></li>
+				      <li><i class="icon-align-right icon-2x icon-border"></i></li>
+				      <li><i class="icon-align-justify icon-2x icon-border"></i></li>
+				      <li><i class="icon-indent-left icon-2x icon-border"></i></li>
+				      <li><i class="icon-indent-right icon-2x icon-border"></i></li>
+				      <li><i class="icon-font icon-2x icon-border"></i></li>
+				      <li><i class="icon-bold icon-2x icon-border"></i></li>
+				      <li><i class="icon-italic icon-2x icon-border"></i></li>
+				      <li><i class="icon-strikethrough icon-2x icon-border"></i></li>
+				      <li><i class="icon-underline icon-2x icon-border"></i></li>
+				      <li><i class="icon-link icon-2x icon-border"></i></li>
+				      <li><i class="icon-paper-clip icon-2x icon-border"></i></li>
+				      <li><i class="icon-columns icon-2x icon-border"></i></li>
+				      <li><i class="icon-table icon-2x icon-border"></i></li>
+				      <li><i class="icon-th-large icon-2x icon-border"></i></li>
+				      <li><i class="icon-th icon-2x icon-border"></i></li>
+				      <li><i class="icon-th-list icon-2x icon-border"></i></li>
+				      <li><i class="icon-list icon-2x icon-border"></i></li>
+				      <li><i class="icon-list-ol icon-2x icon-border"></i></li>
+				      <li><i class="icon-list-ul icon-2x icon-border"></i></li>
+				      <li><i class="icon-list-alt icon-2x icon-border"></i></li>
+      
+				      <li><i class="icon-angle-left icon-2x icon-border"></i></li>
+				      <li><i class="icon-angle-right icon-2x icon-border"></i></li>
+				      <li><i class="icon-angle-up icon-2x icon-border"></i></li>
+				      <li><i class="icon-angle-down icon-2x icon-border"></i></li>
+				      <li><i class="icon-arrow-down icon-2x icon-border"></i></li>
+				      <li><i class="icon-arrow-left icon-2x icon-border"></i></li>
+				      <li><i class="icon-arrow-right icon-2x icon-border"></i></li>
+				      <li><i class="icon-arrow-up icon-2x icon-border"></i></li>
+				      <li><i class="icon-caret-down icon-2x icon-border"></i></li>
+				      <li><i class="icon-caret-left icon-2x icon-border"></i></li>
+				      <li><i class="icon-caret-right icon-2x icon-border"></i></li>
+				      <li><i class="icon-caret-up icon-2x icon-border"></i></li>
+				      <li><i class="icon-chevron-down icon-2x icon-border"></i></li>
+				      <li><i class="icon-chevron-left icon-2x icon-border"></i></li>
+				      <li><i class="icon-chevron-right icon-2x icon-border"></i></li>
+				      <li><i class="icon-chevron-up icon-2x icon-border"></i></li>
+				      <li><i class="icon-circle-arrow-down icon-2x icon-border"></i></li>
+				      <li><i class="icon-circle-arrow-left icon-2x icon-border"></i></li>
+				      <li><i class="icon-circle-arrow-right icon-2x icon-border"></i></li>
+				      <li><i class="icon-circle-arrow-up icon-2x icon-border"></i></li>
+				      <li><i class="icon-double-angle-left icon-2x icon-border"></i></li>
+				      <li><i class="icon-double-angle-right icon-2x icon-border"></i></li>
+				      <li><i class="icon-double-angle-up icon-2x icon-border"></i></li>
+				      <li><i class="icon-double-angle-down icon-2x icon-border"></i></li>
+				      <li><i class="icon-hand-down icon-2x icon-border"></i></li>
+				      <li><i class="icon-hand-left icon-2x icon-border"></i></li>
+				      <li><i class="icon-hand-right icon-2x icon-border"></i></li>
+				      <li><i class="icon-hand-up icon-2x icon-border"></i></li>
+				      <li><i class="icon-circle icon-2x icon-border"></i></li>
+				      <li><i class="icon-circle-blank icon-2x icon-border"></i></li>
+
+				      <li><i class="icon-play-circle icon-2x icon-border"></i></li>
+				      <li><i class="icon-play icon-2x icon-border"></i></li>
+				      <li><i class="icon-pause icon-2x icon-border"></i></li>
+				      <li><i class="icon-stop icon-2x icon-border"></i></li>
+				      <li><i class="icon-step-backward icon-2x icon-border"></i></li>
+				      <li><i class="icon-fast-backward icon-2x icon-border"></i></li>
+				      <li><i class="icon-backward icon-2x icon-border"></i></li>
+				      <li><i class="icon-forward icon-2x icon-border"></i></li>
+				      <li><i class="icon-fast-forward icon-2x icon-border"></i></li>
+				      <li><i class="icon-step-forward icon-2x icon-border"></i></li>
+				      <li><i class="icon-eject icon-2x icon-border"></i></li>
+				      <li><i class="icon-fullscreen icon-2x icon-border"></i></li>
+				      <li><i class="icon-resize-full icon-2x icon-border"></i></li>
+				      <li><i class="icon-resize-small icon-2x icon-border"></i></li>
+      
+				      <li><i class="icon-phone icon-2x icon-border"></i></li>
+				      <li><i class="icon-phone-sign icon-2x icon-border"></i></li>
+				      <li><i class="icon-facebook icon-2x icon-border"></i></li>
+				      <li><i class="icon-facebook-sign icon-2x icon-border"></i></li>
+				      <li><i class="icon-twitter icon-2x icon-border"></i></li>
+				      <li><i class="icon-twitter-sign icon-2x icon-border"></i></li>
+				      <li><i class="icon-github icon-2x icon-border"></i></li>
+				      <li><i class="icon-github-alt icon-2x icon-border"></i></li>
+				      <li><i class="icon-github-sign icon-2x icon-border"></i></li>
+				      <li><i class="icon-linkedin icon-2x icon-border"></i></li>
+				      <li><i class="icon-linkedin-sign icon-2x icon-border"></i></li>
+				      <li><i class="icon-pinterest icon-2x icon-border"></i></li>
+				      <li><i class="icon-pinterest-sign icon-2x icon-border"></i></li>
+				      <li><i class="icon-google-plus icon-2x icon-border"></i></li>
+				      <li><i class="icon-google-plus-sign icon-2x icon-border"></i></li>
+				      <li><i class="icon-sign-blank icon-2x icon-border"></i></li>
+				      		      
+					  <li><i class="icon-ambulance icon-2x icon-border"></i></li>
+					  <li><i class="icon-beaker icon-2x icon-border"></i></li>
+					  <li><i class="icon-h-sign icon-2x icon-border"></i></li>
+					  <li><i class="icon-hospital icon-2x icon-border"></i></li>
+					  <li><i class="icon-medkit icon-2x icon-border"></i></li>
+					  <li><i class="icon-plus-sign-alt icon-2x icon-border"></i></li>
+					  <li><i class="icon-stethoscope icon-2x icon-border"></i></li>
+					  <li><i class="icon-user-md icon-2x icon-border"></i></li>
+				      
+				    </ul>
+              </div><!-- /btn-group -->
+
+	</div>
 	</div>
 	
 		<div class="control-group">
@@ -107,7 +380,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 		<cfset rsSubTypes=application.classExtensionManager.getSubTypes(siteID=rc.siteID,activeOnly=true) />
 		<div class="control-group">
-		<div class="span6 availableSubTypesContainer" >
+			<div class="span6 availableSubTypesContainer" >
 			<label class="control-label">Allow users to add only specific subtypes?</label>
 			<div class="controls"> 
 				<label class="radio inline" ><input name="hasAvailableSubTypes" type="radio" class="radio inline" value="1" <cfif len(subType.getAvailableSubTypes())>checked </cfif>
@@ -130,8 +403,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</select>			
 			</div>
 		</div>
-	</div>
-	</div>
 	
 	<div class="form-actions">
 	<cfif not len(rc.subTypeID)>
