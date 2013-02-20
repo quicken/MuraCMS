@@ -45,21 +45,45 @@ modified version; it is your choice whether to do so, or to make such modified v
 version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS.
 --->
 <cfinclude template="js.cfm">
-<cfoutput><h1>#application.rbFactory.getKeyValue(session.rb,"approvalchains")#</h1>
+<cfset chains=$.getBean('approvalChainManager').getChainFeed(rc.siteID).getIterator()>
+
+<cfoutput>
+<h1>#application.rbFactory.getKeyValue(session.rb,"approvalchains")#</h1>
 
 <div id="nav-module-specific" class="btn-group">
-	<a class="btn" href="index.cfm?muraAction=cchain.edit&chainID&siteid=#URLEncodedFormat(rc.siteid)#"><i class="icon-plus-sign"></i> #application.rbFactory.getKeyValue(session.rb,'approvalchains.addapprovalchain')#</a>
+	<a class="btn" href="index.cfm?muraAction=cchain.edit&chainID=&siteid=#URLEncodedFormat(rc.siteid)#"><i class="icon-plus-sign"></i> #application.rbFactory.getKeyValue(session.rb,'approvalchains.addapprovalchain')#</a>
 </div>
 
 <table class="table table-striped table-condensed table-bordered mura-table-grid"> 
 <thead>
-<tr>
-<th class="var-width">#application.rbFactory.getKeyValue(session.rb,"approvalchains.name")#</th>
-<th class="actions">&nbsp;</th>
-</tr>
+	<tr>
+		<th class="var-width">#application.rbFactory.getKeyValue(session.rb,"approvalchains.name")#</th>
+		<th class="actions">&nbsp;</th>
+	</tr>
 <thead>
 <tbody class="nest">
-<tr><td colspan="2">#application.rbFactory.getKeyValue(session.rb,"approvalchains.noapprovalchains")#</td></tr>
+<cfif not chains.hasNext()>
+	<tr><td colspan="2">#application.rbFactory.getKeyValue(session.rb,"approvalchains.noapprovalchains")#</td></tr>
+<cfelse>
+	<cfloop condition="chains.hasNext()">
+	<cfset chain=chains.next()>
+	<tr>
+		<td class="var-width">
+			<a title="#application.rbFactory.getKeyValue(session.rb,'approvalchains.edit')#" href="index.cfm?muraAction=cchain.edit&chainID=#chain.getChainID()#&siteid=#URLEncodedFormat(rc.siteid)#">#HTMLEditFormat(chain.getName())#</a>
+		</td>
+		<td class="actions">
+			<ul>
+				<li class="edit">
+					<a title="#application.rbFactory.getKeyValue(session.rb,'approvalchains.edit')#" href="index.cfm?muraAction=cchain.edit&chainID=#chain.getChainID()#&siteid=#URLEncodedFormat(rc.siteid)#"><i class="icon-pencil"></i></a>
+				</li>
+				<li class="delete">
+					<a title="#application.rbFactory.getKeyValue(session.rb,'categorymanager.delete')#" href="index.cfm?muraAction=cchain.delete&chainID=#chain.getChainID()#&siteid=#URLEncodedFormat(rc.siteid)#" onClick="return confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'approvalchains.deleteconfirm'))#',this.href)"><i class="icon-remove-sign"></i></a>
+				</li>
+			</ul>
+		</td>
+	</tr>
+	</cfloop>
+</cfif>
 </tbody>
 </table>
 </cfoutput>

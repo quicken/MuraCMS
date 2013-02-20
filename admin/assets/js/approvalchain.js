@@ -5,9 +5,9 @@ var chainManager={
 			update: function(event,ui) {
 				event.stopPropagation();
 				if(ui.item.parents("ul:first").attr("id") =='groupAssignmentListSort'){
-					ui.item.attr('name','assignmentID');
+					ui.item.find('input:first').attr('name','groupID');
 				} else {
-					ui.item.attr('name','availableID');
+					ui.item.find('input:first').attr('name','availableID');
 				}
 			}
 		}).disableSelection();

@@ -20,6 +20,8 @@ component extends="mura.bean.beanORM"  table="tapprovalchains"{
             where type=1 and (isPublic=1 and siteid = :publicPoolID or isPublic=0 and siteid = :privatePoolID )
             and inactive=0 
             and userID not in (select groupID from tapprovalassignments where chainid = :chainID)
+            and groupname != 'admin'
+            order by tusers.groupname
             ";
         qs.addParam(name="publicPoolID", value=site.getPublicUserPoolID(), cfsqltype='cf_sql_varchar');
         qs.addParam(name="privatePoolID", value=site.getPrivateUserPoolID(), cfsqltype='cf_sql_varchar');
@@ -30,6 +32,68 @@ component extends="mura.bean.beanORM"  table="tapprovalchains"{
         it.setQuery(qs.execute().getResult());
         return it;
 
+    }
+
+
+    function save(){
+
+        //writeDump(var=getValue('groupID'),abort=true);
+        if(valueExists('groupID')){
+            var groupID=getValue('groupID');
+            var deleteID='';
+            var assignments=getBean('approvalChain')
+                .loadBy(chainID=getValue('chainID'))
+                .getAssignmentsIterator();
+            var assignment='';
+            var firstID='';
+
+            while(assignments.hasNext()){
+                assignment=assignments.next();
+
+                if(not listFindNoCase(groupID,assignment.getGroupID())){
+                    deleteID=listAppend(deleteID,assignment.getAssignmentID());
+                }
+            }
+
+            //writeDump(var=groupID);
+            for(var i=1; i lte listLen(groupID); i=i+1){
+                assignment=getBean('approvalChainAssignment')
+                    .loadBy(chainID=getValue('chainID'), groupID=listGetAt(groupID,i))
+                    .setOrderNo(i)
+                    .save();
+
+
+                //writeDump(var=assignment.getAssignmentID());
+  
+                if(i eq 1){
+                    firstID=assignment.getGroupID();
+                }
+                
+            }
+            //abort;
+            //writeDump(var=deleteID,abort=true);
+
+            if(len(deleteID)){
+                for(i=1; i lte listLen(deleteID); i=i+1){
+                    var qs = new Query();
+                    var sql="
+                        update tapprovalrequests set groupID= :firstID
+                        where chainid = :chainID
+                        and groupID= :groupID
+                        ";
+                    qs.addParam(name="groupID", value=listGetAt(deleteID,i), cfsqltype='cf_sql_varchar');
+                    qs.addParam(name="firstID", value=firstID, cfsqltype='cf_sql_varchar');
+                    qs.addParam(name="chainID", value=getValue('chainID'), cfsqltype='cf_sql_varchar');
+                    qs.setSQL(sql).execute();
+
+                    getBean('approvalChainAssignment').loadBy(assignmentID=listGetAt(deleteID,i)).delete();
+
+                }
+            }
+
+        }
+
+        return super.save();
     }
     
 }

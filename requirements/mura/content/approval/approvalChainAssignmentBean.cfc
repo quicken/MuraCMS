@@ -1,6 +1,6 @@
-component extends="mura.bean.beanORM"  table="tapprovalassignments" {
+component extends="mura.bean.beanORM"  table="tapprovalmembers" {
 
-	property name="assignmentID" fieldtype="id";
+	property name="memberID" fieldtype="id";
     property name="orderno" type="int" default="1";
     property name="created" type="timestamp";
     property name="approvalChain" fieldtype="many-to-one" cfc="approvalChainBean" fkcolumn="chainID";   

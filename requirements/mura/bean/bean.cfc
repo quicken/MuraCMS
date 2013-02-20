@@ -49,6 +49,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="errors" type="struct" persistent="false" />
 <cfproperty name="isNew" type="numeric" persistent="false" default="0"/>
 <cfproperty name="fromMuraCache" type="boolean" default="false" persistent="false"/>
+<cfproperty name="instanceID" type="char" persistent="false"/>
 
 <cffunction name="init" output="false">
 	<cfset super.init(argumentCollection=arguments)>
@@ -57,6 +58,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.isNew=1/>
 	<cfset variables.instance.errors=structNew()/>
 	<cfset variables.instance.fromMuraCache = false />
+	<cfif not structKeyExists(variables.instance,"instanceID")>
+		<cfset variables.instance.instanceID=createUUID()>
+	</cfif>
 	<cfreturn this>
 </cffunction>
 
