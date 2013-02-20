@@ -59,7 +59,7 @@
     </ul>
                         
     <ul id="groupAssignmentListSort" class="groupDisplayListSortOptions">  
-      <cfset it=rc.chain.getAssignmentsIterator()>
+      <cfset it=rc.chain.getMembershipsIterator()>
       <cfloop condition="it.hasNext()">
         <cfset item=it.next()>
         <li class="ui-state-highlight">
@@ -70,7 +70,7 @@
     </ul>   
     <script>
       $(function(){
-          chainManager.setGroupAssignmentSort();
+          chainManager.setGroupMembershipSort();
         });
     </script>
   </div>

@@ -71,7 +71,7 @@ component extends="controller" {
 
 	function save(rc){
         if(not isdefined('arguments.rc.siteid')){
-        	arguments.rc.siteID=session.siteid
+        	arguments.rc.siteID=session.siteid;
         	variables.fw.redirect(action="cchain.list",append="siteid");
         }
 		bean=getBean('approvalChain').loadBy(chainID=arguments.rc.chainID).set(arguments.rc).save();

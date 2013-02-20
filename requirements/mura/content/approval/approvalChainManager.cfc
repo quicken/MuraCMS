@@ -12,8 +12,8 @@ component extends="mura.cfobject" {
 		return getBean('beanFeed').setBeanClass('approvalAction').setTable('tapprovalactions').setSiteID(arguments.siteID);
 	}
 
-	function getAssignmentFeed(siteID){
-		return getBean('beanFeed').setBeanClass('approvalAssignment').setTable('tapprovalassignments').setSiteID(arguments.siteID);
+	function getMembershipFeed(siteID){
+		return getBean('beanFeed').setBeanClass('approvalMembership').setTable('tapprovalmemberships').setSiteID(arguments.siteID);
 	}
 	
 }

@@ -1,5 +1,5 @@
 var chainManager={
-	setGroupAssignmentSort: function() {
+	setGroupMembershipSort: function() {
 		$("#groupAvailableListSort, #groupAssignmentListSort").sortable({
 			connectWith: ".groupDisplayListSortOptions",
 			update: function(event,ui) {
