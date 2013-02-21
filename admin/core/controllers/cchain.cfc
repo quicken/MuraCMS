@@ -49,20 +49,42 @@ component extends="controller" {
 
 	function before(rc){
 
-	
-	if (not (listFind(session.mura.memberships,'Admin;#variables.settingsManager.getSite(arguments.rc.siteid).getPrivateUserPoolID()#;0') or listFind(session.mura.memberships,'S2'))
-		and not (listFindNoCase('cPrivateUsers.editAddress,cPrivateUsers.updateAddress',listLast(arguments.rc.muraAction,":")) and  rc.userID eq session.mura.userID))}
-		secure(arguments.rc);
+		if(
+			not (
+				listFind(session.mura.memberships,'Admin;#variables.settingsManager.getSite(arguments.rc.siteid).getPrivateUserPoolID()#;0') 
+				or listFind(session.mura.memberships,'S2')
+				)
+		){
+			secure(arguments.rc);
+		}
+
+		param name='arguments.rc.chainid' default='';
+		param name='arguments.rc.name' default='';
+		param name='arguments.rc.description' default='';
+		param name='arguments.rc.userid' default='';
+		param name='arguments.rc.groupid' default='';
+		param name='arguments.rc.requestid' default='';
+		param name='arguments.rc.actionid' default='';
+		param name='arguments.rc.actiontype' default='';
+
 	}
 
-	param name='arguments.rc.chainid' default='';
-	param name='arguments.rc.name' default='';
-	param name='arguments.rc.description' default='';
-	param name='arguments.rc.userid' default='';
-	param name='arguments.rc.groupid' default='';
-	param name='arguments.rc.requestid' default='';
-	param name='arguments.rc.actionid' default='';
-	param name='arguments.rc.actiontype' default='';
+	function save(rc){
+        if(not isdefined('arguments.rc.siteid')){
+        	arguments.rc.siteID=session.siteid;
+        	variables.fw.redirect(action="cchain.list",append="siteid");
+        }
+		bean=getBean('approvalChain').loadBy(chainID=arguments.rc.chainID).set(arguments.rc).save();
+
+		if(not bean.hasErrors()){
+			variables.fw.redirect(action="cchain.list",append="siteid");
+		}
+	}
+
+	function delete(rc){
+		bean=getBean('approvalChain').loadBy(chainID=arguments.rc.chainID).delete();
+		variables.fw.redirect(action="cchain.list",append="siteid");
+	}
 
 }
 

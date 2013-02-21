@@ -1,3 +1,6 @@
+<cfif not len(rc.chainID)>
+  <cfset rc.chainID=createUUID()>
+</cfif>  
 <cfset rc.chain=$.getBean('approvalChain').loadBy(chainid=rc.chainID)/>
 <cfoutput>
 <cfif not len(rc.chainid)>
@@ -14,7 +17,7 @@
     <div class="alert alert-error">#application.utility.displayErrors(rc.chain.getErrors())#</div>
 </cfif>
 
-<form class="fieldset-wrap" novalidate="novalidate" action="index.cfm?muraAction=cchains.save" method="post" name="form1" onsubmit="return validateForm(this);">
+<form class="fieldset-wrap" novalidate="novalidate" action="index.cfm?muraAction=cchain.save" method="post" name="form1" onsubmit="return validateForm(this);">
 <div class="fieldset">
 <div class="control-group">
   <label class="control-label">
@@ -48,7 +51,7 @@
       <cfset it=rc.chain.getAvailableGroupsIterator()>
       <cfloop condition="it.hasNext()">
         <cfset item=it.next()>
-        <li class="ui-state-default" data-groupid="#item.getUserID()#">
+        <li class="ui-state-default">
           #HTMLEditFormat(item.getGroupName())#
           <input name="availableID" type="hidden" value="#item.getUserID()#">
         </li>
@@ -56,33 +59,31 @@
     </ul>
                         
     <ul id="groupAssignmentListSort" class="groupDisplayListSortOptions">  
-      <cfset it=rc.chain.getAssignmentsIterator()>
+      <cfset it=rc.chain.getMembershipsIterator()>
       <cfloop condition="it.hasNext()">
         <cfset item=it.next()>
         <li class="ui-state-highlight">
-          #HTMLEditFormat(item.getGroupName())#
-          <input name="assignmentID" type="hidden" value="#item.getUserID()#">
+          #HTMLEditFormat(item.getGroup().getGroupName())#
+          <input name="groupID" type="hidden" value="#item.getGroupID()#">
         </li>
       </cfloop>
-    </ul>
-              
+    </ul>   
     <script>
       $(function(){
-          chainManager.setGroupAssignmentSort();
+          chainManager.setGroupMembershipSort();
         });
     </script>
   </div>
 </div>
 <div class="form-actions">
   <cfif rc.chainID eq ''>
-    <input type="button" class="btn" onclick="submitForm(document.forms.form1,'add');" value="#application.rbFactory.getKeyValue(session.rb,'approvalchains.add')#" /><input type=hidden name="chainID" value="">
+    <input type="button" class="btn" onclick="submitForm(document.forms.form1,'add');" value="#application.rbFactory.getKeyValue(session.rb,'approvalchains.add')#" />
   <cfelse>
-    <input type="button" class="btn" value="#application.rbFactory.getKeyValue(session.rb,'chains.delete')#" onclick="confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'approvalchains.deleteconfirm'))#','index.cfm?muraAction=cchains.delete&chainID=#rc.chain.getchainID()#&siteid=#URLEncodedFormat(rc.chain.getSiteID())#')" /> 
-    <input type="button" class="btn" onclick="submitForm(document.forms.form1,'update');" value="#application.rbFactory.getKeyValue(session.rb,'approvalchains.update')#" />
-     <input type=hidden name="chainID" value="#rc.chain.getchainID()#">
+    <input type="button" class="btn" value="#application.rbFactory.getKeyValue(session.rb,'approvalchains.delete')#" onclick="confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'approvalchains.deleteconfirm'))#','index.cfm?muraAction=cchain.delete&chainID=#rc.chain.getchainID()#&siteid=#URLEncodedFormat(rc.chain.getSiteID())#')" /> 
+    <input type="button" class="btn" onclick="submitForm(document.forms.form1,'save');" value="#application.rbFactory.getKeyValue(session.rb,'approvalchains.update')#" />
   </cfif>
-  <input type="hidden" name="action" value="">
   <input type="hidden" name="siteid" value="#rc.chain.getSiteID()#">
+  <input type=hidden name="chainID" value="#rc.chain.getchainID()#">
 </div>
 </form>
 <cfinclude template="js.cfm">

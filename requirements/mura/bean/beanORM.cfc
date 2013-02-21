@@ -117,7 +117,16 @@ component extends="mura.bean.bean" {
 	}
 
 	private function synthArgs(args){
-		return {"#translatePropKey(args.loadkey)#"=getValue(translatePropKey(args.fkcolumn)),returnFormat=args.returnFormat};
+		var returnArgs={
+				"#translatePropKey(args.loadkey)#"=getValue(translatePropKey(args.fkcolumn)),
+				returnFormat=args.returnFormat
+			};
+
+		if(structKeyExists(args,'prop') and structKeyExists(variables.properties[args.prop],'orderby')){
+			returnArgs.orderby=variables.properties[args.prop].orderby;
+		}
+
+		return returnArgs;
 	}
 
 	function set(data){
@@ -272,11 +281,11 @@ component extends="mura.bean.bean" {
 
 			       	 		if(prop.fieldtype eq 'one-to-many'){
 			       	 			//getBean("#prop.cfc#").loadBy(argumentCollection=structAppend(arguments.MissingMethodArguments,synthArgs(variables.synthedFunctions["has#prop.name#"].args),false)).recordcount
-				       	 		variables.synthedFunctions['get#prop.name#Iterator']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={fkcolumn="primaryKey",cfc="#prop.cfc#",returnFormat="iterator",functionType='getEntityIterator'}};
-				       	 		variables.synthedFunctions['get#prop.name#Query']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={fkcolumn="primaryKey",cfc="#prop.cfc#",returnFormat="query",functionType='getEntityQuery'}};
-				       	 		variables.synthedFunctions['has#prop.name#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments).recordcount',args={fkcolumn="primaryKey",cfc="#prop.cfc#",returnFormat="query",functionType='hasEntity'}};
-				       	 		variables.synthedFunctions['add#prop.name#']={exp='addObject(arguments.MissingMethodArguments[1])',args={functionType='addEntity'}};
-				       	 		variables.synthedFunctions['remove#prop.name#']={exp='removeObject(arguments.MissingMethodArguments[1])',args={functionType='removeEntity'}};
+				       	 		variables.synthedFunctions['get#prop.name#Iterator']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=prop.name,fkcolumn="primaryKey",cfc="#prop.cfc#",returnFormat="iterator",functionType='getEntityIterator'}};
+				       	 		variables.synthedFunctions['get#prop.name#Query']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=prop.name,fkcolumn="primaryKey",cfc="#prop.cfc#",returnFormat="query",functionType='getEntityQuery'}};
+				       	 		variables.synthedFunctions['has#prop.name#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments).recordcount',args={prop=prop.name,fkcolumn="primaryKey",cfc="#prop.cfc#",returnFormat="query",functionType='hasEntity'}};
+				       	 		variables.synthedFunctions['add#prop.name#']={exp='addObject(arguments.MissingMethodArguments[1])',args={prop=prop.name,functionType='addEntity'}};
+				       	 		variables.synthedFunctions['remove#prop.name#']={exp='removeObject(arguments.MissingMethodArguments[1])',args={prop=prop.name,functionType='removeEntity'}};
 
 					       	 	if(structKeyExists(prop,"singularname")){
 					       	 		variables.synthedFunctions['get#prop.singularname#Iterator']=variables.synthedFunctions['get#prop.name#Iterator'];
@@ -287,11 +296,11 @@ component extends="mura.bean.bean" {
 					       	 	}
 			       	 		} else if (prop.fieldtype eq 'many-to-one'){
 			       	 			if(prop.fkcolumn eq 'siteid'){
-			       	 				variables.synthedFunctions['get#prop.name#']={exp='getBean("settingsManager").getSite(getValue("siteID"))',args={functionType='getEntity'}};
-			       	 				variables.synthedFunctions['set#prop.name#']={exp='setValue("siteID",arguments.MissingMethodArguments[1].getSiteID()))',args={functionType='setEntity'}};
+			       	 				variables.synthedFunctions['get#prop.name#']={exp='getBean("settingsManager").getSite(getValue("siteID"))',args={prop=prop.name,functionType='getEntity'}};
+			       	 				variables.synthedFunctions['set#prop.name#']={exp='setValue("siteID",arguments.MissingMethodArguments[1].getSiteID()))',args={prop=prop.name,functionType='setEntity'}};
 			       	 			} else {
-			       	 				variables.synthedFunctions['get#prop.name#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={fkcolumn="#prop.fkcolumn#",cfc="#prop.cfc#",returnFormat="this",functionType='getEntity'}};
-			       	 				variables.synthedFunctions['set#prop.name#']={exp='setValue("#prop.fkcolumn#",arguments.MissingMethodArguments[1].getValue(arguments.MissingMethodArguments[1].getPrimaryKey())',args={functionType='setEntity'}};
+			       	 				variables.synthedFunctions['get#prop.name#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=prop.name,fkcolumn="#prop.fkcolumn#",cfc="#prop.cfc#",returnFormat="this",functionType='getEntity'}};
+			       	 				variables.synthedFunctions['set#prop.name#']={exp='setValue("#prop.fkcolumn#",arguments.MissingMethodArguments[1].getValue(arguments.MissingMethodArguments[1].getPrimaryKey())',args={prop=prop.name,functionType='setEntity'}};
 			       	 			}
 			       	 		}
 
@@ -354,13 +363,16 @@ component extends="mura.bean.bean" {
 
 		if(arguments.prop.persistent){
 			
-			paramArgs={name=arguments.prop.column,value=arguments.value,cfsqltype="cf_sql_" & columns[arguments.prop.column].datatype};
+			paramArgs={name=arguments.prop.column,cfsqltype="cf_sql_" & columns[arguments.prop.column].datatype};
 						
 			if(structKeyExists(arguments,'value')){
 				paramArgs.null=arguments.prop.nullable and (not len(arguments.value) or arguments.value eq "null");
 			}	else {
+				arguments.value='null';
 				paramArgs.null=arguments.prop.nullable and (not len(variables.instance[arguments.prop.column]) or variables.instance[arguments.prop.column] eq "null");			
 			} 
+
+			paramArgs.value=arguments.value;
 
 			if(columns[arguments.prop.column].datatype eq 'datetime'){
 				paramArgs.cfsqltype='cf_sql_timestamp';
@@ -603,18 +615,36 @@ component extends="mura.bean.bean" {
 		var qs=new Query();
 		var sql="";
 		var props=getProperties();
+		var prop="";
+		var columns=getColumns();
 		var started=false;
 		var rs="";
+		var hasArg=false;
 
 		savecontent variable="sql"{
 			writeOutput("select * from #getTable()# ");
 			for(var arg in arguments){
-				if(structKeyExists(props,arg)){
+				hasArg=false;
+				prop=arg;
+
+				if(structKeyExists(props,arg) or arg eq 'primarykey'){
+					hasArg=true;
+				} else if (structKeyExists(columns,arg)) {
+					for(prop in props){
+						if(props[prop].column eq arg){
+							hasArg=true;
+							break;
+						}
+					}
+				}
+
+				if(hasArg){
 					if(arg eq 'primarykey'){
 						arg=getPrimaryKey();
+						prop=arg;
 					}
 
-					addQueryParam(qs,props[arg],arguments[arg]);
+					addQueryParam(qs,props[prop],arguments[arg]);
 
 					if(not started){
 						writeOutput("where ");
@@ -633,7 +663,7 @@ component extends="mura.bean.bean" {
 		}
 		
 		rs=qs.execute(sql=sql).getResult();
-
+	
 		if(rs.recordcount){
 			set(rs);
 		} else {
