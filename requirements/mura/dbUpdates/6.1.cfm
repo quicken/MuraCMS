@@ -3,4 +3,5 @@
 	getBean('approvalChainMembership').checkSchema();
 	getBean('approvalRequest').checkSchema();
 	getBean('approvalAction').checkSchema();
+	getBean('approvalChainAssignment').checkSchema();
 </cfscript>

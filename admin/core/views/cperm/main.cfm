@@ -117,6 +117,26 @@ version 2 without this exception.  You may, if you choose, apply this exception 
             </tr>
 		</cfif>
 		</table>
+
+	<cfset chains=$.getBean('approvalChainManager').getChainFeed(rc.siteID).getIterator()>
+	<cfset assignment=$.getBean('approvalChainAssignment').loadBy(siteID=rc.siteID, contentID=rc.contentID)>
+	<cfif chains.hasNext()>
+	<h2>#application.rbFactory.getKeyValue(session.rb,'permissions.approvalchain')#</h2>
+	<div class="control-group">
+        <label class="control-label">
+           <a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"tooltip.approvalchain"))#">#application.rbFactory.getKeyValue(session.rb,'permissions.selectapprovalchain')# <i class="icon-question-sign"></i></a>
+        </label>
+        <div class="controls">
+            <select name="chainID" class="dropdown">
+            	<option value="">#application.rbFactory.getKeyValue(session.rb,'permissions.none')#</option>
+            	<cfloop condition="chains.hasNext()">
+            		<cfset chain=chains.next()>
+            		<option value="#chain.getChainID()#"<cfif assignment.getChainID() eq chain.getChainID()> selected</cfif>>#HTMLEditFormat(chain.getName())#</option>
+            	</cfloop>
+         	</select>
+        </div>
+    </div>
+    </cfif>
 	<div class="form-actions no-offset">
 		 <input type="button" class="btn" onclick="submitForm(document.forms.form1);" value="#application.rbFactory.getKeyValue(session.rb,'permissions.update')#" />
 	</div>
