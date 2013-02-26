@@ -801,8 +801,48 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfif newBean.getcontentID() eq ''>
 				<cfset newBean.setcontentID(createUUID()) />
 			</cfif>
-		
-			<cfset newBean.setcontentHistID(createUUID()) />
+
+			<cfif newBean.getApproved() and newBean.requiresApproval()>
+				<cfset var approvalRequest=newBean.getApprovalRequest()>
+
+				<!---If it does not have a currently pending aproval request create one --->
+				<cfif approvalRequest.getIsNew()>			
+					<cfif isDefined("session.mura") and session.mura.isLoggedIn>
+						<cfset approvalRequest.setUserID(session.mura.userID)>
+					</cfif>
+					
+					<cfset newBean.setcontentHistID(createUUID()) />
+					<cfset approvalRequest.setContentHistID(newBean.getContentHistID())>
+					<cfset approvalRequest.save()>
+					<cfset newBean.setApproved(0)>
+				
+				<!--- If it has an approval request that has been rejected or is pending then create a new request --->
+				<cfelseif approvalRequest.getStatus() neq 'Approved'>
+
+					<!--- If the request is pending conditionally delete existing request --->
+					<cfif approvalRequest.getStatus() eq 'Pending' 
+						and yesNoFormat(newBean.getValue('cancelPendingApproval'))>
+						<cfset approvalRequest.delete()>
+						<cfset approvalRequest=newBean.getApprovalRequest()>
+						<cfif isDefined("session.mura") and session.mura.isLoggedIn>
+							<cfset approvalRequest.setUserID(session.mura.userID)>
+						</cfif>
+					</cfif>
+
+					<cfset newBean.setcontentHistID(createUUID()) />
+					<cfset approvalRequest.setcontentHistID(newBean.getContentHistID())>
+					<cfset approvalRequest.save()>
+					<cfset newBean.setApproved(0)>
+				
+				<!--- This should happen if it has an existing approval request that has been approved --->
+				<cfelse>
+					<cfset newBean.setcontentHistID(createUUID()) />
+				</cfif>
+			
+			<!--- The content does is not required to be sent throught an approval chain --->
+			<cfelse>
+				<cfset newBean.setcontentHistID(createUUID()) />
+			</cfif>
 			
 			<cfif newBean.getTitle() eq ''>
 				<cfset newBean.setTitle(newBean.getmenutitle())>
@@ -2278,4 +2318,5 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cffunction name="getTabList" output="false">
 		<cfreturn "Basic,SEO,Mobile,List Display Options,Layout & Objects,Categorization,Tags,Related Content,Extended Attributes,Advanced,Publishing,Usage Report">
 	</cffunction>
+
 </cfcomponent>

@@ -1157,4 +1157,26 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfreturn "contentHistID">
 </cffunction>
 
+<cffunction name="requiresApproval" output="false">
+	<cfset var crumbs=getCrumbIterator()>
+	<cfset crumb="">
+	<cfset chain="">
+
+	<cfloop condition="crumbs.hasNext()">
+		<cfset crumb=crumbs.next()>
+		<cfif len(crumb.getChainID())>
+			<cfset chain=getBean('approvalChain').loadBy(chainID=crumb.getChainID())>
+			<cfif not chain.getIsNew()>
+				<cfset setValue('chainID',crumb.getChainID())>
+				<cfreturn true>
+			</cfif>
+		</cfif>
+	</cfloop>
+
+	<cfreturn false>
+</cffunction>
+
+<cffunction name="getApprovalRequest" output="false">
+	<cfreturn getBean('approvalRequest').loadBy(contenthistid=getValue('contenthistid'),chainID=getValue('chainID'),siteID=getValue('siteID'))>
+</cffunction>
 </cfcomponent>

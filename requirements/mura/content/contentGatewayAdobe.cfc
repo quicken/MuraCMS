@@ -146,9 +146,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			select tcontent.contenthistid, tcontent.contentid, tcontent.menutitle, tcontent.filename, tcontent.parentid, tcontent.type, 
 			tcontent.subtype, tcontent.target, tcontent.targetParams, 
 			tcontent.siteid, tcontent.restricted, tcontent.restrictgroups,tcontent.template,tcontent.childTemplate,tcontent.inheritObjects,tcontent.metadesc,tcontent.metakeywords,tcontent.sortBy,
-			tcontent.sortDirection,tfiles.fileExt
+			tcontent.sortDirection,tfiles.fileExt,tapprovalassignments.chainID
 			from tcontent 
 			left join tfiles on(tcontent.fileID=tfiles.fileID)
+			left join tapprovalassignments on (tcontent.contentid=tapprovalassignments.contentid
+											and tcontent.siteID=tapprovalassignments.siteID)
 			where tcontent.active=1 
 			and tcontent.contentid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#ID#"/> 
 			and tcontent.siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
@@ -178,6 +180,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfset crumb.sortDirection=rsCrumbData.sortDirection />
 			<cfset crumb.inheritObjects=rsCrumbData.inheritObjects />
 			<cfset crumb.fileExt=rsCrumbData.fileExt />
+			<cfset crumb.chainID=rsCrumbData.chainID />
 				
 			<cfset I=I+1>
 			<cfset arrayAppend(crumbdata,crumb) />
@@ -205,7 +208,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			select tcontent.contenthistid, tcontent.contentid, tcontent.menutitle, tcontent.filename, tcontent.parentid, tcontent.type, 
 			tcontent.subtype, tcontent.target, tcontent.targetParams, 
 			tcontent.siteid, tcontent.restricted, tcontent.restrictgroups,tcontent.template,tcontent.childTemplate,tcontent.inheritObjects,tcontent.metadesc,tcontent.metakeywords,tcontent.sortBy,
-			tcontent.sortDirection,
+			tcontent.sortDirection,tapprovalassignments.chainID,
 			<cfif variables.configBean.getDBType() eq "MSSQL">
 			len(Cast(tcontent.path as varchar(1000))) depth
 			<cfelseif variables.configBean.getDBType() eq "NUODB">
@@ -217,6 +220,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			
 			from tcontent  
 			left join tfiles on(tcontent.fileID=tfiles.fileID)
+			left join tapprovalassignments on (tcontent.contentid=tapprovalassignments.contentid
+											and tcontent.siteID=tapprovalassignments.siteID)
 			where
 			tcontent.contentID in (<cfqueryparam cfsqltype="cf_sql_varchar" list="true" value="#arguments.path#">)
 			and tcontent.active=1 
@@ -249,6 +254,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfset crumb.sortDirection=rsCrumbData.sortDirection />
 			<cfset crumb.inheritObjects=rsCrumbData.inheritObjects />
 			<cfset crumb.fileExt=rsCrumbData.fileExt />
+			<cfset crumb.chainID=rsCrumbData.chainID />
 			
 			<cfset arrayAppend(crumbdata,crumb) />
 			<cfif arguments.setInheritance and request.inheritedObjects eq "" and rsCrumbData.inheritObjects eq 'cascade'>
@@ -1101,13 +1107,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var rsHist = "">
 	
 	<cfquery name="rsHist" datasource="#variables.configBean.getReadOnlyDatasource()#"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
-	select menutitle, tcontent.siteid, contentid, contenthistid, fileID, type, tcontent.lastupdateby, active, approved, tcontent.lastupdate, 
-	display, displaystart, displaystop, moduleid, isnav, notes,isfeature,featurestart,featurestop,inheritObjects,filename,targetParams,releaseDate,
+	select tcontent.menutitle, tcontent.siteid, tcontent.contentid, tcontent.contenthistid, tcontent.fileID, tcontent.type, tcontent.lastupdateby, tcontent.active, tcontent.approved, tcontent.lastupdate, 
+	tcontent.display, tcontent.displaystart, tcontent.displaystop, tcontent.moduleid, tcontent.isnav, tcontent.notes,tcontent.isfeature,tcontent.featurestart,tcontent.featurestop,tcontent.inheritObjects,tcontent.filename,tcontent.targetParams,tcontent.releaseDate,
 	tcontent.changesetID, tchangesets.name changesetName, tchangesets.published changsetPublished,tchangesets.publishDate changesetPublishDate , 
-	tcontent.majorVersion,tcontent.minorVersion, tcontent.sourceID
+	tcontent.majorVersion,tcontent.minorVersion, tcontent.sourceID, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID
 	from tcontent 
 	left Join tchangesets on (tcontent.changesetID=tchangesets.changesetID)
-	where contentid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/> and tcontent.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> order by tcontent.lastupdate desc
+	left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
+	where tcontent.contentid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/> and tcontent.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> order by tcontent.lastupdate desc
 	</cfquery>
 
 	<cfreturn rsHist />
@@ -1119,12 +1126,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var rsDraftList = "">
 	
 	<cfquery name="rsDraftList" datasource="#variables.configBean.getReadOnlyDatasource()#"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
-	select menutitle, contentid, contenthistid, fileID, type, lastupdateby, active, approved, lastupdate, 
-	display, displaystart, displaystop, moduleid, isnav, notes,isfeature,inheritObjects,filename,targetParams,releaseDate,path
-	from tcontent where contentid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/>
-	and siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> 
-	and approved=0 and changesetID is null
-	order by lastupdate desc
+	select tcontent.menutitle, tcontent.contentid, tcontent.contenthistid, tcontent.fileID, tcontent.type, tcontent.lastupdateby, tcontent.active, tcontent.approved, tcontent.lastupdate, 
+	tcontent.display, tcontent.displaystart, tcontent.displaystop, tcontent.moduleid, tcontent.isnav, tcontent.notes,tcontent.isfeature,tcontent.inheritObjects,tcontent.filename,
+	tcontent.targetParams,tcontent.releaseDate,tcontent.path, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID
+	from tcontent 
+	left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
+	where tcontent.contentid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/>
+	and tcontent.siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> 
+	and tcontent.approved=0 and tcontent.changesetID is null
+	order by tcontent.lastupdate desc
 	</cfquery>
 
 	<cfreturn rsDraftList />
@@ -1136,12 +1146,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var rsPendingChangeSets = "">
 	
 	<cfquery name="rsPendingChangeSets" datasource="#variables.configBean.getReadOnlyDatasource()#"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
-	select menutitle, contentid, contenthistid, fileID, type, lastupdateby, active, approved, lastupdate, 
-	display, displaystart, displaystop, moduleid, isnav, notes,isfeature,inheritObjects,filename,targetParams,releaseDate,path
-	from tcontent where contentid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/>
-	and siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> 
-	and approved=0 and changesetID is not null
-	order by lastupdate desc
+	select tcontent.menutitle, tcontent.contentid, tcontent.contenthistid, tcontent.fileID, tcontent.type, tcontent.lastupdateby, tcontent.active, tcontent.approved, tcontent.lastupdate, 
+	tcontent.display, tcontent.displaystart, tcontent.displaystop, tcontent.moduleid, tcontent.isnav, tcontent.notes,tcontent.isfeature,tcontent.inheritObjects,tcontent.filename,
+	tcontent.targetParams,tcontent.releaseDate,tcontent.path, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID
+	from tcontent 
+	left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
+	where tcontent.contentid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/>
+	and tcontent.siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> 
+	and tcontent.approved=0 and tcontent.changesetID is not null
+	order by tcontent.lastupdate desc
 	</cfquery>
 
 	<cfreturn rsPendingChangeSets />
@@ -1153,13 +1166,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var rsArchiveHist = "">
 	
 	<cfquery name="rsArchiveHist" datasource="#variables.configBean.getReadOnlyDatasource()#"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
-	select menutitle, contentid, contenthistid, fileID, type, lastupdateby, active, approved, lastupdate, 
-	display, displaystart, displaystop, moduleid, isnav, notes,isfeature,inheritObjects,filename,targetParams,releaseDate
-	from tcontent where contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/> 
-	and siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> 
-	and approved=1 
-	and active=0 
-	order by lastupdate desc
+	select tcontent.menutitle, tcontent.contentid, tcontent.contenthistid, tcontent.fileID, tcontent.type, tcontent.lastupdateby, tcontent.active, tcontent.approved, tcontent.lastupdate, 
+	tcontent.display, tcontent.displaystart, tcontent.displaystop, tcontent.moduleid, tcontent.isnav, tcontent.notes,tcontent.isfeature,tcontent.inheritObjects,tcontent.filename,
+	tcontent.targetParams,tcontent.releaseDate,tcontent.path, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID
+	from tcontent 
+	left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
+	where tcontent.contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/> 
+	and tcontent.siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> 
+	and tcontent.approved=1 
+	and tcontent.active=0 
+	order by tcontent.lastupdate desc
 	</cfquery>
 
 	<cfreturn rsArchiveHist />
