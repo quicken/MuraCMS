@@ -178,7 +178,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<dt>Item Status</dt>
 		<cfif structKeyExists(previewData.previewmap,$.content("contentID")) >
 			<cfif previewData.previewmap[$.content("contentID")].changesetID eq previewData.changesetID>
-			<dd id="m-cs-included">#application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,"changesets.previewnodemembership"),'<strong>"#HTMLEDitFormat(previewData.previewmap[$.content("contentID")].changesetName)#"</strong>')#</dd>
+			<dd id="m-cs-included" ><i class="icon-ok-sign"></i> #application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,"changesets.previewnodemembership"),'<strong>"#HTMLEDitFormat(previewData.previewmap[$.content("contentID")].changesetName)#"</strong>')#</dd>
 			<cfelse>
 			<dd id="m-cs-other">#application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,"changesets.previewnodemembership"),'<strong>"#HTMLEDitFormat(previewData.previewmap[$.content("contentID")].changesetName)#"</strong>')#</dd>
 			</cfif>
