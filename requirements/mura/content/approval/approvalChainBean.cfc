@@ -20,7 +20,6 @@ component extends="mura.bean.beanORM"  table="tapprovalchains"{
             where type=1 and (isPublic=1 and siteid = :publicPoolID or isPublic=0 and siteid = :privatePoolID )
             and inactive=0 
             and userID not in (select groupID from tapprovalmemberships where chainid = :chainID)
-            and groupname != 'admin'
             order by tusers.groupname
             ";
         qs.addParam(name="publicPoolID", value=site.getPublicUserPoolID(), cfsqltype='cf_sql_varchar');
@@ -90,6 +89,17 @@ component extends="mura.bean.beanORM"  table="tapprovalchains"{
 
                 }
             }
+
+            var qs = new Query();
+            var sql="
+                update tapprovalrequests set groupID= :firstID
+                where chainid = :chainID
+                and (groupID is null or groupID='')
+                ";
+
+            qs.addParam(name="firstID", value=firstID, cfsqltype='cf_sql_varchar');
+            qs.addParam(name="chainID", value=getValue('chainID'), cfsqltype='cf_sql_varchar');
+            qs.setSQL(sql).execute();
 
         }
 

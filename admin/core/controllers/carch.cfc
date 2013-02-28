@@ -25,7 +25,6 @@
 	</cfif>
 
 	<cfparam name="arguments.rc.ajaxrequest" default="false"/>
-	<cfparam name="arguments.rc.orderno" default="0"/>
 	<cfparam name="arguments.rc.moduleid" default="00000000000000000000000000000000000"/>
 	
 	<cfif not arguments.rc.ajaxrequest>
@@ -93,6 +92,8 @@
 		<cfparam name="arguments.rc.locking" default="false"/>
 		<cfparam name="arguments.rc.mobileExclude" default="0"/>
 		<cfparam name="arguments.rc.moduleAssign" default=""/>
+		<cfparam name="arguments.rc.orderno" default="0"/>
+		<cfparam name="arguments.rc.cancelPendingApproval" default="false"/>
 		 
 		<cfif not isDefined("arguments.rc.topid")>
 			<cfparam name="session.topID" default="00000000000000000000000000000000001">
@@ -223,7 +224,7 @@
 	 
 	<cfset request.newImageIDList="">
 
-	<cfif not isNumeric(arguments.rc.orderno)>
+	<cfif structKeyExists(arguments.rc,'orderno') and not isNumeric(arguments.rc.orderno)>
 		<cfset arguments.rc.orderno=0>
 	</cfif>
 	
@@ -256,8 +257,10 @@
 	 </cfif>
   
 	 <cfif arguments.rc.allowAction and arguments.rc.action eq 'add'>
-		<cfif structKeyExists(arguments.rc,"sourceID") and isValid('UUID',arguments.rc.sourceID)>
-			 <cfset arguments.rc.contentBean=getBean('content').loadBy(contentHistID=arguments.rc.sourceID, siteid=arguments.rc.siteid).set(arguments.rc).save() />
+		<cfif structKeyExists(arguments.rc,"sourceid") and isValid('UUID',arguments.rc.sourceid)>
+			 <cfset arguments.rc.contentBean=getBean('content').loadBy(contentHistID=arguments.rc.sourceid, siteid=arguments.rc.siteid).set(arguments.rc).save() />
+		<cfelseif structKeyExists(arguments.rc,"contenthistid") and isValid('UUID',arguments.rc.contenthistid)>
+			 <cfset arguments.rc.contentBean=getBean('content').loadBy(contentHistID=arguments.rc.contenthistid, siteid=arguments.rc.siteid).set(arguments.rc).save() />
 		<cfelse>
 			 <cfset arguments.rc.contentBean=getBean('content').loadBy(contentID=arguments.rc.contentID, siteid=arguments.rc.siteid).set(arguments.rc).save() />
 		</cfif>

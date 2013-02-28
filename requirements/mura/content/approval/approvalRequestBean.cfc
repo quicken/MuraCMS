@@ -66,4 +66,15 @@ component extends="mura.bean.beanORM"  table="tapprovalrequests"{
     	return this;
     }
 
+    function save(){
+    	if(not len(getValue('groupID'))){
+	    	var memberships=getBean('approvalChain').loadBy(chainID=getValue('chainID')).getMembershipsIterator();
+
+	    	if(memberships.hasNext()){
+	    		setValue('groupID',memberships.next().getGroupID());
+	    	}
+    	}
+    	return super.save();
+    }
+
 }

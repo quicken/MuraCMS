@@ -528,6 +528,7 @@ var hasBody=#subType.getHasBody()#;
 	<input type="hidden" name="startrow" value="#rc.startrow#">
 	<input type="hidden" name="returnURL" id="txtReturnURL" value="#rc.returnURL#">
 	<input type="hidden" name="homeID" value="#rc.homeID#">
+	<input type="hidden" name="cancelPendingApproval" value="false">
 	<cfif not  listFind(session.mura.memberships,'S2')>
 		<input type="hidden" name="isLocked" value="#rc.contentBean.getIsLocked()#">
 	</cfif>
