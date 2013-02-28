@@ -147,7 +147,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</script>
 	
 	<div id="m-changesets">
-	<h1>Change Sets</h1>
+	<!--- <h1>Change Sets</h1> --->
 	
 	<dl id="m-cs-changeset">
 		<dt>#application.rbFactory.getKeyValue(session.rb,'changesets.previewchangeset')#</dt>
@@ -178,12 +178,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<dt>Item Status</dt>
 		<cfif structKeyExists(previewData.previewmap,$.content("contentID")) >
 			<cfif previewData.previewmap[$.content("contentID")].changesetID eq previewData.changesetID>
-			<dd id="m-cs-included" ><i class="icon-ok-sign"></i> #application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,"changesets.previewnodemembership"),'<strong>"#HTMLEDitFormat(previewData.previewmap[$.content("contentID")].changesetName)#"</strong>')#</dd>
+			<dd id="m-cs-included" ><i class="icon-check"></i> #application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,"changesets.previewnodemembership"),'<strong>"#HTMLEDitFormat(previewData.previewmap[$.content("contentID")].changesetName)#"</strong>')#</dd>
 			<cfelse>
-			<dd id="m-cs-other">#application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,"changesets.previewnodemembership"),'<strong>"#HTMLEDitFormat(previewData.previewmap[$.content("contentID")].changesetName)#"</strong>')#</dd>
+			<dd id="m-cs-other"><i class="icon-check-empty"></i>  #application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,"changesets.previewnodemembership"),'<strong>"#HTMLEDitFormat(previewData.previewmap[$.content("contentID")].changesetName)#"</strong>')#</dd>
 			</cfif>
 		<cfelse>
-			<dd id="m-cs-none">#application.rbFactory.getKeyValue(session.rb,"changesets.previewnodenotinchangeset")#</dd>
+			<dd id="m-cs-none"><!--- <i class="icon-ban-circle"></i>  --->#application.rbFactory.getKeyValue(session.rb,"changesets.previewnodenotinchangeset")#</dd>
 		</cfif>
 	</dl>	
 
@@ -194,10 +194,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</dl>
 	</cfif>
 	
-	<ul id="m-cs-utility">
-		<li id="m-cs-refresh"><a href="?changesetID=#previewdata.changesetID#">Refresh Change Sets</a></li>
-		<li id="m-cs-exit"><a href="?changesetID=">Exit Change Set Preview</a>
-	</ul>
+	<a id="m-cs-close" href="?changesetID=" title="Close Change Set Toolbar"><i class="icon-remove-sign"></i></a>
 		
 	</div>
 </cfoutput>

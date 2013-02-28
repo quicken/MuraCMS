@@ -43,34 +43,29 @@
 	For clarity, if you create a modified version of Mura CMS, you are not obligated to grant this special exception for your 
 	modified version; it is your choice whether to do so, or to make such modified version available under the GNU General Public License 
 	version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS. */
-/*May need to implement for style consistency*/
-/*#m-changesets * {
-	margin: 0;
-	padding: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-}*/
+
+@import url('variables.less');
+@import url('../bootstrap/less/mixins.less');
+@import url('mixins.less');
 
 #m-changesets {
 	position: fixed !important;
-	z-index: 50 !important;
+	z-index: 5000 !important;
 	bottom: 0px !important;
 	left: 0px !important;
 	min-height: 27px !important;
 	font-size: 11px !important;
-	padding: 22px 0 0 !important;
+	padding: 0 !important;
 	width: 100% !important;
-	/*background-color: rgb(100,100,100);*/ /* fallback */
 	background: rgba(170,170,170,.95) !important;
 
-		h1 {
+		/*
+h1 {
 		font-size: 11px !important;
 		text-transform: uppercase !important;
 		font-weight: normal !important;
 		padding: 5px 5px 4px 10px !important;
 		margin: 0 !important;
-		/*background-color: rgb(100,100,100);*/ /* fallback */
 		background: rgba(0, 0, 0, .35) !important;
 		position: absolute !important;
 		top: 0px !important;
@@ -80,53 +75,29 @@
 		text-shadow: rgba(0,0,0,.8) 0px -1px 0px !important;
 		height: 13px !important;
 		line-height: 13px !important;
-	}
+		}
+*/
 	
-		#m-cs-utility {
+		a#m-cs-close {
 		position: absolute !important;
 		top: -2px !important;
-		right:10px !important;
-		list-style: none !important;
-		margin: 0 !important;
-	}
-	
-		#m-cs-utility li {
-		float: left !important;
-		margin-left: 3px !important;
-	}
-	
-		#m-cs-utility li a {
-		color: #fff !important;
-		display: block !important;
+		right: 10px !important;
 		text-align: center !important;
 		text-decoration: none !important;
-		line-height: 12px !important;
-		font-size: 11px !important;
-		color: rgba(255,255,255,.95) !important;
-		padding: 2px 8px !important;
-		margin: 5px 0 !important;
-		border-radius: 8px !important;
-		-moz-border-radius: 8px !important;
-		/*background-color: rgb(175,175,175);*/ /* fallback */
-		background: rgba(0,0,0,.3) !important;
-		text-shadow: #000 0px -1px 0px !important;
-		-moz-text-shadow: #000 0px 1px 0px !important;
-		-webkit-box-shadow: rgba(255,255,255,.2) 0px 1px 0px !important;
-		-moz-box-shadow: rgba(255,255,255,.2) 0px 1px 0px !important;
-		box-shadow: rgba(255,255,255,.2) 0px 1px 0px !important;
-	}
+		padding: 2px 0 !important;
+		margin: 2px 0 !important;
+		
+			i {
+				text-decoration: none !important;
+				color: #333 !important;
+				line-height: 14px !important;
+				font-size: 14px !important;
 	
-		#m-cs-utility li a:hover {
-		text-decoration: none !important;
-		background-color: rgb(0,0,0) !important; /* fallback */
-		background: rgba(0,0,0,.8) !important;
-		text-decoration: none !important;
-	}
-	
-		#m-cs-close a:hover {
-		text-decoration: none !important;
-		background: #333 !important;
-	}
+			&:hover {
+			color: #fff !important;
+				}
+			}
+		}
 	
 		dl {
 		float: left !important;
@@ -136,45 +107,58 @@
 		width: 22.5% !important;
 		position: relative !important;
 		overflow: hidden !important;
-		background: url(../images/cs-vert-rule.png) repeat-y left top !important;
-	}
+		border-right: 1px solid #9a9a9a !important;
+		border-left: 1px solid #c1c1c1 !important;
+		
+			dt {
+			color: rgba(0,0,0,.95) !important;
+			text-shadow: rgba(255,255,255,.3) 0px 1px 0px !important;
+			font-size: 12px !important;
+			margin: 0 0 4px !important;
+			border: 0 !important;
+			padding: 0 !important;
+			}
+		
+			dd {
+			margin: 0 !important;
+			color: rgba(0,0,0,.95) !important;
+			font-size: 11px !important;
+			border: 0 !important;
+			padding: 0 !important;
+			}
 	
-		#m-cs-changeset {
-		border-left: 0 !important;
-		background: none !important;
-	}
-	
-		#m-cs-dependencies {
-		border-right: 0 !important;
-	}
-	
-		dt {
-		color: rgba(0,0,0,.95) !important;
-		text-shadow: rgba(255,255,255,.3) 0px 1px 0px !important;
-		font-size: 12px !important;
-		margin: 0 0 4px !important;
-		border: 0 !important;
-		padding: 0 !important;
-	}
-	
-		dd {
-		margin: 0 !important;
-		color: rgba(0,0,0,.95) !important;
-		font-size: 11px !important;
-		border: 0 !important;
-		padding: 0 !important;
-	}
-	
-	
-		#m-cs-status i {
-		position: relative;
-		font-size: 24px !important;
-		color: green !important;
-		top: 3px;
-	}
-	
-	
-		select {
-		width: 99% !important;
-	}
+			&#m-cs-changeset {
+			border-left: 0 !important;
+			background: none !important;
+			}
+			
+			&#m-cs-status {
+			border-right: 0 !important;
+			background: none !important;
+			
+				#m-cs-included, #m-cs-other {
+					margin-top: -3px !important;
+					line-height: 14px !important;
+					}
+				
+				i {
+					position: relative !important;
+					font-size: 24px !important;
+					top: 3px !important;
+					}
+				
+				#m-cs-included i { color: green !important; }
+				#m-cs-other i { color: @grayDarker !important;}
+			}
+			
+			&#m-cs-dependencies {
+			border-right: 0 !important;
+			}		
+		
+			select {
+			width: 99% !important;
+			font-size: 12px !important;
+			height: auto !important;
+			}
+		}
 }
