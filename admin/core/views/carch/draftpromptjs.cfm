@@ -9,8 +9,6 @@ function initDraftPrompt(){
 		e.preventDefault(); // stop the link's normal clicking behavior
 		var node = jQuery(this).parents(".mura-node-data:first");		
 		var a = jQuery(this);
-
-		//alert(node.attr('data-contentid'))
 		
 		$.ajax({
 			  url: "./index.cfm?muraAction=carch.draftpromptdata&contentid=" + node.attr('data-contentid') + "&siteid=" + node.attr('data-siteid'),
