@@ -501,6 +501,7 @@ var hasBody=#subType.getHasBody()#;
 	<input name="muraPreviouslyApproved" type="hidden" value="#rc.contentBean.getApproved()#">
 	<input id="removePreviousChangeset" name="removePreviousChangeset" type="hidden" value="false">
 	<input id="changesetID" name="changesetID" type="hidden" value="">
+	<input id="changesetname" name="changesetname" type="hidden" value="">
 	<input name="preview" type="hidden" value="0">	
 	<cfif rc.type neq 'Link'>
 		<input name="filename" type="hidden" value="#rc.contentBean.getfilename()#">

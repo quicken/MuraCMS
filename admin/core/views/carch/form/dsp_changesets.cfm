@@ -48,6 +48,11 @@ function saveToChangeset(changesetid,siteid,keywords){
 						if(siteManager.ckContent()){
 							jQuery("##changesetID").val(currentChangesetSelection);
 							jQuery("##removePreviousChangeset").val(document.getElementById("_removePreviousChangeset").checked);
+							if(currentChangesetSelection=='other'){
+								jQuery("##changesetname").val(jQuery("##_changesetname").val());
+							} else {
+								jQuery("##changesetname").val('');
+							}
 							submitForm(document.contentForm, 'add');
 						}
 					} else {

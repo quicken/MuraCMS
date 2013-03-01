@@ -44,6 +44,35 @@ For clarity, if you create a modified version of Mura CMS, you are not obligated
 modified version; it is your choice whether to do so, or to make such modified version available under the GNU General Public License 
 version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS.
 --->
+
+<cfset draftprompdata=application.contentManager.getDraftPromptData(rc.contentid,rc.siteid)>
+<cfif draftprompdata.showdialog>
+	<cfset draftprompdata.showdialog='true'>
+	<cfsavecontent variable="draftprompdata.message">
+	<cfoutput>
+		<div><p>#application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.dialog')# test</p>
+		<ul>
+		<li><a href="##" class="draft-prompt-option" data-contenthistid="#draftprompdata.publishedHistoryID#">#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.published'))#</a></li>
+		<cfif draftprompdata.hasdraft>
+		<li><a href="##" class="draft-prompt-option" data-contenthistid="#draftprompdata.historyid#">#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.latest'))#</a></li>
+		</cfif>
+		<cfif draftprompdata.pendingchangsets.recordcount>
+		<li>Pending Changsets
+		<ul>
+		<cfloop query="draftprompdata.pendingchangsets">
+			<li><a href="##" class="draft-prompt-option" data-contenthistid="#draftprompdata.pendingchangsets.contenthistid#">#HTMLEditFormat(draftprompdata.pendingchangsets.changesetName)#</a></li>
+		</cfloop>
+		</ul>
+		</li>
+		</cfif>
+		</ul>
+		</div>
+	</cfoutput>
+	</cfsavecontent>
+<cfelse>
+	<cfset draftprompdata.showdialog='false'>
+	<cfset draftprompdata.message="">	
+</cfif>
 <cfcontent type="application/json">
-<cfoutput>#createObject("component","mura.json").encode(application.contentManager.getDraftPromptData(rc.contentid,rc.siteid))#</cfoutput>
+<cfoutput>#createObject("component","mura.json").encode(draftprompdata)#</cfoutput>
 <cfabort>

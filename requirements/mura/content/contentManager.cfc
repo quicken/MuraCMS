@@ -775,6 +775,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfset previousChangesetID=newBean.getChangesetID()>
 			
 			<cfset newBean.set(arguments.data) />
+
+			<cfif newBean.getChangesetID() eq 'other' and len(newBean.getChangesetName())>
+				<cfset var changeset=getBean('changeset').setName(newBean.getChangesetName())>
+				<cfset changeset.setSiteID(newBean.getSiteID())>
+				<cfset newBean.setChangesetID(changeset.getChangesetID())>
+				<cfset arguments.data.changesetID=changeset.getChangesetID()>
+				<cfset changeset.save()>
+			</cfif>
 		
 			<cfset pluginEvent.setValue("newBean",newBean)>	
 			<cfset pluginEvent.setValue("contentBean",newBean)>
@@ -1257,7 +1265,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfif len(newBean.getChangesetID()) and newBean.getChangesetID() neq previousChangesetID>
 					<cfset getBean('changeset').loadBy(changesetID=newBean.getChangesetID(),siteid=newBean.getSiteID()).save()>
 				</cfif>
-								
+
+				<!---
+				<cfif len(newBean.getChangesetID())>
+					variables.changesetManager.setSessionPreviewData(newBean.getChangeSetID())>
+				</cfif>
+				--->
+							
 				<cfset variables.trashManager.takeOut(newBean)>
 					
 				<!--- END CONTENT TYPE: ALL CONTENT TYPES --->
@@ -2136,12 +2150,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="siteid" type="string" required="true" />
 		
 		<cfset var data = structNew() />
-		<cfset var cb = getBean("content").loadby(contentid=arguments.contentid,siteid=arguments.siteid) />   
-		<cfset var showdialog = false />
-		<cfset var historyID = cb.getContentHistID() />
+		<cfset var cb = getBean("content").loadby(contentid=arguments.contentid,siteid=arguments.siteid) /> 
 		<cfset var newDraft = "" />
 		<cfset var history = "" />
-		
+
+		<cfset data.pendingchangsets=variables.changesetManager.getPendingByContentID(arguments.contentID,arguments.siteID) />
+		<cfset data.hasdraft=false>
+		<cfset data.historyID=''>
+		<cfset data.publishedHistoryID= cb.getContentHistID() />
+
 		<cfif cb.getActive()>
 			<cfif cb.hasDrafts()>
 				<cfset history = getDraftHist(arguments.contentid,arguments.siteid) />
@@ -2150,16 +2167,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					order by lastUpdate desc
 				</cfquery>
 				<cfif newDraft.recordCount>
-					<cfset showdialog = true />
-					<cfset historyID = newDraft.contentHistId[1] />
+					<cfset data.hasdraft=true>
+					<cfset data['historyID'] = newDraft.contentHistId[1] />
 				</cfif>
 			</cfif>
 		</cfif>
 		
-		<cfset data['showdialog'] = showdialog />
-		<cfset data['historyID'] = historyID />
-		<cfset data['publishedHistoryID'] = cb.getContentHistID() />
-		
+		<cfset data.showdialog = data.hasdraft or data.pendingchangsets.recordcount/>
+			
 		<cfreturn data />
 	</cffunction>
 	
