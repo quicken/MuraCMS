@@ -262,3 +262,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		and not (isArray(this.ormSettings.cfclocation) and arrayLen(this.ormSettings.cfclocation))>
 		<cfset this.ormenabled=false>
 	</cfif>
+
+	<cfset this.javaSettings = {
+		loadPaths=[properties.getProperty('javaSettingsLoadPaths','/requirements/lib')]
+		, loadColdFusionClassPath=properties.getProperty('javaSettingsLoadColdFusionClassPath',false)
+		, reloadOnChange=properties.getProperty('javaSettingsReloadOnChange',false)
+		, watchInterval=properties.getProperty('javaSettingsWatchInterval',60)
+		, watchExtensions=properties.getProperty('javaSettingsWatchExtensions','jar,class')
+	}>
