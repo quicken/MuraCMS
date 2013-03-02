@@ -7,19 +7,8 @@ $(function(){
 function initDraftPrompt(){
 	$('a.draftprompt').click(function(e){
 		e.preventDefault(); // stop the link's normal clicking behavior
-		var node = jQuery(this).parents("li:first");
-		
-		if(!node.attr('data-contentid')){
-			node = jQuery(this).parents("tr:first");
-		}
-		
+		var node = jQuery(this).parents(".mura-node-data:first");		
 		var a = jQuery(this);
-
-		var goToDraft=function(contenthistid){
-			var href = a.attr('href').replace(node.attr('data-contenthistid'),contenthistid);
-			window.location = href;
-			return false;
-		};
 		
 		$.ajax({
 			  url: "./index.cfm?muraAction=carch.draftpromptdata&contentid=" + node.attr('data-contentid') + "&siteid=" + node.attr('data-siteid'),
