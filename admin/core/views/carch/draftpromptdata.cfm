@@ -50,22 +50,30 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset draftprompdata.showdialog='true'>
 	<cfsavecontent variable="draftprompdata.message">
 	<cfoutput>
-		<div><p>#application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.dialog')# test</p>
-		<ul>
-		<li><a href="##" class="draft-prompt-option" data-contenthistid="#draftprompdata.publishedHistoryID#">#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.published'))#</a></li>
-		<cfif draftprompdata.hasdraft>
-		<li><a href="##" class="draft-prompt-option" data-contenthistid="#draftprompdata.historyid#">#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.latest'))#</a></li>
-		</cfif>
-		<cfif draftprompdata.pendingchangsets.recordcount>
-		<li>Pending Changsets
-		<ul>
-		<cfloop query="draftprompdata.pendingchangsets">
-			<li><a href="##" class="draft-prompt-option" data-contenthistid="#draftprompdata.pendingchangsets.contenthistid#">#HTMLEditFormat(draftprompdata.pendingchangsets.changesetName)#</a></li>
-		</cfloop>
-		</ul>
-		</li>
-		</cfif>
-		</ul>
+		<div>
+			<p>#application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.dialog')#</p>
+				<a href="##" class="btn btn-medium btn-block draft-prompt-option" data-contenthistid="#draftprompdata.publishedHistoryID#"><!--- <i class="icon-pencil"></i>  --->#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.published'))#</a>
+			<cfif draftprompdata.hasdraft>
+			<a href="##" class="btn btn-medium btn-block draft-prompt-option" data-contenthistid="#draftprompdata.historyid#"><!--- <i class="icon-pencil"></i>  --->#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.latest'))#</a>
+			</cfif>
+			
+			<cfif draftprompdata.pendingchangsets.recordcount>
+			
+			<div class="btn-group btn-block dropup">
+			  <a class="btn btn-medium btn-block dropdown-toggle" data-toggle="dropdown" style="font-size: 12px !important;" href="##">
+			    Pending Change Sets
+			    <span class="caret"></span>
+			 </a>
+			  <ul class="dropdown-menu">
+				<cfloop query="draftprompdata.pendingchangsets">
+				<li>
+					<a href="##" class="draft-prompt-option" data-contenthistid="#draftprompdata.pendingchangsets.contenthistid#">#HTMLEditFormat(draftprompdata.pendingchangsets.changesetName)#</a>
+				</li>
+				</cfloop>
+			 </ul>
+			</div>
+			
+			</cfif>
 		</div>
 	</cfoutput>
 	</cfsavecontent>
