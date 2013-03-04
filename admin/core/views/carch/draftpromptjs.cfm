@@ -18,12 +18,14 @@ function initDraftPrompt(){
 					jQuery(resp.message).dialog({
 						title:"#JSStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.title'))#",
 						modal:true,
-						width:"400px",
+						width:"400px"
+						/*
+						,
 						buttons: {
 							"#JSStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.cancel'))#":function(){
 								jQuery(this).dialog('close');
 							}
-							/*
+							
 							,
 							"#JSStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.latest'))#": function(){
 								var href = a.attr('href').replace(node.attr('data-contenthistid'),resp.historyid);
@@ -32,8 +34,8 @@ function initDraftPrompt(){
 							"#JSStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.published'))#" : function(){
 								window.location = a.attr('href');
 							}
-							*/
-						}
+							
+						}*/
 					});
 					$(".draft-prompt-option").click(function(e){
 						e.preventDefault();
