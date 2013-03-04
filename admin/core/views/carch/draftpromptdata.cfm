@@ -50,18 +50,19 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset draftprompdata.showdialog='true'>
 	<cfsavecontent variable="draftprompdata.message">
 	<cfoutput>
-		<div>
+		<div id="draft-prompt">
 			<p>#application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.dialog')#</p>
-				<a href="##" class="btn btn-medium btn-block draft-prompt-option" data-contenthistid="#draftprompdata.publishedHistoryID#"><!--- <i class="icon-pencil"></i>  --->#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.published'))#</a>
+				<a href="##" class="btn btn-large btn-block draft-prompt-option" data-contenthistid="#draftprompdata.publishedHistoryID#"><!--- <i class="icon-pencil"></i>  --->#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.published'))#</a>
 			<cfif draftprompdata.hasdraft>
-			<a href="##" class="btn btn-medium btn-block draft-prompt-option" data-contenthistid="#draftprompdata.historyid#"><!--- <i class="icon-pencil"></i>  --->#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.latest'))#</a>
+			<a href="##" class="btn btn-large btn-block draft-prompt-option" data-contenthistid="#draftprompdata.historyid#"><!--- <i class="icon-pencil"></i>  --->#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.latest'))#</a>
 			</cfif>
 			
 			<cfif draftprompdata.pendingchangsets.recordcount>
 			
-			<div class="btn-group btn-block dropup">
-			  <a class="btn btn-medium btn-block dropdown-toggle" data-toggle="dropdown" style="font-size: 12px !important;" href="##">
-			    Pending Change Sets
+			<!---
+<div class="btn-group btn-block">
+			  <a class="btn btn-large btn-block dropdown-toggle" data-toggle="dropdown" style="font-size: 14px !important;" href="##">
+			    Edit a Version in a Change Set
 			    <span class="caret"></span>
 			 </a>
 			  <ul class="dropdown-menu">
@@ -72,7 +73,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfloop>
 			 </ul>
 			</div>
-			
+--->
+			<h1><!--- <i class="icon-arrow-right"></i>  --->Edit a Version in a Change Set</h1>
+				<cfloop query="draftprompdata.pendingchangsets">
+					<a href="##" class="draft-prompt-option btn btn-large btn-block" data-contenthistid="#draftprompdata.pendingchangsets.contenthistid#">#HTMLEditFormat(draftprompdata.pendingchangsets.changesetName)#</a>
+				</cfloop>	
 			</cfif>
 		</div>
 	</cfoutput>

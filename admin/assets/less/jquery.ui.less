@@ -15,10 +15,16 @@
 	
 	button {
 		.btn;
+		color: @grayDarker !important;
 		.box-shadow(@globalDropShadow);
 		text-transform: capitalize;
 		}
 	}
+
+ .btn {
+		color: @grayDark !important;
+		font-weight: bold;
+		}
 
 // Date Picker
 
@@ -293,28 +299,15 @@
 
 /* @end */
 
-.ui-dialog {
+.mura .ui-dialog {
 	/* border: 6px solid #666; */
-	border-radius: 4px;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-}
+	.border-radius(4px);
 
-/* @group Dialog  */
-
-.ui-dialog .ui-icon-alert {
+	.ui-icon-alert {
 	display: none;
-}
+	}
 
-/*
-.ui-dialog .ui-dialog-titlebar-close span {
-	background: url(../../../images/icons/remov_16.png) no-repeat 50% 50%;
-	height: 16px;
-	width: 16px;
-}
-*/
-
-.ui-dialog .ui-dialog-content {
+	.ui-dialog-content {
 	height: auto !important;
 	padding: 1em;
 	font-size: 13px;
@@ -322,9 +315,9 @@
 	color: @grayDark;
 	background: @grayLight;
 	.border-radius(4px);
-}
+	}
 
-.ui-dialog .ui-dialog-titlebar-close {
+	.ui-dialog-titlebar-close {
 	position: absolute;
 	right: -3px;
 	top: 2px;
@@ -335,13 +328,13 @@
 	display: inline-block;
 	}
 	
-.ui-dialog .ui-dialog-titlebar-close:hover {
+	.ui-dialog-titlebar-close:hover {
 	background: transparent;
 	border: 0;
 	text-decoration: none;
 	}
 
-.ui-dialog .ui-dialog-titlebar-close span {
+	.ui-dialog-titlebar-close span {
 	background: transparent;
 	background-image: none;
 	text-decoration: inherit;
@@ -351,7 +344,7 @@
 	width: 22px;
 	}
 	
-.ui-dialog .ui-dialog-titlebar-close span:before {
+	.ui-dialog-titlebar-close span:before {
 	font-family: FontAwesome;
 	font-weight: normal;
 	font-style: normal;
@@ -366,6 +359,27 @@
 	content: "\f057"; 
 	}
 
-.ui-dialog .ui-dialog-titlebar-close:hover span:before {
+	.ui-dialog-titlebar-close:hover span:before {
 	color: @grayDarker;
 	}
+	
+	h1 {
+		color: @blue !important;
+		font-size: 14px;
+		margin-bottom: 0;
+		line-height: 1;
+		clear: both;
+		float: none !important;
+		text-align: center;
+		font-weight: normal;
+	}
+		
+	.btn + h1 {
+		margin-top: 1.5em;
+	}
+	
+	#draft-prompt > p:first-child {
+		font-size: 14px;
+	}
+
+}
