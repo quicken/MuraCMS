@@ -53,7 +53,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset nodeLevelList="Page,Folder,Calendar,Gallery,Link,File"/>
 <cfset hasChangesets=application.settingsManager.getSite(rc.siteID).getHasChangesets()>
 <cfset requiresApproval=rc.contentBean.requiresApproval()>
-<cfset approvalStatus=rc.contentBean.getApprovalRequest().getStatus()>
 <cfset rc.perm=application.permUtility.getnodePerm(rc.crumbdata)>
 <cfif rc.parentID eq "" and not rc.contentBean.getIsNew()>
 	<cfset rc.parentID=rc.contentBean.getParentID()>	
@@ -298,8 +297,8 @@ var hasBody=#subType.getHasBody()#;
 					<cfif not rc.contentBean.getIsNew()>
 						<cfif rc.contentBean.getactive() gt 0 and rc.contentBean.getapproved() gt 0>
 							#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
-						<cfelseif len(approvalStatus)>
-							#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#approvalStatus#")#
+						<cfelseif len(rc.contentBean.getApprovalStatus())>
+							#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#rc.contentBean.getApprovalStatus()#")#
 						<cfelseif rc.contentBean.getapproved() lt 1>
 							#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draft")#
 						<cfelse>
@@ -326,9 +325,9 @@ var hasBody=#subType.getHasBody()#;
 	</cfif>
 	
 	<cfif not rc.contentBean.getIsNew()>
-		<cfif len(rc.contentBean.getChangesetID())>
+		<cfif listFindNoCase('Pending,Rejected',rc.contentBean.getApprovalStatus())>
 			<p class="alert alert-error">
-			#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.pendingmessage")#
+			#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.pendingmessage")# 
 			</p>
 		</cfif>
 		

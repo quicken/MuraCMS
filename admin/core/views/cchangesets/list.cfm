@@ -74,7 +74,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfloop condition="rc.changesets.hasNext()">
 <cfset rc.changeset=rc.changesets.next()>
 <tr>
-	<td class="var-width"><a title="Edit" href="index.cfm?muraAction=cChangesets.edit&changesetID=#rc.changeset.getchangesetID()#&siteid=#URLEncodedFormat(rc.siteID)#">#HTMLEditFormat(rc.changeset.getName())#</a></td>
+	<td class="var-width"><a title="Edit" href="index.cfm?muraAction=cChangesets.assignments&changesetID=#rc.changeset.getchangesetID()#&siteid=#URLEncodedFormat(rc.siteID)#">#HTMLEditFormat(rc.changeset.getName())#</a></td>
 	<td><cfif isDate(rc.changeset.getPublishDate())>#LSDateFormat(rc.changeset.getPublishDate(),session.dateKeyFormat)# #LSTimeFormat(rc.changeset.getPublishDate(),"medium")#<cfelse>NA</cfif></td>
 	<td>#LSDateFormat(rc.changeset.getLastUpdate(),session.dateKeyFormat)# #LSTimeFormat(rc.changeset.getLastUpdate(),"medium")#</td>
 	<td class="actions">
