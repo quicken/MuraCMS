@@ -51,6 +51,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 #application.utility.displayErrors(rc.changeset.getErrors())#
 
+<cfset hasPendingApprovals=$.getBean('changesetManager').hasPendingApprovals(rc.changesetID)>
+<cfif hasPendingApprovals>
+  <div class="alert alert-error">
+      This changeset contains content that has not been approved.  
+  </div>  
+</cfif>
+
 <cfif rc.changeset.getPublished()>
 <p class="alert">
 #application.rbFactory.getKeyValue(session.rb,'changesets.publishednotice')#
@@ -105,7 +112,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
   <cfelse>
     <input type="button" class="btn" value="#application.rbFactory.getKeyValue(session.rb,'changesets.delete')#" onclick="confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'changesets.deleteconfirm'))#','index.cfm?muraAction=cChangesets.delete&changesetID=#rc.changeset.getchangesetID()#&siteid=#URLEncodedFormat(rc.changeset.getSiteID())#')" /> 
     <input type="button" class="btn" onclick="submitForm(document.forms.form1,'update');" value="#application.rbFactory.getKeyValue(session.rb,'changesets.update')#" />
-    <cfif not rc.changeset.getPublished()>
+    <cfif not rc.changeset.getPublished() and not hasPendingApprovals>
       <input type="button" class="btn" value="#application.rbFactory.getKeyValue(session.rb,'changesets.publishnow')#" onclick="confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'changesets.publishnowconfirm'))#','index.cfm?muraAction=cChangesets.publish&changesetID=#rc.changeset.getchangesetID()#&siteid=#URLEncodedFormat(rc.changeset.getSiteID())#')" /> 
     </cfif>
      <input type=hidden name="changesetID" value="#rc.changeset.getchangesetID()#">

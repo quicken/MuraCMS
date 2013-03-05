@@ -51,7 +51,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfswitch expression="#rc.originalfuseaction#">
 			<cfcase value="assignments">
 				<a class="btn" title="#application.rbFactory.getKeyValue(session.rb,'changesets.backtochangesets')#" href="index.cfm?muraAction=cChangesets.list&siteid=#URLEncodedFormat(rc.siteid)#"><i class="icon-circle-arrow-left"></i> #application.rbFactory.getKeyValue(session.rb,'changesets.backtochangesets')#</a>
-				<a class="btn" title="#application.rbFactory.getKeyValue(session.rb,'changesets.vieweditform')#" href="index.cfm?muraAction=cChangesets.edit&siteid=#URLEncodedFormat(rc.siteid)#&changesetID=#HTMLEditFormat(rc.changesetID)#">#application.rbFactory.getKeyValue(session.rb,'changesets.vieweditform')#</a>
+				<a class="btn" title="#application.rbFactory.getKeyValue(session.rb,'changesets.vieweditform')#" href="index.cfm?muraAction=cChangesets.edit&siteid=#URLEncodedFormat(rc.siteid)#&changesetID=#HTMLEditFormat(rc.changesetID)#"><i class="icon-pencil"></i> #application.rbFactory.getKeyValue(session.rb,'changesets.vieweditform')#</a>
 			</cfcase>
 			<cfcase value="list">
 				<a class="btn" title="#application.rbFactory.getKeyValue(session.rb,'changesets.addchangeset')#" href="index.cfm?muraAction=cChangesets.edit&changesetID=&siteid=#URLEncodedFormat(rc.siteid)#"><i class="icon-plus-sign"></i> #application.rbFactory.getKeyValue(session.rb,'changesets.addchangeset')#</a>

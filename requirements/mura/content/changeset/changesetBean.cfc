@@ -175,4 +175,16 @@
 	<cfreturn "changesetID">
 </cffunction>
 
+<cffunction name="hasPendingApprovals" output="false">
+		<cfreturn variables.changesetManager.hasPendingApprovals(getValue('changesetID'))>
+</cffunction>
+
+<cffunction name="getAssignmentsIterator" output="false">
+		<cfreturn variables.changesetManager.getAssignmentsIterator(getValue('changesetID'))>
+</cffunction>
+
+<cffunction name="getAssignmentsQuery" output="false">
+		<cfreturn variables.changesetManager.getAssignmentsQuery(getValue('changesetID'))>
+</cffunction>
+
 </cfcomponent>

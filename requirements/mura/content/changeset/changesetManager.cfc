@@ -333,24 +333,26 @@
 <cffunction name="publish" access="public" returntype="any" output="false">
 <cfargument name="changesetID">
 <cfargument name="byDate" default="false">
-	<cfset var it=getAssignmentsIterator(argumentCollection=arguments)>
-	<cfset var item="">
-	<cfset var changeset="">
-	
-	<cfloop condition="it.hasNext()">
-		<cfset item=it.next()>
-		<cfset item.setApproved(1)>
-		<cfif arguments.byDate>
-			<cfset item.setLastUpdateBy("System")>
-			<cfset item.setLastUpdateByID("")>
-		</cfif>
-		<cfset item.save()>
-	</cfloop>
-	
-	<cfset changeset=read(arguments.changesetID)>
-	<cfset changeset.setPublished(1)>
-	<cfset changeset.setPublishDate(now())>
-	<cfset changeset.save()>
+	<cfif not hasPendingApprovals(arguments.changesetID)>
+		<cfset var it=getAssignmentsIterator(argumentCollection=arguments)>
+		<cfset var item="">
+		<cfset var changeset="">
+		
+		<cfloop condition="it.hasNext()">
+			<cfset item=it.next()>
+			<cfset item.setApproved(1)>
+			<cfif arguments.byDate>
+				<cfset item.setLastUpdateBy("System")>
+				<cfset item.setLastUpdateByID("")>
+			</cfif>
+			<cfset item.save()>
+		</cfloop>
+		
+		<cfset changeset=read(arguments.changesetID)>
+		<cfset changeset.setPublished(1)>
+		<cfset changeset.setPublishDate(now())>
+		<cfset changeset.save()>
+	</cfif>
 </cffunction>
 
 <cffunction name="getAssignmentsIterator" access="public" returntype="any" output="false">
@@ -388,6 +390,21 @@
 	order by tcontent.menutitle
 	</cfquery>
 	<cfreturn rs>
+</cffunction>
+
+
+<cffunction name="hasPendingApprovals" access="public" returntype="any" output="false">
+<cfargument name="changesetID">
+
+	<cfset var rs="">
+	<cfquery name="rs" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	select count(tcontent.contenthistid)
+	from tcontent 
+	inner join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
+	where tcontent.changesetID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.changesetID#">
+	and tapprovalrequests.status !='Approved'
+	</cfquery>
+	<cfreturn rs.recordcount>
 </cffunction>
 
 <cffunction name="removeItem" access="public" returntype="any" output="false">
