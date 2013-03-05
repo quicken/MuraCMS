@@ -326,6 +326,12 @@ var hasBody=#subType.getHasBody()#;
 	</cfif>
 	
 	<cfif not rc.contentBean.getIsNew()>
+		<cfif len(rc.contentBean.getChangesetID())>
+			<p class="alert alert-error">
+			#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.pendingmessage")#
+			</p>
+		</cfif>
+		
 		<cfset draftcheck=application.contentManager.getDraftPromptData(rc.contentBean.getContentID(),rc.contentBean.getSiteID())>
 		
 		<cfif yesNoFormat(draftcheck.showdialog) and draftcheck.historyid neq rc.contentBean.getContentHistID()>

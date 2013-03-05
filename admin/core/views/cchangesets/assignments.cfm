@@ -50,10 +50,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfinclude template="dsp_secondary_menu.cfm">
 
-<cfif $.getBean('changesetManager').hasPendingApprovals(rc.changesetID)>
-  <div class="alert alert-error">
-      This changeset contains content that has not been approved.  
-  </div>  
+<cfif rc.changeset.getPublished()>
+<p class="alert">
+#application.rbFactory.getKeyValue(session.rb,'changesets.publishednotice')#
+</p>
+<cfelse>
+  <cfset hasPendingApprovals=rc.changeset.hasPendingApprovals()>
+  <cfif hasPendingApprovals>
+    <div class="alert alert-error">
+        #application.rbFactory.getKeyValue(session.rb,'changesets.haspendingapprovals')# 
+    </div>  
+  </cfif>
 </cfif>
 
 <h2>#application.rbFactory.getKeyValue(session.rb,'changesets.name')#</h2>
