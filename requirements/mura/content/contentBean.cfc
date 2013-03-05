@@ -125,6 +125,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="expires" type="date" default="" required="true" />
 <cfproperty name="assocFilename" type="date" default="" required="true" />
 <cfproperty name="displayInterval" type="string" default="Daily" required="true" />
+<cfproperty name="requestID" type="string" default="" required="true" />
+<cfproperty name="approvalStatus" type="string" default="" required="true" />
 
 <cffunction name="init" access="public" returntype="any" output="false">
 	
@@ -221,6 +223,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.displayInterval = "Daily" />
 	<cfset variables.instance.errors=structnew() />
 	<cfset variables.instance.categoryID = "" />
+	<cfset variables.instance.requestID = "" />
+	<cfset variables.instance.approvalStatus = "" />
 	
 	<cfset variables.kids = arrayNew(1) />
 	<cfset variables.displayRegions = structNew()>

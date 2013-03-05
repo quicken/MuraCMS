@@ -93,9 +93,11 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 			<cfif not isQuery(arguments.sourceIterator.getPageQuery("page#arguments.sourceIterator.getPageIndex()#"))>
 				<cfquery name="rsPage" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 					select #variables.fieldlist#, tfiles.fileSize, 
-					tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename
+					tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename,
+					tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID
 					 from tcontent 
 					left join tfiles on (tcontent.fileid=tfiles.fileid)
+					left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
 					where 
 					tcontent.contenthistid in (<cfqueryparam cfsqltype="cf_sql_varchar" list="true" value="#arguments.sourceIterator.getPageIDList()#">)
 					and tcontent.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" />
@@ -115,9 +117,11 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 			<cfif len(arguments.contentHistID)>	
 				<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" name="rsContent"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 					select #variables.fieldlist#, tfiles.fileSize, 
-					tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename
+					tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename,
+					tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID
 					from tcontent 
 					left join tfiles on (tcontent.fileid=tfiles.fileid)
+					left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
 					where tcontent.contenthistid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#" /> 
 					and tcontent.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" />
 				</cfquery>
@@ -176,9 +180,11 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 			<cfif not isQuery(arguments.sourceIterator.getPageQuery("page#arguments.sourceIterator.getPageIndex()#"))>
 				<cfquery name="rsPage" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 					select #variables.fieldlist#, tfiles.fileSize,
-					tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename
+					tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename,
+					tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID
 					from tcontent 
 					left join tfiles on (tcontent.fileid=tfiles.fileid)
+					left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
 					where 
 					tcontent.#arguments.sourceIterator.getRecordIdField()# in (<cfqueryparam cfsqltype="cf_sql_varchar" list="true" value="#arguments.sourceIterator.getPageIDList()#">)
 					#renderActiveClause("tcontent",arguments.siteID)#
@@ -200,9 +206,11 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 			<cfif len(arguments.contentID)>
 				<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" name="rsContent"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 					select #variables.fieldlist#, tfiles.fileSize,
-					tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename
+					tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename,
+				tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID
 					from tcontent 
 					left join tfiles on (tcontent.fileid=tfiles.fileid)
+					left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
 					where tcontent.contentid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#" /> 
 					#renderActiveClause("tcontent",arguments.siteID)#
 					and tcontent.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" />
@@ -256,9 +264,11 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		<cfif len(arguments.remoteID)>		
 			<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" name="rsContent"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 				select #variables.fieldlist#, tfiles.fileSize,
-				tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename
+				tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename,
+				tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID
 				from tcontent 
 				left join tfiles on (tcontent.fileid=tfiles.fileid)
+				left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
 				where tcontent.remoteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.remoteID#" /> 
 				#renderActiveClause("tcontent",arguments.siteID)#
 				and tcontent.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteid#" />
@@ -308,9 +318,11 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		<cfif len(arguments.title)>		
 			<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" name="rsContent"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 				select #variables.fieldlist#, tfiles.fileSize,
-				tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename
+				tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename,
+				tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID
 				from tcontent 
 				left join tfiles on (tcontent.fileid=tfiles.fileid)
+				left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
 				where tcontent.title=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.title#" /> 
 				#renderActiveClause("tcontent",arguments.siteID)#
 				and tcontent.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteid#" />
@@ -360,9 +372,11 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		<cfif len(arguments.urltitle)>		
 			<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" name="rsContent"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 				select #variables.fieldlist#, tfiles.fileSize,
-				tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename
+				tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename,
+				tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID
 				from tcontent 
 				left join tfiles on (tcontent.fileid=tfiles.fileid)
+				left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
 				where tcontent.urltitle=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.urltitle#" /> 
 				#renderActiveClause("tcontent",arguments.siteID)#
 				and tcontent.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteid#" />
@@ -411,9 +425,11 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		
 		<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" name="rsContent"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 			select #variables.fieldlist#, tfiles.fileSize,
-			tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename
+			tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename,
+			tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID
 			from tcontent 
 			left join tfiles on (tcontent.fileid=tfiles.fileid)
+			left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
 			where 
 			<cfif arguments.filename neq ''>
 			 tcontent.filename=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.filename#" />
