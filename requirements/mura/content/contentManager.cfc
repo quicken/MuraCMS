@@ -810,7 +810,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset newBean.setcontentID(createUUID()) />
 			</cfif>
 
-			<cfif newBean.getApproved() and newBean.requiresApproval()>
+			<cfif (newBean.getApproved() or len(newBean.getChangesetID())) and newBean.requiresApproval()>
 				<cfset var approvalRequest=newBean.getApprovalRequest()>
 
 				<!---If it does not have a currently pending aproval request create one --->
@@ -982,6 +982,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				
 				<!--- Begin Changeset --->
 				<cfif not newBean.getIsNew() and isBoolean(newBean.getValue("removePreviousChangeset")) and newBean.getValue("removePreviousChangeset") and isValid("uuid",previousChangesetID)>
+					<!--- If removePreviousChangeset cancel any approval requests previous version --->
+					<cfquery name="local.rsApprovalsDelete" datasource="#variables.configBean.getDatasource()#" password="#variables.configBean.getDbPassword()#" username="#variables.configBean.getDbUsername()#">
+						select tcontent.contenthistid, tapprovalrequests.requestID
+						from tcontent 
+						left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
+						where tcontent.contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#newBean.getContentID()#">
+						and changesetID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#previousChangesetID#">
+						and tcontent.siteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#newBean.getSiteID()#">
+					</cfquery>
+
 					<cfquery datasource="#variables.configBean.getDatasource()#" password="#variables.configBean.getDbPassword()#" username="#variables.configBean.getDbUsername()#">
 						update tcontent set changesetID=null 
 						where contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#newBean.getContentID()#">
@@ -990,6 +1000,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfquery>
 				</cfif>
 				<cfif len(newBean.getChangesetID())>
+					<!--- If the version has been assigned to a change set cancel any approval request for previous version--->
+					<cfquery name="local.rsApprovalsDelete" datasource="#variables.configBean.getDatasource()#" password="#variables.configBean.getDbPassword()#" username="#variables.configBean.getDbUsername()#">
+						select tcontent.contenthistid, tapprovalrequests.requestID
+						from tcontent 
+						left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
+						where tcontent.contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#newBean.getContentID()#">
+						and tcontent.changesetID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#newBean.getChangesetID()#">
+						and tcontent.siteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#newBean.getSiteID()#">
+					</cfquery>
+
 					<cfquery datasource="#variables.configBean.getDatasource()#" password="#variables.configBean.getDbPassword()#" username="#variables.configBean.getDbUsername()#">
 						update tcontent set changesetID=null 
 						where contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#newBean.getContentID()#">
@@ -1266,6 +1286,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfset getBean('changeset').loadBy(changesetID=newBean.getChangesetID(),siteid=newBean.getSiteID()).save()>
 				</cfif>
 
+				<cfif isDefined('local.rsApprovalsDelete')>
+					<cfloop query="local.rsApprovalsDelete">
+						<cfset getBean('approvalRequest').loadBy(requestID=local.rsApprovalsDelete.requestID).delete()>
+					</cfloop>
+				</cfif>
+
 				<!---
 				<cfif len(newBean.getChangesetID())>
 					variables.changesetManager.setSessionPreviewData(newBean.getChangeSetID())>
@@ -1469,9 +1495,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset fileList=listAppend(fileList,rsPendingChangesets.FileID)/>
 			</cfif>
 		</cfloop>
-		
+	
 		<cfloop query="rsHist">
-			<cfif not (rshist.active eq 1 or (rshist.approved eq 0 and len(rshist.changesetID))) and len(rshist.FileID)>
+			<cfif not len(rshist.approvalstatus) and not (rshist.active eq 1 or (rshist.approved eq 0 and len(rshist.changesetID))) and len(rshist.FileID)>
 				<cfif not listFind(fileList,rshist.FileID)>
 					<cfset variables.fileManager.deleteVersion(rshist.FileID,false) />
 					<cfset fileList=listAppend(fileList,rshist.FileID)/>

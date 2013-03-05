@@ -96,6 +96,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfif rc.rshist.active and rc.rshist.approved>
 	<cfset isActiveRenderered=true>
 	<cfset versionStatus=application.rbFactory.getKeyValue(session.rb,'sitemanager.content.published')>
+<cfelseif listFindNoCase('Pending,Rejected',rc.rshist.approvalstatus)>
+	<cfset versionStatus=application.rbFactory.getKeyValue(session.rb,'sitemanager.content.#rc.rshist.approvalstatus#')>
 <cfelseif not rc.rshist.approved and len(rc.rshist.changesetID)>
 	<cfset versionStatus=application.rbFactory.getKeyValue(session.rb,'sitemanager.content.queued')>
 <cfelseif not rc.rshist.approved>

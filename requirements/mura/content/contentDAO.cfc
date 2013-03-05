@@ -646,19 +646,25 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	<cfset var rslist= "">
 	
 	<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" name="rsdate"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
-	select lastupdate from tcontent where active = 1 and siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" /> and contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#" />
+	select tcontent.lastupdate from tcontent 
+	where tcontent.active = 1 
+	and tcontent.siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" /> 
+	and tcontent.contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#" />
 	</cfquery>
 	
 	<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" name="rslist"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
-	select contenthistid from tcontent 
-	where siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" /> 
-	and contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#" />
+	select tcontent.contenthistid from tcontent
+	left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid) 
+	where tcontent.siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" /> 
+	and tcontent.contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#" />
 	<!---and lastupdate < #createodbcdatetime(rsdate.lastupdate)#--->
 	and (
-		 		(approved=0 and changesetID is null)
+		 		(tcontent.approved=0 and tcontent.changesetID is null)
 				 or 
-				(approved=1 and active=0)
+				(tcontent.approved=1 and tcontent.active=0)
 			)
+
+	and tapprovalrequests.status is null
 	</cfquery>
 	
 	<cfif rslist.recordcount>
@@ -709,10 +715,12 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	<cfset var rsFiles= "">
 		
 	<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" name="rslist"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
-	select contenthistid from tcontent 
-	where siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" />
-	and contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#" />
-	and approved=0 and changesetID is null
+	select tcontent.contenthistid from tcontent 
+	where tcontent.siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" />
+	and tcontent.contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#" />
+	left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
+	and tcontent.approved=0 and tcontent.changesetID is null
+	and tapprovalrequests.status is null
 	</cfquery>
 	
 	<cfif rslist.recordcount>	

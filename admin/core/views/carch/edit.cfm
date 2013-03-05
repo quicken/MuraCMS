@@ -52,6 +52,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset isExtended=false>
 <cfset nodeLevelList="Page,Folder,Calendar,Gallery,Link,File"/>
 <cfset hasChangesets=application.settingsManager.getSite(rc.siteID).getHasChangesets()>
+<cfset requiresApproval=rc.contentBean.requiresApproval()>
+<cfset approvalStatus=rc.contentBean.getApprovalRequest().getStatus()>
 <cfset rc.perm=application.permUtility.getnodePerm(rc.crumbdata)>
 <cfif rc.parentID eq "" and not rc.contentBean.getIsNew()>
 	<cfset rc.parentID=rc.contentBean.getParentID()>	
@@ -65,7 +67,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset $=event.getValue("MuraScope")>
 <cfset tabAssignments=$.getBean("user").loadBy(userID=session.mura.userID, siteID=session.mura.siteID).getContentTabAssignments()>
 <script>
-var draftremovalnotice=<cfif application.configBean.getPurgeDrafts() and event.getValue("suppressDraftNotice") neq "true" and rc.contentBean.hasDrafts()><cfoutput>'#jsStringFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draftremovalnotice"))#'</cfoutput><cfelse>""</cfif>;
+var draftremovalnotice=<cfif application.configBean.getPurgeDrafts() and event.getValue("suppressDraftNotice") neq "true" and rc.contentBean.hasDrafts() and not requiresApproval><cfoutput>'#jsStringFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draftremovalnotice"))#'</cfoutput><cfelse>""</cfif>;
 </script>
 <cfif rc.compactDisplay neq "true" and application.configBean.getConfirmSaveAsDraft()><script>
 siteManager.requestedURL="";
@@ -242,10 +244,22 @@ var hasBody=#subType.getHasBody()#;
 		<button type="button" class="btn" onclick="document.contentForm.preview.value=1;if(siteManager.ckContent(draftremovalnotice)){submitForm(document.contentForm,'add');}"><i class="icon-eye-open"></i> #HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.savedraftandpreview"))#</button>
 		</cfif>
 		<cfif assignChangesets>
-		<button type="button" class="btn" onclick="saveToChangeset('#rc.contentBean.getChangesetID()#','#HTMLEditFormat(rc.siteID)#','');return false;"><i class="icon-check"></i> #HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.savetochangeset"))#</button>	
+			<button type="button" class="btn" onclick="saveToChangeset('#rc.contentBean.getChangesetID()#','#HTMLEditFormat(rc.siteID)#','');return false;"><i class="icon-check"></i> 
+				<cfif requiresApproval>
+					#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.savetochangesetandsendforapproval"))#
+				<cfelse>
+					#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.savetochangeset"))#
+				</cfif>
+				</button>	
 		</cfif>
 		<cfif rc.perm eq 'editor' and not $.siteConfig('EnforceChangesets')>
-		<button type="button" class="btn" onclick="document.contentForm.approved.value=1;if(siteManager.ckContent(draftremovalnotice)){submitForm(document.contentForm,'add');}"><i class="icon-check"></i> #HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.publish"))#</button>
+			<button type="button" class="btn" onclick="document.contentForm.approved.value=1;if(siteManager.ckContent(draftremovalnotice)){submitForm(document.contentForm,'add');}"><i class="icon-check"></i> 
+				<cfif requiresApproval>
+					#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.sendforapproval"))#
+				<cfelse>
+					#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.publish"))#
+				</cfif>
+			</button>
 		</cfif> 
 	</div>
 	</cfoutput>
@@ -278,7 +292,24 @@ var hasBody=#subType.getHasBody()#;
 			</cfif>
 			</cfif>
 			<li>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.update")#: <strong>#LSDateFormat(parseDateTime(rc.contentBean.getlastupdate()),session.dateKeyFormat)# #LSTimeFormat(parseDateTime(rc.contentBean.getlastupdate()),"short")#</strong></li>
-			<li>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.status")#: <strong><cfif not rc.contentBean.getIsNew()><cfif rc.contentBean.getactive() gt 0 and rc.contentBean.getapproved() gt 0>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#<cfelseif rc.contentBean.getapproved() lt 1>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draft")#<cfelse>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.archived")#</cfif><cfelse>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draft")#</cfif></strong></li>
+			<li>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.status")#: 
+				<strong>
+
+					<cfif not rc.contentBean.getIsNew()>
+						<cfif rc.contentBean.getactive() gt 0 and rc.contentBean.getapproved() gt 0>
+							#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
+						<cfelseif len(approvalStatus)>
+							#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#approvalStatus#")#
+						<cfelseif rc.contentBean.getapproved() lt 1>
+							#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draft")#
+						<cfelse>
+							#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.archived")#
+						</cfif>
+					<cfelse>
+						#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draft")#
+					</cfif>
+				</strong>
+			</li>
 			<cfset started=false>
 			<li>
 				#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.type")#: <strong>#HTMLEditFormat(rc.type)#</strong>
