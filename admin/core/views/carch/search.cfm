@@ -166,8 +166,9 @@ siteManager.copySiteID = '#session.copySiteID#';
 		<div class="mura-results-wrapper">
 		<p class="clearfix search-showing">
 			#application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.paginationmeta"),args)#
-		</p> 
-		<ul class="pagination">
+		</p>
+		<div class="pagination">
+		<ul>
 		<cfif rc.nextN.currentpagenumber gt 1> 
 			<li>
 				<a href="index.cfm?muraAction=cArch.search&siteid=#URLEncodedFormat(rc.siteid)#&keywords=#session.keywords#&startrow=#rc.nextn.previous#&moduleid=#rc.moduleid#">&laquo;&nbsp;Prev</a>
@@ -187,6 +188,7 @@ siteManager.copySiteID = '#session.copySiteID#';
 		</cfif> 
 		</cfoutput>
 		</ul>
+		</div>
 		</div>
 	</cfif> 
 </table>
