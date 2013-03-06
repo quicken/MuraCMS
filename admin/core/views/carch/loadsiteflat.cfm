@@ -129,9 +129,19 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cfscript>
 
 <cfif $.event('report') eq "mydrafts">
-	<cfquery dbtype="query" name="rspendingApprovals">
-		select * from sublist where approvalStatus='Pending'
+	<cftry>
+	<cfset rs=iterator.getQuery()>
+	<cfquery dbtype="query" name="rs">
+		select rs.contentid, rs.type, rs.subtype, rs.contenthistid, rs.siteid, rs.title, rs.menutitle, rs.fileid,
+		rs.path, rs.expires, sublist.lastupdate, sublist.approvalstatus from rs, sublist 
+		where 
+		rs.contentID=sublist.contentID
 	</cfquery>
+	<cfset iterator.setQuery(rs)>
+	<cfcatch>
+		<cfdump var="#cfcatch#" abort="true">
+	</cfcatch>
+	</cftry>
 </cfif>
 
 <cfsavecontent variable="pagination">
@@ -208,14 +218,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset deletable=((item.getParentID() neq '00000000000000000000000000000000001' and application.settingsManager.getSite(item.getSiteID()).getLocking() neq 'all') or (item.getParentID() eq '00000000000000000000000000000000001' and application.settingsManager.getSite(item.getSiteID()).getLocking() eq 'none')) and (verdict eq 'editor')  and item.getIsLocked() neq 1 and item.getContentID() neq '00000000000000000000000000000000001'>
 
 		<cfset editLink="index.cfm?muraAction=cArch.edit&contenthistid=#item.getContentHistID()#&contentid=#item.getContentID()#&type=#item.gettype()#&parentid=#item.getParentID()#&topid=#URLEncodedFormat(topID)#&siteid=#URLEncodedFormat(item.getSiteid())#&moduleid=#item.getmoduleid()#&startrow=#$.event('startrow')#">
-
-		<cfif $.event('report') eq "mydrafts">
-			<cfquery dbtype="query" name="rspendingApproval">
-				select * from rspendingApprovals where contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#item.getContentID()#">
-			</cfquery>
-		</cfif>
-
-
 		</cfsilent>
 	
 		<tr data-siteid="#item.getSiteID()#" data-contentid="#item.getContentID()#" data-contenthistid="#item.getContentHistID()#" data-sortby="#item.getSortBy()#" data-sortdirection="#item.getSortDirection()#" data-moduleid="#HTMLEditFormat(item.getModuleID())#" data-type="#item.getType()#" class="mura-node-data">
@@ -278,7 +280,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfif not listFindNoCase('none,read',verdict)>
 					<a title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.edit')#" class="draftprompt" href="index.cfm?muraAction=cArch.edit&contenthistid=#item.getContentHistID()#&contentid=#item.getContentID()#&type=#item.gettype()#&parentid=#item.getParentID()#&topid=#URLEncodedFormat(topID)#&siteid=#URLEncodedFormat(item.getSiteid())#&moduleid=#item.getmoduleid()#&startrow=#$.event('startrow')#">#HTMLEditFormat(item.getMenuTitle())# 
 						<cfif $.event('report') eq 'mydrafts'>
-							<cfif rspendingApproval.recordcount>
+							<cfif item.getApprovalStatus() eq 'Page'>
 								(#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.pending')#)
 							<cfelse>
 								(#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.draft')#)
@@ -288,7 +290,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfelse>
 					#HTMLEditFormat(item.getMenuTitle())#
 					<cfif $.event('report') eq 'mydrafts'>
-						<cfif rspendingApproval.recordcount>
+						<cfif item.getApprovalStatus() eq 'Page'>
 								(#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.pending')#)
 						<cfelse>
 							(#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.draft')#)
