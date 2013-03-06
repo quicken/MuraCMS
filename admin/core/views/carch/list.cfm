@@ -177,8 +177,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<div class="mura-results-wrapper">
 		<p class="clearfix search-showing">
 			#application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.paginationmeta"),args)#
-		</p> 
-		<ul class="pagination">
+		</p>
+		<div class="pagination">
+		<ul>
 		 <cfif rc.nextN.currentpagenumber gt 1>
 			
 					<li>	
@@ -199,6 +200,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</li>
 				</cfif>
 				</ul>
+				</div>
 			</div>
 		</cfoutput>
 			

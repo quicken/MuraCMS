@@ -249,7 +249,8 @@ select * from rsSubTypes where subType <> 'Default'
     <p class="clearfix search-showing">
       #application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.paginationmeta"),args)#
     </p> 
-    <ul class="pagination">
+    <div class="pagination">
+    <ul>
       <cfif rc.nextN.currentpagenumber gt 1>
         <li>
        <a href="index.cfm?muraAction=cPublicUsers.editgroup&startrow=#rc.nextN.previous#&userid=#URLEncodedFormat(rc.userid)#&siteid=#URLEncodedFormat(rc.siteid)#">&laquo;&nbsp;#application.rbFactory.getKeyValue(session.rb,'user.prev')#</a>
@@ -268,5 +269,6 @@ select * from rsSubTypes where subType <> 'Default'
       </li>
       </cfif>
     </ul>
+    </div>
   </div></cfoutput>
   </cfif>

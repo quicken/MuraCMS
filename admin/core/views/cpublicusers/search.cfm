@@ -96,24 +96,26 @@ version 2 without this exception.  You may, if you choose, apply this exception 
     <p class="clearfix search-showing">
       #application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.paginationmeta"),args)#
     </p> 
-    <ul class="pagination">
-<cfif rc.nextN.currentpagenumber gt 1> 
-  <li>
-    <a href="index.cfm?muraAction=cPublicUsers.search&startrow=#rc.nextN.previous#&lname=#urlencodedformat(rc.lname)#&siteid=#URLEncodedFormat(rc.siteid)#&search=#urlencodedformat(rc.search)#">&laquo;&nbsp;#application.rbFactory.getKeyValue(session.rb,'user.prev')#</a>
-  </li>
-</cfif>	
- <cfloop from="#rc.nextN.firstPage#"  to="#rc.nextN.lastPage#" index="i">
-  <cfif rc.nextN.currentpagenumber eq i>
-    <li class="active"><a href="##">#i#</a></li>
-  <cfelse> 
-    <li><a href="index.cfm?muraAction=cPublicUsers.search&startrow=#evaluate('(#i#*#rc.nextN.recordsperpage#)-#rc.nextN.recordsperpage#+1')#&lname=#urlencodedformat(rc.lname)#&siteid=#URLEncodedFormat(rc.siteid)#&search=#urlencodedformat(rc.search)#">#i#</a></li>
-  </cfif>
-</cfloop>
-<cfif rc.nextN.currentpagenumber lt rc.nextN.NumberOfPages>
-  <li><a href="index.cfm?muraAction=cPublicUsers.search&startrow=#rc.nextN.next#&lname=#urlencodedformat(rc.lname)#&siteid=#URLEncodedFormat(rc.siteid)#&search=#urlencodedformat(rc.search)#">#application.rbFactory.getKeyValue(session.rb,'user.next')#&nbsp;&raquo;</a>
-  </li>
-</cfif> 
-</ul>
+    <div class="pagination">
+	    <ul>
+		<cfif rc.nextN.currentpagenumber gt 1> 
+		  <li>
+		    <a href="index.cfm?muraAction=cPublicUsers.search&startrow=#rc.nextN.previous#&lname=#urlencodedformat(rc.lname)#&siteid=#URLEncodedFormat(rc.siteid)#&search=#urlencodedformat(rc.search)#">&laquo;&nbsp;#application.rbFactory.getKeyValue(session.rb,'user.prev')#</a>
+		  </li>
+		</cfif>	
+		 <cfloop from="#rc.nextN.firstPage#"  to="#rc.nextN.lastPage#" index="i">
+		  <cfif rc.nextN.currentpagenumber eq i>
+		    <li class="active"><a href="##">#i#</a></li>
+		  <cfelse> 
+		    <li><a href="index.cfm?muraAction=cPublicUsers.search&startrow=#evaluate('(#i#*#rc.nextN.recordsperpage#)-#rc.nextN.recordsperpage#+1')#&lname=#urlencodedformat(rc.lname)#&siteid=#URLEncodedFormat(rc.siteid)#&search=#urlencodedformat(rc.search)#">#i#</a></li>
+		  </cfif>
+		</cfloop>
+		<cfif rc.nextN.currentpagenumber lt rc.nextN.NumberOfPages>
+		  <li><a href="index.cfm?muraAction=cPublicUsers.search&startrow=#rc.nextN.next#&lname=#urlencodedformat(rc.lname)#&siteid=#URLEncodedFormat(rc.siteid)#&search=#urlencodedformat(rc.search)#">#application.rbFactory.getKeyValue(session.rb,'user.next')#&nbsp;&raquo;</a>
+		  </li>
+		</cfif> 
+		</ul>
+    </div>
 </div>
 </cfoutput>
 </cfif>

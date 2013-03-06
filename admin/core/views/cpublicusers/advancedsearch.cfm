@@ -242,7 +242,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<p class="clearfix search-showing">
 			#application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.paginationmeta"),args)#
 		</p> 
-		<ul class="pagination">
+		<div class="pagination">
+		<ul>
 		<cfif rc.nextN.currentpagenumber gt 1>
 			<li>
 				<a href="index.cfm?muraAction=cPublicUsers.advancedSearch&startrow=#rc.nextN.previous#&siteid=#URLEncodedFormat(rc.siteid)#">&laquo;&nbsp;#application.rbFactory.getKeyValue(session.rb,'user.prev')#</a></li>
@@ -260,6 +261,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<li><a href="index.cfm?muraAction=cPublicUsers.advancedSearch&startrow=#rc.nextN.next#&siteid=#URLEncodedFormat(rc.siteid)#">#application.rbFactory.getKeyValue(session.rb,'user.next')#&nbsp;&raquo;</a></li>
 			</cfif> 
 			</ul>
+		</div>
 		</div>
 		</cfoutput>
 </cfif>

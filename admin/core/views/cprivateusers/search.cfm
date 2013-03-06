@@ -85,7 +85,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 <cfif rc.nextN.numberofpages gt 1>
 <cfoutput>
-<ul class="pagination">
+<div class="pagination">
+<ul>
 <cfif rc.nextN.currentpagenumber gt 1> 
   <li>
     <a href="index.cfm?muraAction=cPrivateUsers.search&startrow=#rc.nextN.previous#&lname=#urlencodedformat(rc.lname)#&siteid=#URLEncodedFormat(rc.siteid)#&search=#urlencodedformat(rc.search)#">&laquo;&nbsp;#application.rbFactory.getKeyValue(session.rb,'user.prev')#</a>
@@ -103,5 +104,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
   </li>
 </cfif> 
 </ul>
+</div>
 </cfoutput>
 </cfif>

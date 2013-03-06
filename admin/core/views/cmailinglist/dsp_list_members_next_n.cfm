@@ -53,8 +53,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<div class="mura-results-wrapper">
 		<p class="clearfix search-showing">
 			#application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.paginationmeta"),args)#
-		</p> 
-		<ul class="pagination">
+		</p>
+		<div class="pagination"> 
+		<ul>
 		<cfif rc.nextN.currentpagenumber gt 1> 
 			<li>
 				<a href="index.cfm?muraAction=cMailingList.listmembers&mlid=#rc.mlid#&startrow=#rc.nextN.previous#&siteid=#URLEncodedFormat(rc.siteid)#">&laquo;&nbsp;#application.rbFactory.getKeyValue(session.rb,'mailinglistmanager.prev')#</a>
@@ -73,6 +74,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<li><a href="index.cfm?muraAction=cMailingList.listmembers&mlid=#rc.mlid#&startrow=#rc.nextN.next#&siteid=#URLEncodedFormat(rc.siteid)#">#application.rbFactory.getKeyValue(session.rb,'mailinglistmanager.next')#&nbsp;&raquo;</a></li>
 		</cfif> 
 		</ul>
+		</div>
 		</div>		
 </cfoutput>
 </cfif>
