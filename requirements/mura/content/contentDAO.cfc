@@ -732,9 +732,9 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		
 	<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" name="rslist"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 	select tcontent.contenthistid from tcontent 
+	left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
 	where tcontent.siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" />
 	and tcontent.contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#" />
-	left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
 	and tcontent.approved=0 and tcontent.changesetID is null
 	and tapprovalrequests.status is null
 	</cfquery>
