@@ -40,8 +40,8 @@
 							liHasKidsCustomString='',
 							liHasKidsNestedClass='',
 							liNestedClass='',
-							aHasKidsClass='dropdown-toggle',
-							aHasKidsCustomString='role="button" data-toggle="dropdown" data-target="##"',
+							aaHasKidsClass='dropdown-toggle',
+							aaHasKidsCustomString='',
 							liCurrentClass='active',
 							aCurrentClass=''
 						)#
