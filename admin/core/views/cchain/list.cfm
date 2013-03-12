@@ -50,14 +50,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfoutput>
 <h1>#application.rbFactory.getKeyValue(session.rb,"approvalchains")#</h1>
 
-<div id="nav-module-specific" class="btn-group">
-	<a class="btn" href="index.cfm?muraAction=cchain.edit&chainID=&siteid=#URLEncodedFormat(rc.siteid)#"><i class="icon-plus-sign"></i> #application.rbFactory.getKeyValue(session.rb,'approvalchains.addapprovalchain')#</a>
-</div>
+<cfinclude template="dsp_secondary_menu.cfm">
 
 <table class="table table-striped table-condensed table-bordered mura-table-grid"> 
 <thead>
 	<tr>
 		<th class="var-width">#application.rbFactory.getKeyValue(session.rb,"approvalchains.name")#</th>
+		<th>#application.rbFactory.getKeyValue(session.rb,"approvalchains.lastupdate")#</th>
 		<th class="actions">&nbsp;</th>
 	</tr>
 <thead>
@@ -69,13 +68,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset chain=chains.next()>
 	<tr>
 		<td class="var-width">
-			<a title="#application.rbFactory.getKeyValue(session.rb,'approvalchains.edit')#" href="index.cfm?muraAction=cchain.edit&chainID=#chain.getChainID()#&siteid=#URLEncodedFormat(rc.siteid)#">#HTMLEditFormat(chain.getName())#</a>
+			<a title="#application.rbFactory.getKeyValue(session.rb,'approvalchains.edit')#" href="index.cfm?muraAction=cchain.pending&chainID=#chain.getChainID()#&siteid=#URLEncodedFormat(rc.siteid)#">#HTMLEditFormat(chain.getName())#</a>
 		</td>
+		<td>#LSDateFormat(chain.getLastUpdate(),session.dateKeyFormat)# #LSTimeFormat(chain.getLastUpdate(),"medium")#</td>
 		<td class="actions">
 			<ul>
 				<li class="edit">
 					<a title="#application.rbFactory.getKeyValue(session.rb,'approvalchains.edit')#" href="index.cfm?muraAction=cchain.edit&chainID=#chain.getChainID()#&siteid=#URLEncodedFormat(rc.siteid)#"><i class="icon-pencil"></i></a>
 				</li>
+				<li class="change-sets"><a title="#application.rbFactory.getKeyValue(session.rb,'approvalchains.pendingrequests')#" href="index.cfm?muraAction=cchain.pending&chainID=#chain.getChainID()#&siteid=#URLEncodedFormat(chain.getSiteID())#"><i class="icon-reorder"></i></a></li>
 				<li class="delete">
 					<a title="#application.rbFactory.getKeyValue(session.rb,'categorymanager.delete')#" href="index.cfm?muraAction=cchain.delete&chainID=#chain.getChainID()#&siteid=#URLEncodedFormat(rc.siteid)#" onClick="return confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'approvalchains.deleteconfirm'))#',this.href)"><i class="icon-remove-sign"></i></a>
 				</li>

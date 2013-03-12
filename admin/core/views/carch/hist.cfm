@@ -50,6 +50,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset rc.perm=application.permUtility.getnodeperm(crumbdata)> 
 <cfset nodeLevelList="Page,Folder,Calendar,Gallery,Link,File"/>
 <cfset hasChangesets=application.settingsManager.getSite(rc.siteID).getHasChangesets()>
+<cfset hasChangesetAccess=application.permUtility.getModulePerm("00000000000000000000000000000000014","#session.siteid#")>
 <cfset stats=rc.contentBean.getStats()>
 <cfif rc.contentBean.getType() eq 'File'>
 <cfset rsFile=application.serviceFactory.getBean('fileManager').readMeta(rc.contentBean.getFileID())>
@@ -119,7 +120,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</td>
 </cfif>
 <td class="notes"><cfif rc.rsHist.notes neq ''><a rel="tooltip" data-original-title="#application.contentRenderer.setParagraphs(htmleditformat(rc.rshist.notes))#">View&nbsp;Note</a></cfif></td>
-<cfif hasChangesets><td class="changeset"><cfif isDate(rc.rshist.changesetPublishDate)><a href="##" rel="tooltip" title="#HTMLEditFormat(LSDateFormat(rc.rshist.changesetPublishDate,"short"))#"> <i class="icon-question-sign"></i></a></cfif>#HTMLEditFormat(rc.rshist.changesetName)#</td></cfif> 
+<cfif hasChangesets>
+	<td class="changeset">
+		<cfif isDate(rc.rshist.changesetPublishDate)><a href="##" rel="tooltip" title="#HTMLEditFormat(LSDateFormat(rc.rshist.changesetPublishDate,"short"))#"> <i class="icon-calendar"></i></a></cfif>
+		<cfif hasChangesetAccess>
+			<a href="./?muraAction=cChangesets.assignments&siteID=#rc.rshist.siteid#&changesetID=#rc.rshist.changesetID#">		#HTMLEditFormat(rc.rshist.changesetName)#
+			</a>
+		<cfelse>
+			#HTMLEditFormat(rc.rshist.changesetName)#
+		</cfif>
+	</td>
+</cfif> 
 <td class="status">#versionStatus#</td> 
 <td class="display<cfif rc.rshist.Display eq 2> scheduled</cfif>"> 
 	<cfif rc.rshist.Display and (rc.rshist.Display eq 1 and rc.rshist.approved)>	

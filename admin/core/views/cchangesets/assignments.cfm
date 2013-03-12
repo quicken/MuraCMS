@@ -124,7 +124,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
       </tr>
     </cfif>
 </table>
-</td></tr></table>
+
 
 <cfset rc.rslist=rc.componentAssignments.getQuery()>
 <h3>#application.rbFactory.getKeyValue(session.rb,'changesets.components')#</h3>
@@ -170,7 +170,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
       </tr>
     </cfif>
 </table>
-</td></tr></table>
+
 
 <cfset rc.rslist=rc.formAssignments.getQuery()>
 <h3>#application.rbFactory.getKeyValue(session.rb,'changesets.forms')#</h3>
@@ -217,5 +217,5 @@ version 2 without this exception.  You may, if you choose, apply this exception 
       </tr>
     </cfif>
 </table>
-</td></tr></table>
+
   </cfoutput>
