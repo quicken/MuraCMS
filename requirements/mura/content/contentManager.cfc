@@ -772,8 +772,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfif>
 		
 		<cfif not refused>
-			<cfset previousChangesetID=newBean.getChangesetID()>
-			
+			<cfset previousChangesetID=newBean.getChangesetID()>			
 			<cfset newBean.set(arguments.data) />
 
 			<cfif newBean.getChangesetID() eq 'other' and len(newBean.getChangesetName())>
@@ -809,8 +808,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfif newBean.getcontentID() eq ''>
 				<cfset newBean.setcontentID(createUUID()) />
 			</cfif>
-
-			<cfif not newBean.getApprovalChainOverride() and (newBean.getApproved() or len(newBean.getChangesetID())) and newBean.requiresApproval()>
+			
+			<cfif not newBean.getApprovalChainOverride() and (newBean.getApproved() or len(newBean.getChangesetID())) and newBean.requiresApproval()>		
 				<cfset var approvalRequest=newBean.getApprovalRequest()>
 
 				<!---If it does not have a currently pending aproval request create one --->
@@ -826,10 +825,18 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				
 				<!--- If it has an approval request that has been rejected or is pending then create a new request --->
 				<cfelseif approvalRequest.getStatus() neq 'Approved'>
-
+					
 					<!--- If the request is pending conditionally delete existing request --->
-					<cfif approvalRequest.getStatus() eq 'Pending' 
-						and yesNoFormat(newBean.getValue('cancelPendingApproval'))>
+					<cfif 	(
+								approvalRequest.getStatus() eq 'Pending' 
+								and yesNoFormat(newBean.getValue('cancelPendingApproval'))
+							)
+							or 
+							(
+								len(newBean.getChangesetID()) and previousChangesetID eq newBean.getChangesetID()
+							)
+						>
+						
 						<cfset approvalRequest.delete()>
 						<cfset approvalRequest=newBean.getApprovalRequest()>
 						<cfif isDefined("session.mura") and session.mura.isLoggedIn>
@@ -838,6 +845,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfif>
 
 					<cfset newBean.setcontentHistID(createUUID()) />
+					<cfset approvalRequest.setRequestID(createUUID())>
 					<cfset approvalRequest.setcontentHistID(newBean.getContentHistID())>
 					<cfset approvalRequest.save()>
 					<cfset newBean.setApproved(0)>
@@ -846,7 +854,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfelse>
 					<cfset newBean.setcontentHistID(createUUID()) />
 				</cfif>
-			
+				
 			<!--- The content does is not required to be sent throught an approval chain --->
 			<cfelse>
 				<cfset newBean.setcontentHistID(createUUID()) />

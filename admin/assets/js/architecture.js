@@ -126,16 +126,39 @@ var siteManager = {
 			this.fileLockConfirmed = true;
 			return false;
 		}
+		//alert(document.contentForm.muraPreviouslyApproved)
+		//alert(document.contentForm.approved.value)
+		//alert(cancelPendingApproval)
 
-		if(document.contentForm.muraPreviouslyApproved == 0 && document.contentForm.approved.value == 1 && typeof(currentChangesetID) != 'undefined' && currentChangesetID != '') {
+		if(document.contentForm.muraPreviouslyApproved.value == 0 && document.contentForm.approved.value == 1){
+		 if(typeof(currentChangesetID) != 'undefined' && currentChangesetID != '') {
 
-			confirmDialog(publishitemfromchangeset, function() {
+				confirmDialog(publishitemfromchangeset, function() {
+					formSubmitted = true;
+					document.contentForm.submit();
+				});
+
+				return false;
+			} else if(pendingApproval != 'undefined' && pendingApproval) {
+
+				confirmDialog(cancelPendingApproval, 
+					function() {
+						formSubmitted = true;
+						document.contentForm.cancelpendingapproval.value='true';
+						document.contentForm.submit();
+					},
+					 function() {
+						formSubmitted = true;
+						document.contentForm.cancelpendingapproval.value='false';
+						document.contentForm.submit();
+					}
+				);
+
+				return false;
+			} else {
 				formSubmitted = true;
-				document.contentForm.submit();
-			});
-
-			return false;
-
+				return true;
+			}
 		} else {
 			formSubmitted = true;
 			return true;
@@ -143,7 +166,7 @@ var siteManager = {
 
 	},
 
-
+ 
 	//  DHTML Menu for Site Summary
 	DHTML: (document.getElementById || document.all || document.layers),
 	lastid: "",

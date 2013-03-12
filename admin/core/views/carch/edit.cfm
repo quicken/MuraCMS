@@ -16,7 +16,7 @@ Linking Mura CMS statically or dynamically with other modules constitutes the pr
 Mura CMS. Thus, the terms and conditions of the GNU General Public License version 2 ("GPL") cover the entire combined work.
 
 However, as a special exception, the copyright holders of Mura CMS grant you permission to combine Mura CMS with programs
-or libraries that are released under the GNU Lesser General Public License version 2.1.
+or libraries that are released under the GNU Lesser General Pbuublic License version 2.1.
 
 In addition, as a special exception, the copyright holders of Mura CMS grant you permission to combine Mura CMS with 
 independent software modules (plugins, themes and bundles), and to distribute these plugins, themes and bundles without 
@@ -132,6 +132,17 @@ function conditionalExit(msg){
 	}
 
 }
+<cfif requiresApproval>
+	<cfset approvalRequest=rc.contentBean.getApprovalRequest()>
+	<cfif not approvalRequest.getIsNew() and approvalRequest.getStatus() eq 'Pending'>
+		var pendingApproval=true;
+		var cancelPendingApproval=<cfoutput>'#JSStringFormat(application.rbFactory.getKeyValue(session.rb,"approvalchains.cancelPendingApproval"))#'</cfoutput>;
+	<cfelse>
+		var pendingApproval=false;
+	</cfif>
+<cfelse>
+	var pendingApproval=false;
+</cfif>
 </script>
 <cfelseif rc.compactDisplay eq "true">
 <script type="text/javascript">
@@ -339,7 +350,7 @@ var hasBody=#subType.getHasBody()#;
 			<p>
 		</cfif>
 	</cfif>
-	
+
 	<cfif hasChangesets and (not currentChangeset.getIsNew() or pendingChangesets.recordcount)>
 		<p class="alert">
 		<cfif pendingChangesets.recordcount>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.changesetnodenotify")#: 
@@ -565,7 +576,7 @@ var hasBody=#subType.getHasBody()#;
 	<input type="hidden" name="startrow" value="#rc.startrow#">
 	<input type="hidden" name="returnURL" id="txtReturnURL" value="#rc.returnURL#">
 	<input type="hidden" name="homeID" value="#rc.homeID#">
-	<input type="hidden" name="cancelPendingApproval" value="false">
+	<input type="hidden" name="cancelpendingapproval" value="false">
 	<cfif not  listFind(session.mura.memberships,'S2')>
 		<input type="hidden" name="isLocked" value="#rc.contentBean.getIsLocked()#">
 	</cfif>

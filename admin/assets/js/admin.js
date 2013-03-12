@@ -868,14 +868,15 @@ function confirmDialog(message, yesAction, noAction) {
 				}
 
 			},
-			'NO': function() {
-				$(this).dialog('close');
+			'NO': function() {		
 				if(typeof(_noAction) != 'undefined') {
 					if(typeof(_noAction) == 'function') {
 						_noAction();
 					} else {
 						location.href = _noAction;
 					}
+				} else {
+					$(this).dialog('close');
 				}
 			}
 		}
