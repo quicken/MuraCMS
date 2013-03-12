@@ -810,7 +810,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset newBean.setcontentID(createUUID()) />
 			</cfif>
 
-			<cfif (newBean.getApproved() or len(newBean.getChangesetID())) and newBean.requiresApproval()>
+			<cfif not newBean.getApprovalChainOverride() and (newBean.getApproved() or len(newBean.getChangesetID())) and newBean.requiresApproval()>
 				<cfset var approvalRequest=newBean.getApprovalRequest()>
 
 				<!---If it does not have a currently pending aproval request create one --->

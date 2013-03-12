@@ -75,6 +75,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset variables.fw.redirect(action="cChangesets.edit",append="changesetID,siteID")>
 </cffunction>
 
+<cffunction name="rollback" output="false">
+<cfargument name="rc">
+<cfset variables.changesetManager.rollback(rc.changesetID)>
+<cfset variables.fw.redirect(action="cChangesets.edit",append="changesetID,siteID")>
+</cffunction>
+
 <cffunction name="assignments" output="false">
 <cfargument name="rc">
 <cfset rc.siteAssignments=variables.changesetManager.getAssignmentsIterator(rc.changesetID,rc.keywords,'00000000000000000000000000000000000')>

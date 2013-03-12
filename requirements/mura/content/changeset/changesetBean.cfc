@@ -187,4 +187,28 @@
 		<cfreturn variables.changesetManager.getAssignmentsQuery(getValue('changesetID'))>
 </cffunction>
 
+<cffunction name="rollback" output="false">
+	<cfif variables.instance.published>
+		<cfset var it=getBean('changesetRollBack')
+			.getFeed()
+			.setNextN(0)
+			.setSiteID(getValue('siteID'))
+			.addParam(column='changesetID',criteria=getValue('changesetID'))
+			.getIterator()>
+
+		<cfif it.hasNext()>
+			<cfloop condition="it.hasNext()">
+				<cfset it.next().rollback()>
+			</cfloop>
+		</cfif>	
+	</cfif>
+
+	<cfset variables.instance.published=0>
+	<cfset variables.instance.publishDate="">
+	<cfset save()>
+	<!---<cfdump var="#variables.instance.published#" abort="true">--->
+
+	<cfreturn this>
+</cffunction>
+
 </cfcomponent>

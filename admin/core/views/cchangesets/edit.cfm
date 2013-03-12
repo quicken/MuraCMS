@@ -117,6 +117,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
     <cfif not rc.changeset.getPublished() and not hasPendingApprovals>
       <input type="button" class="btn" value="#application.rbFactory.getKeyValue(session.rb,'changesets.publishnow')#" onclick="confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'changesets.publishnowconfirm'))#','index.cfm?muraAction=cChangesets.publish&changesetID=#rc.changeset.getchangesetID()#&siteid=#URLEncodedFormat(rc.changeset.getSiteID())#')" /> 
     </cfif>
+    <cfif rc.changeset.getPublished()>
+        <input type="button" class="btn" value="#application.rbFactory.getKeyValue(session.rb,'changesets.rollback')#" onclick="confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'changesets.rollbackconfirm'))#','index.cfm?muraAction=cChangesets.rollback&changesetID=#rc.changeset.getchangesetID()#&siteid=#URLEncodedFormat(rc.changeset.getSiteID())#')" /> 
+    </cfif>
      <input type=hidden name="changesetID" value="#rc.changeset.getchangesetID()#">
   </cfif>
   <input type="hidden" name="action" value="">

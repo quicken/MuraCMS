@@ -337,15 +337,28 @@
 		<cfset var it=getAssignmentsIterator(argumentCollection=arguments)>
 		<cfset var item="">
 		<cfset var changeset="">
-		
+		<cfset var previousHistID="">
+		<cfset var changesetHistID="">
+		<cfset var rollback="">
+		<cfset var current="">
 		<cfloop condition="it.hasNext()">
 			<cfset item=it.next()>
 			<cfset item.setApproved(1)>
+			<cfset current=getBean('content').loadBy(contentID=item.getContentID(),siteID=item.getSiteID())>
+			
 			<cfif arguments.byDate>
 				<cfset item.setLastUpdateBy("System")>
 				<cfset item.setLastUpdateByID("")>
 			</cfif>
+
 			<cfset item.save()>
+
+			<cfset rollback=getBean('changesetRollBack').loadBy(
+					changesetHistID=item.getContentHistID(), 
+					changesetID=item.getChangesetID(), 
+					previousHistID=current.getContentHistID(),
+					siteID=item.getSiteID()
+				).save()>
 		</cfloop>
 		
 		<cfset changeset=read(arguments.changesetID)>
@@ -398,7 +411,7 @@
 
 	<cfset var rs="">
 	<cfquery name="rs" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
-	select count(tcontent.contenthistid)
+	select tcontent.contenthistid
 	from tcontent 
 	inner join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
 	where tcontent.changesetID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.changesetID#">
@@ -426,6 +439,12 @@
 	<cfset var iterator=getBean("changesetIterator")>
 	<cfset iterator.setQuery(getQuery(argumentCollection=arguments))>
 	<cfreturn iterator>
+</cffunction>
+
+<cffunction name="rollback" output="false">
+	<cfargument name="changesetID">
+	<cfset read(changesetID=arguments.changesetID).rollback()>	
+	<cfreturn this>
 </cffunction>
 
 </cfcomponent>

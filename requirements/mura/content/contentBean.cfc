@@ -127,6 +127,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="displayInterval" type="string" default="Daily" required="true" />
 <cfproperty name="requestID" type="string" default="" required="true" />
 <cfproperty name="approvalStatus" type="string" default="" required="true" />
+<cfproperty name="approvalChainOverride" type="boolean" default="false" required="true" />
 
 <cffunction name="init" access="public" returntype="any" output="false">
 	
@@ -225,7 +226,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.categoryID = "" />
 	<cfset variables.instance.requestID = "" />
 	<cfset variables.instance.approvalStatus = "" />
-	
+	<cfset variables.instance.approvalChainOverride = false />
+
 	<cfset variables.kids = arrayNew(1) />
 	<cfset variables.displayRegions = structNew()>
 	
@@ -1182,5 +1184,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="getApprovalRequest" output="false">
 	<cfreturn getBean('approvalRequest').loadBy(contenthistid=getValue('contenthistid'),chainID=getValue('chainID'),siteID=getValue('siteID'))>
+</cffunction>
+
+<cffunction name="getSourceVersion" output="false">
+	<cfreturn getBean('content').loadBy(contenthistid=getValue('sourceID'))>
 </cffunction>
 </cfcomponent>

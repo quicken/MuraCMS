@@ -696,8 +696,8 @@ component extends="mura.bean.bean" {
 	}
 
 	function getFeed(){		
-		var feed=getBean('beanFeed').setBean(variables.beanClass).setTable(getTable());
-
+		var feed=getBean('beanFeed').setBeanClass(variables.beanClass).setTable(getTable());
+	
 		if(hasProperty('siteid')){
 			feed.setSiteID(getValue('siteID'));
 		}
@@ -707,7 +707,7 @@ component extends="mura.bean.bean" {
 	}
 
 	function getIterator(){		
-		return getBean('beanIterator').setBean(variables.beanClass);
+		return getBean('beanIterator').setBeanClass(variables.beanClass);
 	}
 
 }

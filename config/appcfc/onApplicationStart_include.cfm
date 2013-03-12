@@ -219,6 +219,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			variables.serviceFactory.addAlias("approvalAction","approvalActionBean");
 			variables.serviceFactory.addAlias("approvalChainMembership","approvalChainMembershipBean");
 			variables.serviceFactory.addAlias("approvalChainAssignment","approvalChainAssignmentBean");
+			variables.serviceFactory.addAlias("changesetRollBack","changesetRollBackBean");
 
 			application.serviceFactory=variables.serviceFactory;
 		</cfscript>
