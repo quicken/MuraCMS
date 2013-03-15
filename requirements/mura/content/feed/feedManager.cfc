@@ -283,15 +283,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfargument name="userID"  type="string" default="" />
 
 			<cfset var rs="" />
-			<cfset var allowFeed=true />
 			<cfset var rLen=listLen(arguments.feedBean.getRestrictGroups()) />
 			<cfset var G = 0 />
 			
 			<cfif listFind(session.mura.memberships,'S2IsPrivate;#arguments.feedBean.getSiteID()#')>
 				<cfreturn true />
-			</cfif>
-			
-			<cfif  arguments.feedBean.getRestricted()>
+			<cfelseif arguments.feedBean.getIsNew()>
+				<cfreturn false>
+			<cfelseif  arguments.feedBean.getRestricted()>
 						<cfquery name="rs" datasource="#variables.configBean.getReadOnlyDatasource()#"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 						select tusers.userid from tusers 
 						<cfif rLen> inner join tusersmemb 
@@ -319,9 +318,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<cfif not rs.recordcount>
 							<cfreturn false />
 						</cfif>
+			<cfelse>
+				<cfreturn true>
 			</cfif>
-			
-		<cfreturn allowFeed>
+		
 </cffunction>
 
 <cffunction name="getDefaultFeeds" returntype="query" access="public" output="false">
