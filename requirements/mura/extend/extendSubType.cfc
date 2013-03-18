@@ -177,20 +177,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset arguments.type='Folder'>
 	</cfif>
 	<cfset variables.instance.Type = trim(arguments.Type) />
-
-	<cfif listFindNoCase('Base,Page,Folder,Gallery,File,Calendar,Gallery',getType())>
-		<cfset setBaseTable('tcontent')>
-		<cfset setBaseKeyField('contentHistID')>
-	<cfelseif listFindNoCase('User,Group,1,2',getType())>
-		<cfset setBaseTable('tusers')>
-		<cfset setBaseKeyField('userID')>
-	<cfelseif getType()  eq 'Address'>
-		<cfset setBaseTable('tuseraddresses')>
-		<cfset setBaseKeyField('addressID')>
-	<cfelseif getType()  eq 'Site'>
-		<cfset setBaseTable('tsettings')>
-		<cfset setBaseKeyField('baseID')>
-	</cfif>
 	<cfreturn this>
 </cffunction>
 
@@ -343,7 +329,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<cfif not len(getBaseTable())>
 		<cfswitch expression="#getType()#">
-			<cfcase value="Page,Folder,Component,File,Link,Calendar,Gallery">
+			<cfcase value="Page,Folder,Component,File,Link,Calendar,Gallery,Base,Form">
 				<cfset setBaseTable("tcontent")>
 			</cfcase>
 			<cfcase value="1,2,User,Group,Address">
@@ -354,7 +340,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfif not len(getBaseKeyField())>
 		<cfswitch expression="#getType()#">
-			<cfcase value="Page,Folder,Component,File,Link,Calendar,Gallery">
+			<cfcase value="Page,Folder,Component,File,Link,Calendar,Gallery,Base,Form">
 				<cfset setBaseKeyField("contentHistID")>
 			</cfcase>
 			<cfcase value="1,2,User,Group,Address">
@@ -365,7 +351,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfif not len(getDataTable())>
 		<cfswitch expression="#getType()#">
-			<cfcase value="Page,Folder,Component,File,Link,Calendar,Gallery">
+			<cfcase value="Page,Folder,Component,File,Link,Calendar,Gallery,Base,Form">
 				<cfset setDataTable("tclassextenddata")>
 			</cfcase>
 			<cfcase value="1,2,User,Group,Address">
