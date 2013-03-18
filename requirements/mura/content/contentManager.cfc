@@ -2194,11 +2194,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset data.publishedHistoryID= cb.getContentHistID() />
 
 		<cfif cb.getActive()>
-			<cfif cb.hasDrafts()>
+			<cfif cb.hasDrafts() or data.pendingchangsets.recordcount>
 				<cfset history = getDraftHist(arguments.contentid,arguments.siteid) />
 				<cfquery name="newDraft" dbtype="query">
-					select * from history where lastUpdate > <cfqueryparam cfsqltype="cf_sql_timestamp" value="#cb.getLastUpdate()#"> 
-					order by lastUpdate desc
+					select contenthistid, lastupdate from history where lastUpdate > <cfqueryparam cfsqltype="cf_sql_timestamp" value="#cb.getLastUpdate()#"> 
+					union 
+					select contenthistid, lastupdate from data.pendingchangsets
+				</cfquery>
+				<cfquery name="newDraft" dbtype="query">
+					select * from newDraft order by lastupdate desc
 				</cfquery>
 				<cfif newDraft.recordCount>
 					<cfset data.hasdraft=true>

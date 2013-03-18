@@ -186,6 +186,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="validate" access="public" output="false">
 	<cfscript>
+	/*
 	variables.instance.errors=structnew();
 
 	local.errors=getBean('validationService').validate(this).getErrors();
@@ -194,7 +195,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	for(local.error in local.errors){
 		variables.instance.errors['#local.error.getProperty()#']=local.error.getMessage();
 	}
-	
+	*/
 	return this;
 	</cfscript>
 </cffunction>

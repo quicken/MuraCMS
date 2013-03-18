@@ -177,6 +177,20 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset arguments.type='Folder'>
 	</cfif>
 	<cfset variables.instance.Type = trim(arguments.Type) />
+
+	<cfif listFindNoCase('Base,Page,Folder,Gallery,File,Calendar,Gallery',getType())>
+		<cfset setBaseTable('tcontent')>
+		<cfset setBaseKeyField('contentHistID')>
+	<cfelseif listFindNoCase('User,Group,1,2',getType())>
+		<cfset setBaseTable('tusers')>
+		<cfset setBaseKeyField('userID')>
+	<cfelseif getType()  eq 'Address'>
+		<cfset setBaseTable('tuseraddresses')>
+		<cfset setBaseKeyField('addressID')>
+	<cfelseif getType()  eq 'Site'>
+		<cfset setBaseTable('tsettings')>
+		<cfset setBaseKeyField('baseID')>
+	</cfif>
 	<cfreturn this>
 </cffunction>
 
@@ -208,7 +222,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="setBaseTable" access="public" output="false">
 	<cfargument name="BaseTable" type="String" />
-	<cfset variables.instance.BaseTable = trim(arguments.BaseTable) />
+	<cfif len(trim(arguments.BaseTable))>
+		<cfset variables.instance.BaseTable = trim(arguments.BaseTable) />
+	</cfif>
 	<cfreturn this>
 </cffunction>
 
@@ -218,7 +234,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="setbaseKeyField" access="public" output="false">
 	<cfargument name="baseKeyField" type="String" />
-	<cfset variables.instance.baseKeyField = trim(arguments.baseKeyField) />
+	<cfif len(trim(arguments.baseKeyField))>
+		<cfset variables.instance.baseKeyField = trim(arguments.baseKeyField) />
+	</cfif>
 	<cfreturn this>
 </cffunction>
 

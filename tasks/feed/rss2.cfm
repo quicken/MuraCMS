@@ -61,6 +61,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset $=request.servletEvent.getValue('MuraScope')>
 		<cfset request.currentFilename=item.getFilename()>
 		<cfset request.currentFilenameAdjusted=item.getFilename()>
+		<cfset request.muraDynamicContentError=false>
 		<cfset $.event('contentBean',item) />
 		<cfset $.event('crumbdata',item.getCrumbArray()) />
 		<cfset $.getHandler("standardSetContentRenderer").handle($)>
@@ -70,16 +71,31 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset $.getHandler("standardDoActions").handle($)>		
 		<cfset $.getValidator("standardRequireLogin").validate($)>		
 		<cfset $.getHandler("standardSetLocale").handle($)>		
+		<cfset $.announceEvent('onRenderStart')>
+		<cfset r=$.event('r')>
+
+		<cfif not r.restrict or (r.restrict and not r.allow)>
+			<cftry>
+				<cfset itemcontent=trim($.addCompletePath($.dspBody(pageTitle='',bodyAttribute='body', crumblist=0,showMetaImage=0),item.getSiteID()))>
+				<cfif request.muraDynamicContentError>
+					<cfset itemcontent="">
+				<cfelse>
+					<cfset itemcontent = $.addCompletePath(itemcontent,item.getSiteID())>
+				</cfif>
+				<cfcatch><cfset itemcontent=""></cfcatch>
+			</cftry>
+		<cfelse>
+			<cfset itemcontent="">
+		</cfif>
 		
-		<cfset itemcontent=trim($.addCompletePath($.dspBody(pageTitle='',crumblist=0,showMetaImage=0),item.getSiteID()))>	
 		<cfset itemdescription=trim($.setDynamicContent(item.getValue('summary')))>
 		
-		<!---<cfif feedBean.getallowhtml() eq 0>
+		<cfif feedBean.getallowhtml() eq 0>
 			<cfset itemdescription = $.stripHTML(itemdescription)>
 			<cfset itemdescription=left(itemdescription,200) & "...">
-		<cfelse>--->
+		<cfelse>
 			<cfset itemdescription = $.addCompletePath(itemdescription,item.getSiteID())>
-		<!---</cfif>--->
+		</cfif>
 
 		<cfif isDate(item.getValue('releaseDate'))>
 			<cfset thePubDate=item.getValue('releaseDate')>
@@ -89,7 +105,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 		<cfset rsCats=application.contentManager.getCategoriesByHistID(item.getContentHistID())>
 
-		<cfset theLink=XMLFormat($.createHREFforRss(item.getValue('type'),item.getValue('filename'),item.getValue('siteID'),item.getValue('contentID'),item.getValue('target'),item.getValue('targetParams'),application.configBean.getContext(),application.configBean.getStub(),application.configBean.getIndexFile(),0,item.getValue('fileEXT'))) />
+		<cfset theLink=XMLFormat(item.getURL(complete=true)) />		
 	</cfsilent>
 		<item>
 			<title>#XMLFormat(item.getValue('menuTitle'))#</title>	
@@ -99,7 +115,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<pubDate>#GetHttpTimeString(thePubDate)#</pubDate>
 			<description><![CDATA[#itemdescription#]]></description>
 			<cfloop query="rsCats"><category>#XMLFormat(rsCats.name)#</category>	
-			</cfloop><cfif item.getType() eq "Page"><content:encoded><![CDATA[#itemcontent#]]></content:encoded>
+			</cfloop><cfif item.getType() eq "Page" and len(itemcontent)><content:encoded><![CDATA[#itemcontent#]]></content:encoded>
 			</cfif><cfif len(item.getFileID())><cfset fileMeta=application.serviceFactory.getBean("fileManager").readMeta(item.getValue('fileID'))><enclosure url="#XMLFormat('http://#application.settingsManager.getSite(item.getValue('siteID')).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()#/tasks/render/file/?fileID=#item.getValue('fileID')#&fileEXT=.#item.getValue('fileEXT')#')#" length="#item.getValue('fileSize')#" type="#fileMeta.ContentType#/#fileMeta.ContentSubType#" /></cfif>
 		</item>
 </cfloop></channel>
