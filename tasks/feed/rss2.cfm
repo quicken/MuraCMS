@@ -62,6 +62,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset request.currentFilename=item.getFilename()>
 		<cfset request.currentFilenameAdjusted=item.getFilename()>
 		<cfset request.muraDynamicContentError=false>
+		<cfset $.announceEvent('onSiteRequestStart')>
 		<cfset $.event('contentBean',item) />
 		<cfset $.event('crumbdata',item.getCrumbArray()) />
 		<cfset $.getHandler("standardSetContentRenderer").handle($)>
