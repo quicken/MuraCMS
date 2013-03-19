@@ -2186,7 +2186,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset var data = structNew() />
 		<cfset var cb = getBean("content").loadby(contentid=arguments.contentid,siteid=arguments.siteid) /> 
 		<cfset var newDraft = "" />
-		<cfset var history = "" />
+		<cfset var history = getDraftHist(arguments.contentid,arguments.siteid) />
 
 		<cfset data.pendingchangsets=variables.changesetManager.getPendingByContentID(arguments.contentID,arguments.siteID) />
 		<cfset data.hasdraft=false>
@@ -2194,7 +2194,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset data.publishedHistoryID= cb.getContentHistID() />
 
 		<cfif cb.getActive()>
-			<cfif cb.hasDrafts() or data.pendingchangsets.recordcount>
+			<cfif history.recordcount or data.pendingchangsets.recordcount>
 				<cfset history = getDraftHist(arguments.contentid,arguments.siteid) />
 				<cfquery name="newDraft" dbtype="query">
 					select contenthistid, lastupdate from history where lastUpdate > <cfqueryparam cfsqltype="cf_sql_timestamp" value="#cb.getLastUpdate()#"> 
