@@ -2195,7 +2195,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 		<cfif cb.getActive()>
 			<cfif history.recordcount or data.pendingchangsets.recordcount>
-				<cfset history = getDraftHist(arguments.contentid,arguments.siteid) />
 				<cfquery name="newDraft" dbtype="query">
 					select contenthistid, lastupdate from history where lastUpdate > <cfqueryparam cfsqltype="cf_sql_timestamp" value="#cb.getLastUpdate()#"> 
 					union 
