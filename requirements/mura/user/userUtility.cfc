@@ -236,7 +236,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset structDelete(session,'siteArray')>
 
 		<cfquery name="RsGetRoles" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
-			Select groupname, isPublic, siteid from tusers where userid in
+			Select userID, groupname, isPublic, siteid from tusers where userid in
 			(Select GroupID from tusersmemb where userid='#rsuser.userid#')
 		</cfquery>
 				
@@ -287,7 +287,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		WHERE tusers.UserID='#rsUser.UserID#'
 		</cfquery>
 				
-		<cfset setUserStruct(rsuser,rolelist)>
+		<cfset setUserStruct(rsuser,rolelist,valueList(RsGetRoles.userID))>
 		
 		<cfset variables.globalUtility.logEvent("UserID:#rsuser.userid# Name:#rsuser.fname# #rsuser.lname# logged in at #now()#","mura-users","Information",true) />
 
@@ -662,6 +662,7 @@ Thanks for using #contactName#</cfoutput>
 <cffunction name="setUserStruct" output="false" access="public" returntype="void">
 <cfargument name="user">
 <cfargument name="memberships" required="true" default="">
+<cfargument name="membershipids" required="true" default="">
 
 <cfparam name="session.rememberMe" type="numeric" default="0" />
 <cfparam name="session.loginAttempts" type="numeric" default="0" />
@@ -685,6 +686,12 @@ Thanks for using #contactName#</cfoutput>
 	<cfset session.mura.lastlogin=arguments.user.lastlogin>
 	<cfset session.mura.passwordCreated=arguments.user.passwordCreated>
 	<cfset session.mura.memberships=arguments.memberships>
+	<cfif structKeyExists(arguments.user,'groupID')>
+		<cfset session.mura.membershipids=arguments.user.groupID>
+	<cfelse>
+		<cfset session.mura.membershipids=arguments.membershipids>
+	</cfif>
+	
 <cfelse>
 	<cfset session.mura.isLoggedIn=false>			
 	<cfset session.mura.userID="">
@@ -700,6 +707,7 @@ Thanks for using #contactName#</cfoutput>
 	<cfset session.mura.email="">
 	<cfset session.mura.remoteID="">
 	<cfset session.mura.memberships="">
+	<cfset session.mura.membershipids="">
 	<cfset session.mura.showTrace=false>
 </cfif>
 </cffunction>

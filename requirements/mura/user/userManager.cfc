@@ -919,16 +919,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>
 
 <cffunction name="setUserStructDefaults" output="false" access="public" returntype="void">
-<cfset var user="">
-<cfif not structKeyExists(session,"mura")>
-	<cfif yesNoFormat(variables.configBean.getValue("useLegacySessions")) 
-			and len(getAuthUser()) and isValid("UUID",listFirst(getAuthUser(),"^"))>
-		<cfset user=read(listFirst(getAuthUser(),"^"))>
-		<cfset variables.userUtility.setUserStruct(user.getAllValues())>
-	<cfelse>
-		<cfset variables.userUtility.setUserStruct()>
+	<cfset var user="">
+	<cfif not structKeyExists(session,"mura")>
+		<cfif yesNoFormat(variables.configBean.getValue("useLegacySessions")) 
+				and len(getAuthUser()) and isValid("UUID",listFirst(getAuthUser(),"^"))>
+			<cfset user=read(listFirst(getAuthUser(),"^"))>
+			<cfset variables.userUtility.setUserStruct(user.getAllValues())>
+		<cfelse>
+			<cfset variables.userUtility.setUserStruct()>
+		</cfif>
 	</cfif>
-</cfif>
+	<cfparam name="session.mura.membershipids" default="" />
 </cffunction>
 
 <cffunction name="getIterator" returntype="any" output="false">
