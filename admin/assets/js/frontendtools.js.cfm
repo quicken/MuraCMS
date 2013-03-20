@@ -329,6 +329,15 @@
 				}
 
 				if(count){
+					if(muraInlineEditor.data.approvalstatus=='Pending'){
+						if(confirm('#JSStringFormat(application.rbFactory.getKeyValue(session.rb,"approvalchains.cancelPendingApproval"))#')){
+							muraInlineEditor.data.cancelpendingapproval=true;
+						} else {
+							muraInlineEditor.data.cancelpendingapproval=false;
+						}
+
+					}
+
 					$.post('#application.configBean.getContext()#/admin/index.cfm',
 						muraInlineEditor.data,
 						function(data){
@@ -457,7 +466,8 @@
 			parentid: '#JSStringFormat(node.getParentID())#',
 			moduleid: '#JSStringFormat(node.getModuleID())#',
 			approved: 0,
-			changesetid: ''
+			changesetid: '',
+			approvalstatus: '#JSStringFormat(node.getApprovalStatus())#'
 			},
 		attributes: {},
 		preprocessed: {

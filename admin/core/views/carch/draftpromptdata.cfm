@@ -54,10 +54,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<p>#application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.dialog')#</p>
 				<a href="##" class="btn btn-large btn-block draft-prompt-option" data-contenthistid="#draftprompdata.publishedHistoryID#"><!--- <i class="icon-pencil"></i>  --->#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.published'))#</a>
 			<cfif draftprompdata.hasdraft>
-			<a href="##" class="btn btn-large btn-block draft-prompt-option" data-contenthistid="#draftprompdata.historyid#"><!--- <i class="icon-pencil"></i>  --->#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.latest'))#</a>
+			<a href="##" class="btn btn-large btn-block draft-prompt-option" data-contenthistid="#draftprompdata.historyid#"><!--- <i class="icon-pencil"></i>  --->
+				#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.latest'))#
+				<cfif draftprompdata.hasdraftpending >
+					(#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.pending')#)
+				</cfif>
+			</a>
 			</cfif>
 			
-			<cfif draftprompdata.pendingchangsets.recordcount>
+			<cfif draftprompdata.pendingchangesets.recordcount>
 			
 			<!---
 <div class="btn-group btn-block">
@@ -66,17 +71,44 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			    <span class="caret"></span>
 			 </a>
 			  <ul class="dropdown-menu">
-				<cfloop query="draftprompdata.pendingchangsets">
+				<cfloop query="draftprompdata.pendingchangesets">
 				<li>
-					<a href="##" class="draft-prompt-option" data-contenthistid="#draftprompdata.pendingchangsets.contenthistid#">#HTMLEditFormat(draftprompdata.pendingchangsets.changesetName)#</a>
+					<a href="##" class="draft-prompt-option" data-contenthistid="#draftprompdata.pendingchangesets.contenthistid#">#HTMLEditFormat(draftprompdata.pendingchangesets.changesetName)#</a>
 				</li>
 				</cfloop>
 			 </ul>
 			</div>
 --->
 			<h1><!--- <i class="icon-arrow-right"></i>  --->Edit a Version in a Change Set</h1>
-				<cfloop query="draftprompdata.pendingchangsets">
-					<a href="##" class="draft-prompt-option btn btn-large btn-block" data-contenthistid="#draftprompdata.pendingchangsets.contenthistid#">#HTMLEditFormat(draftprompdata.pendingchangsets.changesetName)#</a>
+				<cfloop query="draftprompdata.pendingchangesets">
+					<a href="##" class="draft-prompt-option btn btn-large btn-block" data-contenthistid="#draftprompdata.pendingchangesets.contenthistid#">#HTMLEditFormat(draftprompdata.pendingchangesets.changesetName)#
+						<cfif draftprompdata.pendingchangesets.approvalStatus eq 'Pending'>
+							(#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.pending')#)
+						</cfif>
+					</a>
+				</cfloop>	
+			</cfif>
+			<cfif draftprompdata.yourapprovals.recordcount>
+			
+			<!---
+<div class="btn-group btn-block">
+			  <a class="btn btn-large btn-block dropdown-toggle" data-toggle="dropdown" style="font-size: 14px !important;" href="##">
+			    Edit a Version in a Change Set
+			    <span class="caret"></span>
+			 </a>
+			  <ul class="dropdown-menu">
+				<cfloop query="draftprompdata.pendingchangesets">
+				<li>
+					<a href="##" class="draft-prompt-option" data-contenthistid="#draftprompdata.pendingchangesets.contenthistid#">#HTMLEditFormat(draftprompdata.pendingchangesets.changesetName)#</a>
+				</li>
+				</cfloop>
+			 </ul>
+			</div>
+--->
+			<h1><!--- <i class="icon-arrow-right"></i>  --->These versions are currently awaiting your approval</h1>
+				<cfloop query="draftprompdata.yourapprovals">
+					<a href="##" class="draft-prompt-option btn btn-large btn-block" data-contenthistid="#draftprompdata.yourapprovals.contenthistid#">#LSDateFormat(draftprompdata.yourapprovals.lastupdate)# #LSTimeFormat(draftprompdata.yourapprovals.lastupdate,"medium")#
+					</a>
 				</cfloop>	
 			</cfif>
 		</div>
@@ -86,6 +118,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset draftprompdata.showdialog='false'>
 	<cfset draftprompdata.message="">	
 </cfif>
+<cfset structDelete(draftprompdata,'yourapprovals')>
+<cfset structDelete(draftprompdata,'pendingchangesets')>
 <cfcontent type="application/json">
 <cfoutput>#createObject("component","mura.json").encode(draftprompdata)#</cfoutput>
 <cfabort>

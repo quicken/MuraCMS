@@ -2187,30 +2187,63 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset var cb = getBean("content").loadby(contentid=arguments.contentid,siteid=arguments.siteid) /> 
 		<cfset var newDraft = "" />
 		<cfset var history = getDraftHist(arguments.contentid,arguments.siteid) />
+		<cfset var pending = "">
 
-		<cfset data.pendingchangsets=variables.changesetManager.getPendingByContentID(arguments.contentID,arguments.siteID) />
+		<cfset data.pendingchangesets=variables.changesetManager.getPendingByContentID(arguments.contentID,arguments.siteID) />
 		<cfset data.hasdraft=false>
+		<cfset data.hasdraftpending=false>
 		<cfset data.historyID=''>
 		<cfset data.publishedHistoryID= cb.getContentHistID() />
+		<cfset data.yourapprovals=queryNew('empty')>
 
 		<cfif cb.getActive()>
-			<cfif history.recordcount or data.pendingchangsets.recordcount>
+			<cfif history.recordcount or data.pendingchangesets.recordcount>
 				<cfquery name="newDraft" dbtype="query">
-					select contenthistid, lastupdate from history where lastUpdate > <cfqueryparam cfsqltype="cf_sql_timestamp" value="#cb.getLastUpdate()#"> 
+					select contenthistid, lastupdate, approvalStatus from history where lastUpdate > <cfqueryparam cfsqltype="cf_sql_timestamp" value="#cb.getLastUpdate()#"> 
 					union 
-					select contenthistid, lastupdate from data.pendingchangsets
+					select contenthistid, lastupdate, approvalStatus from data.pendingchangesets
 				</cfquery>
 				<cfquery name="newDraft" dbtype="query">
 					select * from newDraft order by lastupdate desc
 				</cfquery>
 				<cfif newDraft.recordCount>
 					<cfset data.hasdraft=true>
+					<cfif newDraft.approvalStatus eq 'Pending'>
+						<cfset data.hasdraftpending=true>
+					</cfif>
 					<cfset data['historyID'] = newDraft.contentHistId[1] />
+				</cfif>
+
+			
+				<cfquery name="data.yourapprovals" dbtype="query">
+					select contenthistid, lastupdate, approvalStatus, approvalGroupID, '' changesetID, '' changesetName from history
+					union 
+					select contenthistid, lastupdate, approvalStatus, approvalGroupID, changesetID, changesetName from data.pendingchangesets
+				</cfquery>
+
+				<cfquery name="data.yourapprovals" dbtype="query">
+					select * from data.yourapprovals
+					where approvalGroupID in (<cfqueryparam list='true' cfsqltype='cf_sql_varchar' value='#session.mura.membershipids#'>) order by lastupdate asc
+				</cfquery>
+		
+				<cfif data.yourapprovals.recordcount>
+					
+					<cfset queryAddColumn(data.yourapprovals, 'publishDate','date',[])>
+
+					<cfloop query="data.yourapprovals">
+						<cfif len(data.yourapprovals.changesetID)>
+							<cfquery name="pending" dbtype="query">
+								select publishDate from data.pendingchangesets
+								where contenthistid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#data.yourapprovals.contenthistid#">
+							</cfquery>
+							<cfset querySetCell(data.yourapprovals, "publishDate", pending.publishdate, data.yourapprovals.currentrow)>
+						</cfif>
+					</cfloop>
 				</cfif>
 			</cfif>
 		</cfif>
 		
-		<cfset data.showdialog = data.hasdraft or data.pendingchangsets.recordcount/>
+		<cfset data.showdialog = data.hasdraft or data.pendingchangesets.recordcount/>
 			
 		<cfreturn data />
 	</cffunction>

@@ -1158,7 +1158,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	select tcontent.menutitle, tcontent.siteid, tcontent.contentid, tcontent.contenthistid, tcontent.fileID, tcontent.type, tcontent.lastupdateby, tcontent.active, tcontent.approved, tcontent.lastupdate, 
 	tcontent.display, tcontent.displaystart, tcontent.displaystop, tcontent.moduleid, tcontent.isnav, tcontent.notes,tcontent.isfeature,tcontent.featurestart,tcontent.featurestop,tcontent.inheritObjects,tcontent.filename,tcontent.targetParams,tcontent.releaseDate,
 	tcontent.changesetID, tchangesets.name changesetName, tchangesets.published changsetPublished,tchangesets.publishDate changesetPublishDate , 
-	tcontent.majorVersion,tcontent.minorVersion, tcontent.sourceID, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID
+	tcontent.majorVersion,tcontent.minorVersion, tcontent.sourceID, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID, tapprovalrequests.groupid approvalGroupID
 	from tcontent 
 	left Join tchangesets on (tcontent.changesetID=tchangesets.changesetID)
 	left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
@@ -1176,7 +1176,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfquery name="rsDraftList" datasource="#variables.configBean.getReadOnlyDatasource()#"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 	select tcontent.menutitle, tcontent.contentid, tcontent.contenthistid, tcontent.fileID, tcontent.type, tcontent.lastupdateby, tcontent.active, tcontent.approved, tcontent.lastupdate, 
 	tcontent.display, tcontent.displaystart, tcontent.displaystop, tcontent.moduleid, tcontent.isnav, tcontent.notes,tcontent.isfeature,tcontent.inheritObjects,tcontent.filename,
-	tcontent.targetParams,tcontent.releaseDate,tcontent.path, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID
+	tcontent.targetParams,tcontent.releaseDate,tcontent.path, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID,tapprovalrequests.groupid approvalGroupID
 	from tcontent 
 	left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
 	where tcontent.contentid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/>
@@ -1196,7 +1196,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfquery name="rsPendingChangeSets" datasource="#variables.configBean.getReadOnlyDatasource()#"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 	select tcontent.menutitle, tcontent.contentid, tcontent.contenthistid, tcontent.fileID, tcontent.type, tcontent.lastupdateby, tcontent.active, tcontent.approved, tcontent.lastupdate, 
 	tcontent.display, tcontent.displaystart, tcontent.displaystop, tcontent.moduleid, tcontent.isnav, tcontent.notes,tcontent.isfeature,tcontent.inheritObjects,tcontent.filename,
-	tcontent.targetParams,tcontent.releaseDate,tcontent.path, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID
+	tcontent.targetParams,tcontent.releaseDate,tcontent.path, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID,tapprovalrequests.groupid approvalGroupID
 	from tcontent 
 	left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
 	where tcontent.contentid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/>
@@ -1216,7 +1216,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfquery name="rsArchiveHist" datasource="#variables.configBean.getReadOnlyDatasource()#"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 	select tcontent.menutitle, tcontent.contentid, tcontent.contenthistid, tcontent.fileID, tcontent.type, tcontent.lastupdateby, tcontent.active, tcontent.approved, tcontent.lastupdate, 
 	tcontent.display, tcontent.displaystart, tcontent.displaystop, tcontent.moduleid, tcontent.isnav, tcontent.notes,tcontent.isfeature,tcontent.inheritObjects,tcontent.filename,
-	tcontent.targetParams,tcontent.releaseDate,tcontent.path, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID
+	tcontent.targetParams,tcontent.releaseDate,tcontent.path, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID, tapprovalrequests.groupid approvalGroupID
 	from tcontent 
 	left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
 	where tcontent.contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/> 

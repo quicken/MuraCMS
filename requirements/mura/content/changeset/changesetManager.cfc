@@ -216,7 +216,8 @@
 	<cfset var rsPendingChangeSets="">
 	<cfquery name="rsPendingChangeSets" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 	select tchangesets.changesetID, tcontent.contentID, tcontent.contenthistid, 
-	tcontent.siteID, tchangesets.name changesetName, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID,tcontent.lastupdate
+	tcontent.siteID, tchangesets.name changesetName, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID,
+	tcontent.lastupdate, tapprovalrequests.groupid approvalGroupID, tchangesets.publishDate
 	from tcontent
 	inner join tchangesets on tcontent.changesetID=tchangesets.changesetID
 	left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
