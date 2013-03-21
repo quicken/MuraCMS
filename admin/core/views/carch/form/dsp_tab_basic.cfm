@@ -91,7 +91,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfinclude template="dsp_file_selector.cfm">
 	</cfif>	
 
-	<cfif rc.type neq 'Form' and  rc.type neq 'Component' >	
+	<cfif not ListFindNoCase('Form,Component',rc.type) >	
 		<div class="control-group summaryContainer" style="display:none;">
 	      	<label class="control-label">
 	      		<a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"tooltip.contentSummary"))#">
