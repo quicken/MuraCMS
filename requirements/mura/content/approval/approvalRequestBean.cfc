@@ -8,6 +8,7 @@ component extends="mura.bean.beanORM"  table="tapprovalrequests"{
     property name="user" fieldtype="many-to-one" cfc="user" fkcolumn="userID";
     property name="site" fieldtype="many-to-one" cfc="settingBean" fkcolumn="siteID";
     property name="group" fieldtype="many-to-one" cfc="user" fkcolumn="groupID";
+    property name="actions" singularname="action" fieldtype="one-to-many" cfc="approvalActionBean" orderby="created asc" cascade="delete";
 
 
     function approve(comments){
@@ -16,6 +17,8 @@ component extends="mura.bean.beanORM"  table="tapprovalrequests"{
 	    	getBean('approvalAction').loadBy(requestID=getValue('requestID'), groupID=getValue('groupID'))
 		    	.setComments(arguments.comments)
 		    	.setActionType('Approval')
+		    	.setUserID(getCurrentUser().getUserID())
+		    	.setChainID(getValue('chainID'))
 		    	.save();
 
 	    	var memberships=getBean('approvalChain').loadBy(chainID=getValue('chainID')).getMembershipsIterator();
@@ -61,9 +64,28 @@ component extends="mura.bean.beanORM"  table="tapprovalrequests"{
 	    	getBean('approvalAction').loadBy(requestID=getValue('requestID'), groupID=getValue('groupID'))
 		    	.setComments(arguments.comments)
 		    	.setActionType('Rejection')
+		    	.setUserID(getCurrentUser().getUserID())
+		    	.setChainID(getValue('chainID'))
 		    	.save();
 
 			setValue('status','Rejected');
+	    	save();
+	    	var content=getBean('content').loadBy(contenthistid=getValue('contenthistid'),siteid=getValue('siteid'));
+	    	getBean('contentManager').purgeContentCache(contentBean=content);
+ 		}
+    	return this;
+    }
+
+    function cancel(comments){
+	    if(getValue('status') eq 'Pending'){
+	    	getBean('approvalAction').loadBy(requestID=getValue('requestID'), groupID=getValue('groupID'))
+		    	.setComments(arguments.comments)
+		    	.setActionType('Cancelation')
+		    	.setUserID(getCurrentUser().getUserID())
+		    	.setChainID(getValue('chainID'))
+		    	.save();
+
+			setValue('status','Cancelled');
 	    	save();
 	    	var content=getBean('content').loadBy(contenthistid=getValue('contenthistid'),siteid=getValue('siteid'));
 	    	getBean('contentManager').purgeContentCache(contentBean=content);

@@ -150,6 +150,14 @@
 	</cfif>
 </cffunction>
 
+<cffunction name="isAdminUser" access="public" returntype="boolean" output="false">
+	<cfif hasSession()>
+		<cfreturn isInGroup('Admin',0) />
+	<cfelse>
+		<cfreturn false>
+	</cfif>
+</cffunction>
+
 <cffunction name="isLoggedIn" access="public" returntype="boolean" output="false">	
 	<cfif hasSession()>
 		<cfreturn session.mura.isLoggedIn>

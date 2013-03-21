@@ -655,4 +655,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="getPrimaryKey" output="false">
 	<cfreturn "userID">
 </cffunction>
+
+<cffunction name="getFullName" access="public" returntype="any" output="false">
+	<cfif variables.instance.type eq 2>
+		<cfreturn trim("#variables.instance.fname# # variables.instance.lname#")>
+	<cfelse>
+		<cfreturn variables.instance.groupname>
+	</cfif>
+</cffunction>
 </cfcomponent>

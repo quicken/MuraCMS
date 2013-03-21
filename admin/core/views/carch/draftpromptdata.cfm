@@ -79,11 +79,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			 </ul>
 			</div>
 --->
-			<h1><!--- <i class="icon-arrow-right"></i>  --->Edit a Version in a Change Set</h1>
+			<h1><!--- <i class="icon-arrow-right"></i>  --->#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.editversioninchangeset')#</h1>
 				<cfloop query="draftprompdata.pendingchangesets">
 					<a href="##" class="draft-prompt-option btn btn-large btn-block" data-contenthistid="#draftprompdata.pendingchangesets.contenthistid#">#HTMLEditFormat(draftprompdata.pendingchangesets.changesetName)#
-						<cfif draftprompdata.pendingchangesets.approvalStatus eq 'Pending'>
-							(#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.pending')#)
+						<cfif listFindNoCase('Pending,Rejected',draftprompdata.pendingchangesets.approvalStatus)>
+							(#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.#draftprompdata.pendingchangesets.approvalStatus#')#)
 						</cfif>
 					</a>
 				</cfloop>	
@@ -105,7 +105,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			 </ul>
 			</div>
 --->
-			<h1><!--- <i class="icon-arrow-right"></i>  --->These versions are currently awaiting your approval</h1>
+			<h1><!--- <i class="icon-arrow-right"></i>  --->#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.theseversionsapproval')#</h1>
 				<cfloop query="draftprompdata.yourapprovals">
 					<a href="##" class="draft-prompt-option btn btn-large btn-block" data-contenthistid="#draftprompdata.yourapprovals.contenthistid#">#LSDateFormat(draftprompdata.yourapprovals.lastupdate)# #LSTimeFormat(draftprompdata.yourapprovals.lastupdate,"medium")#
 					</a>

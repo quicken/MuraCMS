@@ -309,7 +309,7 @@ var hasBody=#subType.getHasBody()#;
 						<cfif rc.contentBean.getactive() gt 0 and rc.contentBean.getapproved() gt 0>
 							#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
 						<cfelseif len(rc.contentBean.getApprovalStatus())>
-							#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#rc.contentBean.getApprovalStatus()#")#
+							<a href="##" onclick="return viewApprovalInfo('#JSStringFormat(rc.contentBean.getContentHistID())#','#JSStringFormat(rc.contentBean.getSiteID())#');">#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#rc.contentBean.getApprovalStatus()#")#</a>
 						<cfelseif rc.contentBean.getapproved() lt 1>
 							#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draft")#
 						<cfelse>
@@ -336,9 +336,8 @@ var hasBody=#subType.getHasBody()#;
 	</cfif>
 	
 	<cfif not rc.contentBean.getIsNew()>
-		<cfif listFindNoCase('Pending,Rejected',rc.contentBean.getApprovalStatus())>
-			<cfinclude template="dsp_approval.cfm">
-		</cfif>
+		
+		<cfinclude template="dsp_approval.cfm">
 		
 		<cfset draftcheck=application.contentManager.getDraftPromptData(rc.contentBean.getContentID(),rc.contentBean.getSiteID())>
 		

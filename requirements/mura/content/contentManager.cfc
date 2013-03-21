@@ -820,6 +820,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					
 					<cfset newBean.setcontentHistID(createUUID()) />
 					<cfset approvalRequest.setContentHistID(newBean.getContentHistID())>
+					<cfset approvalRequest.setStatus("Pending")>
 					<cfset approvalRequest.save()>
 					<cfset newBean.setApproved(0)>
 				
@@ -837,16 +838,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 							)
 						>
 						
-						<cfset approvalRequest.delete()>
-						<cfset approvalRequest=newBean.getApprovalRequest()>
-						<cfif isDefined("session.mura") and session.mura.isLoggedIn>
-							<cfset approvalRequest.setUserID(session.mura.userID)>
-						</cfif>
+						<cfset approvalRequest.cancel('')>
+				
 					</cfif>
 
 					<cfset newBean.setcontentHistID(createUUID()) />
 					<cfset approvalRequest.setRequestID(createUUID())>
 					<cfset approvalRequest.setcontentHistID(newBean.getContentHistID())>
+					<cfset approvalRequest.setStatus("Pending")>
 					<cfset approvalRequest.save()>
 					<cfset newBean.setApproved(0)>
 				
