@@ -337,9 +337,7 @@ var hasBody=#subType.getHasBody()#;
 	
 	<cfif not rc.contentBean.getIsNew()>
 		<cfif listFindNoCase('Pending,Rejected',rc.contentBean.getApprovalStatus())>
-			<p class="alert alert-error">
-			#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.pendingmessage")# 
-			</p>
+			<cfinclude template="dsp_approval.cfm">
 		</cfif>
 		
 		<cfset draftcheck=application.contentManager.getDraftPromptData(rc.contentBean.getContentID(),rc.contentBean.getSiteID())>

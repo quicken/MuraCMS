@@ -2299,10 +2299,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset purgeContentCacheKey(cache,"urltitle" & arguments.contentBean.getSiteID() & arguments.contentBean.getURLTitle())>
 		
 		<cfset history=arguments.contentBean.getVersionHistoryIterator()>
-		
+	
 		<cfloop condition="history.hasNext()">
 			<cfset version=history.next()>
-			<cfset purgeContentCacheKey(cache,"version" & arguments.contentBean.getSiteID() & arguments.contentBean.getContentHistID(),false)>
+			<cfset purgeContentCacheKey(cache,"version" & version.getSiteID() & version.getContentHistID(),false)>
 		</cfloop>
 		
 		<cfif arguments.broadcast>

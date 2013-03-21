@@ -45,6 +45,9 @@ component extends="mura.bean.beanORM"  table="tapprovalrequests"{
 				      	
 	    			}
 
+	    			var content=getBean('content').loadBy(contenthistid=getValue('contenthistid'),siteid=getValue('siteid'));
+	    			getBean('contentManager').purgeContentCache(contentBean=content);
+
 	    			break;
 	    		}
 	    	}
@@ -62,6 +65,8 @@ component extends="mura.bean.beanORM"  table="tapprovalrequests"{
 
 			setValue('status','Rejected');
 	    	save();
+	    	var content=getBean('content').loadBy(contenthistid=getValue('contenthistid'),siteid=getValue('siteid'));
+	    	getBean('contentManager').purgeContentCache(contentBean=content);
  		}
     	return this;
     }
