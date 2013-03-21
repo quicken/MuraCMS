@@ -87,7 +87,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfdefaultcase>
 	</cfswitch>
 
-	<cfif listFind("Page,Folder,Calendar,Gallery,Link",rc.type)>
+	<cfif ListFindNoCase("Page,Folder,Calendar,Gallery,Link",rc.type)>
 		<cfinclude template="dsp_file_selector.cfm">
 	</cfif>	
 
