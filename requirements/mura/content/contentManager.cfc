@@ -2221,10 +2221,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					select contenthistid, lastupdate, approvalStatus, approvalGroupID, changesetID, changesetName from data.pendingchangesets
 				</cfquery>
 
-				<cfquery name="data.yourapprovals" dbtype="query">
-					select * from data.yourapprovals
-					where approvalGroupID in (<cfqueryparam list='true' cfsqltype='cf_sql_varchar' value='#session.mura.membershipids#'>) order by lastupdate asc
-				</cfquery>
+				<cfif not getCurrentUser().isAdminUser() and not getCurrentUser().isSuperUser()>
+					<cfquery name="data.yourapprovals" dbtype="query">
+						select * from data.yourapprovals
+						where approvalGroupID in (<cfqueryparam list='true' cfsqltype='cf_sql_varchar' value='#session.mura.membershipids#'>) order by lastupdate asc
+					</cfquery>
+				</cfif>
 		
 				<cfif data.yourapprovals.recordcount>
 					
