@@ -314,7 +314,7 @@ var hasBody=#subType.getHasBody()#;
 							<cfelse>
 								#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
 							</cfif>				
-						<cfelseif len(rc.contentBean.getApprovalStatus())>
+						<cfelseif len(rc.contentBean.getApprovalStatus()) and requiresApproval >
 							<a href="##" onclick="return viewApprovalInfo('#JSStringFormat(rc.contentBean.getContentHistID())#','#JSStringFormat(rc.contentBean.getSiteID())#');">#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#rc.contentBean.getApprovalStatus()#")#</a>
 						<cfelseif rc.contentBean.getapproved() lt 1>
 							#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draft")#
