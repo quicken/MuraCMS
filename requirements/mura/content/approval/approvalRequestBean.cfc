@@ -40,7 +40,7 @@ component extends="mura.bean.beanORM"  table="tapprovalrequests"{
 		    				save();
 		    				
 		    				var content=getBean('content').loadBy(contentHistID=getValue('contentHistID'));
-					      	
+					      	var sourceid=getValue('contentHistID');
 		    				if(not len(content.getChangesetID())){
 						      	
 						      	setValue(
@@ -51,6 +51,12 @@ component extends="mura.bean.beanORM"  table="tapprovalrequests"{
 							      		.getContentHistID()
 						      	);
 						      	save();
+
+						      	var source=getBean('content').loadBy(contenthistid=sourceid);
+						      	
+						      	if(not source.getIsNew()){
+						      		source.deleteVersion();
+						      	}
 						      	
 						     }
 					      	
