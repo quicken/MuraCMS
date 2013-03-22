@@ -948,7 +948,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		INNER JOIN tapprovalrequests on (tapprovalrequests.contenthistid=draft.contenthistid)
 	WHERE draft.active=0 
 	and tapprovalrequests.status = 'Pending'
-	and tapprovalrequests.groupid in (<cfqueryparam list="true" cfsqltype="cf_sql_varchar" value="#session.mura.membershipids#">)
+	<cfif not getCurrentUser().isAdminUser() and not getCurrentUser().isSuperUser()>
+		and tapprovalrequests.groupid in (<cfqueryparam list="true" cfsqltype="cf_sql_varchar" value="#session.mura.membershipids#">)
+	</cfif>
 	<cfif isdate(arguments.stopDate)>and active.lastUpdate <=  <cfqueryparam cfsqltype="cf_sql_timestamp" value="#createDateTime(year(arguments.stopDate),month(arguments.stopDate),day(arguments.stopDate),23,59,0)#"></cfif>
 	<cfif isdate(arguments.startDate)>and active.lastUpdate >= <cfqueryparam cfsqltype="cf_sql_timestamp" value="#createDateTime(year(arguments.startDate),month(arguments.startDate),day(arguments.startDate),0,0,0)#"></cfif>
 	GROUP BY module.Title, active.ModuleID, active.ParentID, active.Type, active.subType,
