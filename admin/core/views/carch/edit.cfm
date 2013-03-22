@@ -307,7 +307,11 @@ var hasBody=#subType.getHasBody()#;
 
 					<cfif not rc.contentBean.getIsNew()>
 						<cfif rc.contentBean.getactive() gt 0 and rc.contentBean.getapproved() gt 0>
-							#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
+							<cfif len(rc.contentBean.getApprovalStatus())>
+								<a href="##" onclick="return viewApprovalInfo('#JSStringFormat(rc.contentBean.getContentHistID())#','#JSStringFormat(rc.contentBean.getSiteID())#');">#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#</a>
+							<cfelse>
+								#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
+							</cfif>				
 						<cfelseif len(rc.contentBean.getApprovalStatus())>
 							<a href="##" onclick="return viewApprovalInfo('#JSStringFormat(rc.contentBean.getContentHistID())#','#JSStringFormat(rc.contentBean.getSiteID())#');">#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#rc.contentBean.getApprovalStatus()#")#</a>
 						<cfelseif rc.contentBean.getapproved() lt 1>

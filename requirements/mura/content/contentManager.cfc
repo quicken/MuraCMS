@@ -811,60 +811,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			
 			<cfif not newBean.getApprovalChainOverride() and (newBean.getApproved() or len(newBean.getChangesetID())) and newBean.requiresApproval()>		
 				<cfset var approvalRequest=newBean.getApprovalRequest()>
-
-				<!---If it does not have a currently pending aproval request create one --->
-				<cfif approvalRequest.getIsNew() or (not newBean.getIsNew() and currentBean.getActive())>			
-					<cfif isDefined("session.mura") and session.mura.isLoggedIn>
-						<cfset approvalRequest.setUserID(session.mura.userID)>
-					</cfif>
-					
-					<cfset newBean.setcontentHistID(createUUID()) />
-					<cfset approvalRequest.setRequestID(createUUID())>
-					<cfset approvalRequest.setContentHistID(newBean.getContentHistID())>
-					<cfset approvalRequest.setStatus("Pending")>
-					<cfset approvalRequest.setGroupID("")>
-					<cfset approvalRequest.save()>
-					<cfset newBean.setApproved(0)>
-				
-				<!--- If it has an approval request that has been rejected or is pending then create a new request --->
-				<cfelseif approvalRequest.getStatus() neq 'Approved'>
-					
-					<!--- If the request is pending conditionally delete existing request --->
-					<cfif 	(
-								approvalRequest.getStatus() eq 'Pending' 
-								and yesNoFormat(newBean.getValue('cancelPendingApproval'))
-							)
-							or 
-							(
-								len(newBean.getChangesetID()) and previousChangesetID eq newBean.getChangesetID()
-							)
-						>
-						
-						<cfset approvalRequest.cancel('')>
-				
-					</cfif>
-
-					<cfif isDefined("session.mura") and session.mura.isLoggedIn>
-						<cfset approvalRequest.setUserID(session.mura.userID)>
-					</cfif>
-
-					<cfset newBean.setcontentHistID(createUUID()) />
-					<cfset approvalRequest.setRequestID(createUUID())>
-					<cfset approvalRequest.setcontentHistID(newBean.getContentHistID())>
-					<cfset approvalRequest.setStatus("Pending")>
-					<cfset approvalRequest.setGroupID("")>
-					<cfset approvalRequest.save()>
-					<cfset newBean.setApproved(0)>
-				
-				<!--- This should happen if it has an existing approval request that has been approved --->
-				<cfelse>
-					<cfset newBean.setcontentHistID(createUUID()) />
-				</cfif>
-				
-			<!--- The content does is not required to be sent throught an approval chain --->
-			<cfelse>
-				<cfset newBean.setcontentHistID(createUUID()) />
 			</cfif>
+			
+			<cfset newBean.setcontentHistID(createUUID()) />
 			
 			<cfif newBean.getTitle() eq ''>
 				<cfset newBean.setTitle(newBean.getmenutitle())>
@@ -906,8 +855,54 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset arguments.data=newBean.getAllValues()>
 
 				<cflock type="exclusive" name="editingContent#arguments.data.siteid##application.instanceID#" timeout="600">
-				<cftransaction>
+	
+				<cfif isDefined('approvalRequest')>
+					<!---If it does not have a currently pending aproval request create one --->
+					<cfif approvalRequest.getIsNew() or (not newBean.getIsNew() and currentBean.getActive())>			
+						<cfif isDefined("session.mura") and session.mura.isLoggedIn>
+							<cfset approvalRequest.setUserID(session.mura.userID)>
+						</cfif>
+						
+						<cfset approvalRequest.setRequestID(createUUID())>
+						<cfset approvalRequest.setContentHistID(newBean.getContentHistID())>
+						<cfset approvalRequest.setStatus("Pending")>
+						<cfset approvalRequest.setGroupID("")>
+						<cfset approvalRequest.save()>
+						<cfset newBean.setApproved(0)>
+					
+					<!--- If it has an approval request that has been rejected or is pending then create a new request --->
+					<cfelseif approvalRequest.getStatus() neq 'Approved'>
+						
+						<!--- If the request is pending conditionally delete existing request --->
+						<cfif 	(
+									approvalRequest.getStatus() eq 'Pending' 
+									and yesNoFormat(newBean.getValue('cancelPendingApproval'))
+								)
+								or 
+								(
+									len(newBean.getChangesetID()) and previousChangesetID eq newBean.getChangesetID()
+								)
+							>
+							
+							<cfset approvalRequest.cancel('')>
+					
+						</cfif>
+
+						<cfif isDefined("session.mura") and session.mura.isLoggedIn>
+							<cfset approvalRequest.setUserID(session.mura.userID)>
+						</cfif>
+
+						<cfset approvalRequest.setRequestID(createUUID())>
+						<cfset approvalRequest.setcontentHistID(newBean.getContentHistID())>
+						<cfset approvalRequest.setStatus("Pending")>
+						<cfset approvalRequest.setGroupID("")>
+						<cfset approvalRequest.save()>
+						<cfset newBean.setApproved(0)>
+					
+					</cfif>
+				</cfif>	
 				
+				<cftransaction>
 				<!--- BEGIN CONTENT TYPE: ALL EXTENDABLE CONTENT TYPES --->
 				<cfif  listFindNoCase(this.ExtendableList,newBean.getType())>
 					<cfif isDefined('arguments.data.extendSetID') and len(arguments.data.extendSetID)>	

@@ -680,7 +680,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 				(tcontent.approved=1 and tcontent.active=0)
 			)
 
-	and tapprovalrequests.status !='Pending'
+	and (tapprovalrequests.status !='Pending' or tapprovalrequests.status is null)
 	</cfquery>
 	
 	<cfif rslist.recordcount>
@@ -736,7 +736,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	where tcontent.siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" />
 	and tcontent.contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#" />
 	and tcontent.approved=0 and tcontent.changesetID is null
-	and tapprovalrequests.status != 'Pending'
+	and (tapprovalrequests.status !='Pending' or tapprovalrequests.status is null)
 	</cfquery>
 	
 	<cfif rslist.recordcount>	
