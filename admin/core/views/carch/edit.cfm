@@ -132,17 +132,6 @@ function conditionalExit(msg){
 	}
 
 }
-<cfif requiresApproval>
-	<cfset approvalRequest=rc.contentBean.getApprovalRequest()>
-	<cfif not approvalRequest.getIsNew() and approvalRequest.getStatus() eq 'Pending'>
-		var pendingApproval=true;
-		var cancelPendingApproval=<cfoutput>'#JSStringFormat(application.rbFactory.getKeyValue(session.rb,"approvalchains.cancelPendingApproval"))#'</cfoutput>;
-	<cfelse>
-		var pendingApproval=false;
-	</cfif>
-<cfelse>
-	var pendingApproval=false;
-</cfif>
 </script>
 <cfelseif rc.compactDisplay eq "true">
 <script type="text/javascript">
@@ -161,6 +150,19 @@ jQuery(document).ready(function(){
 });
 </script>
 </cfif> 
+<script>
+<cfif requiresApproval>
+	<cfset approvalRequest=rc.contentBean.getApprovalRequest()>
+	<cfif not approvalRequest.getIsNew() and approvalRequest.getStatus() eq 'Pending'>
+		var pendingApproval=true;
+		var cancelPendingApproval=<cfoutput>'#JSStringFormat(application.rbFactory.getKeyValue(session.rb,"approvalchains.cancelPendingApproval"))#'</cfoutput>;
+	<cfelse>
+		var pendingApproval=false;
+	</cfif>
+<cfelse>
+	var pendingApproval=false;
+</cfif>
+</script>
 
 <cfset subtype=application.classExtensionManager.getSubTypeByName(rc.type,rc.contentBean.getSubType(),rc.siteid)>
 <cfoutput>
