@@ -72,8 +72,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 </cfif>
 
-</cfoutput>
-<cfoutput>
 <table class="table table-striped table-condensed table-bordered mura-table-grid">
 <thead>
   <tr><th class="var-width">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.title')#</th>

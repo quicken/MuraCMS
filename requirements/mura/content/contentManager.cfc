@@ -813,14 +813,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset var approvalRequest=newBean.getApprovalRequest()>
 
 				<!---If it does not have a currently pending aproval request create one --->
-				<cfif approvalRequest.getIsNew()>			
+				<cfif approvalRequest.getIsNew() or (not newBean.getIsNew() and currentBean.getActive())>			
 					<cfif isDefined("session.mura") and session.mura.isLoggedIn>
 						<cfset approvalRequest.setUserID(session.mura.userID)>
 					</cfif>
 					
 					<cfset newBean.setcontentHistID(createUUID()) />
+					<cfset approvalRequest.setRequestID(createUUID())>
 					<cfset approvalRequest.setContentHistID(newBean.getContentHistID())>
 					<cfset approvalRequest.setStatus("Pending")>
+					<cfset approvalRequest.setGroupID("")>
 					<cfset approvalRequest.save()>
 					<cfset newBean.setApproved(0)>
 				
@@ -842,10 +844,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				
 					</cfif>
 
+					<cfif isDefined("session.mura") and session.mura.isLoggedIn>
+						<cfset approvalRequest.setUserID(session.mura.userID)>
+					</cfif>
+
 					<cfset newBean.setcontentHistID(createUUID()) />
 					<cfset approvalRequest.setRequestID(createUUID())>
 					<cfset approvalRequest.setcontentHistID(newBean.getContentHistID())>
 					<cfset approvalRequest.setStatus("Pending")>
+					<cfset approvalRequest.setGroupID("")>
 					<cfset approvalRequest.save()>
 					<cfset newBean.setApproved(0)>
 				
@@ -1249,7 +1256,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						and active=0 and siteid='#newBean.getsiteid()#'
 						</cfquery>
 					</cfif>
-										 
 				</cfif>	 
 					
 				<!--- Send out notification(s) if needed--->
@@ -1504,7 +1510,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfloop>
 	
 		<cfloop query="rsHist">
-			<cfif not len(rshist.approvalstatus) and not (rshist.active eq 1 or (rshist.approved eq 0 and len(rshist.changesetID))) and len(rshist.FileID)>
+			<cfif not rshist.approvalstatus eq 'Pending' and not (rshist.active eq 1 or (rshist.approved eq 0 and len(rshist.changesetID))) and len(rshist.FileID)>
 				<cfif not listFind(fileList,rshist.FileID)>
 					<cfset variables.fileManager.deleteVersion(rshist.FileID,false) />
 					<cfset fileList=listAppend(fileList,rshist.FileID)/>

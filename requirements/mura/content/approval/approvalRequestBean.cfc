@@ -10,9 +10,8 @@ component extends="mura.bean.beanORM"  table="tapprovalrequests"{
     property name="group" fieldtype="many-to-one" cfc="user" fkcolumn="groupID";
     property name="actions" singularname="action" fieldtype="one-to-many" cfc="approvalActionBean" orderby="created asc" cascade="delete";
 
-
     function approve(comments){
-
+    	
     	if(getValue('status') eq 'Pending'){
 	    	getBean('approvalAction').loadBy(requestID=getValue('requestID'), groupID=getValue('groupID'))
 		    	.setComments(arguments.comments)
@@ -23,36 +22,64 @@ component extends="mura.bean.beanORM"  table="tapprovalrequests"{
 
 	    	var memberships=getBean('approvalChain').loadBy(chainID=getValue('chainID')).getMembershipsIterator();
 
-	    	while(memberships.hasNext()){
-	    		if(memberhips.getGroupID() eq getValue('groupID')){
-	    			if(memberships.hasNext()){
-	    				setValue('groupID',memberships.next().getGroupID());
-	    				save();
-	    			} else {
-	    				setValue('status','Approved');
-	    				save();
-	    				
-	    				var content=getBean('content').loadBy(contentHistID=getValue('contentHistID'));
-				      	
-	    				if(not len(content.getChangesetID())){
+	    	if(memberships.hasNext()){
+	    		
+		    	do {
+		    		var membership=memberships.next();
+		    		
+		    		//writeLog(text=membership.getGroupID() & ' ' & getValue('groupID'));	
+		    		
+		    		if(membership.getGroupID() eq getValue('groupID')){
+		    			
+		    			if(memberships.hasNext()){
+		    				setValue('groupID',memberships.next().getGroupID());
+		    				save();
+							
+		    			} else {
+		    				setValue('status','Approved');
+		    				save();
+		    				
+		    				var content=getBean('content').loadBy(contentHistID=getValue('contentHistID'));
 					      	
-					      	setValue(
-					      		'contentHistID', 
-					      		content
-						      		.setApproved(1)
-						      		.save()
-						      		.getContentHistID()
-					      	);
-					      	save();
-					     }
-				      	
-	    			}
+		    				if(not len(content.getChangesetID())){
+						      	
+						      	setValue(
+						      		'contentHistID', 
+						      		content
+							      		.setApproved(1)
+							      		.save()
+							      		.getContentHistID()
+						      	);
+						      	save();
+						      	
+						     }
+					      	
+		    			}
 
-	    			var content=getBean('content').loadBy(contenthistid=getValue('contenthistid'),siteid=getValue('siteid'));
-	    			getBean('contentManager').purgeContentCache(contentBean=content);
+		    			var content=getBean('content').loadBy(contenthistid=getValue('contenthistid'),siteid=getValue('siteid'));
+		    			getBean('contentManager').purgeContentCache(contentBean=content);
 
-	    			break;
-	    		}
+		    			break;
+		    		}
+		    	} while (memberships.hasNext());
+
+		    } else {
+		    	setValue('status','Approved');
+		    	save();
+		    				
+		    	var content=getBean('content').loadBy(contentHistID=getValue('contentHistID'));
+					      	
+		    	if(not len(content.getChangesetID())){
+						      	
+					setValue(
+						    'contentHistID', 
+						    content
+							.setApproved(1)
+							.save()
+							.getContentHistID()
+						 );
+					save();
+				}
 	    	}
 		}
 
