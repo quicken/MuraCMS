@@ -224,12 +224,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		tcontent.releaseDate,tfiles.fileSize,tfiles.FileExt,tfiles.ContentType,tfiles.ContentSubType
 		
 		<cfif arguments.threshold gt 1>
-		HAVING count(tcontentratings.contentID) >= #arguments.threshold#
+		HAVING count(tcontentratings.contentID) >= <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.threshold#">
 		</cfif>
 		
 		ORDER BY  theAvg desc, theCount desc 
 	
-	<cfif dbType eq "mysql" and arguments.limit>limit #arguments.limit#</cfif>
+	<cfif dbType eq "mysql" and arguments.limit>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#"></cfif>
 	<cfif dbType eq "oracle" and arguments.limit>) where ROWNUM <=1 </cfif>
 	</cfquery>
 		
