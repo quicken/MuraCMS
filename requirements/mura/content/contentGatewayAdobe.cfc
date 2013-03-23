@@ -356,6 +356,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfset var nowAdjusted="">
 			<cfset var tableModifier="">
 
+			<cfif not listFindNoCase('asc,desc',arguments.sortDirection)>
+				<cfset arguments.sortDirection='asc'>
+			</cfif>
+
 			<cfif dbtype eq "MSSQL">
 				<cfset tableModifier="with (nolock)">
 			</cfif>
@@ -809,6 +813,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="sortDirection" type="string" required="true" default="desc">
 	<cfset var rsDraftList = "">
 	
+	<cfif not listFindNoCase('asc,desc',arguments.sortDirection)>
+		<cfset arguments.sortDirection='asc'>
+	</cfif>
+
 	<cfquery name="rsDraftList" datasource="#variables.configBean.getReadOnlyDatasource()#"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 	
 	SELECT DISTINCT tmodule.Title AS module, active.ModuleID, active.SiteID, active.ParentID, active.Type, active.subtype, active.MenuTitle, active.Filename, active.ContentID,
@@ -981,6 +989,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 		<cfif dbtype eq "MSSQL">
 			<cfset tableModifier="with (nolock)">
+		</cfif>
+
+		<cfif not listFindNoCase('asc,desc',arguments.sortDirection)>
+			<cfset arguments.sortDirection='asc'>
 		</cfif>
 		
 		<cfquery name="rsNest" datasource="#variables.configBean.getReadOnlyDatasource()#"   username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
