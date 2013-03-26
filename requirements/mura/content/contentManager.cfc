@@ -2217,8 +2217,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			
 				<cfquery name="data.yourapprovals" dbtype="query">
 					select contenthistid, lastupdate, approvalStatus, approvalGroupID, '' changesetID, '' changesetName from history
+					where approvalStatus='Pending'
 					union 
 					select contenthistid, lastupdate, approvalStatus, approvalGroupID, changesetID, changesetName from data.pendingchangesets
+					where approvalStatus='Pending'
 				</cfquery>
 
 				<cfif not getCurrentUser().isAdminUser() and not getCurrentUser().isSuperUser()>
