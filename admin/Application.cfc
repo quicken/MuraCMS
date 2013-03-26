@@ -170,8 +170,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset var qrystr="">
 		<cfset var item="">
 		<cfloop collection="#url#" item="item">
-			<cftry>	
-				<cfset qrystr="#qrystr#&#item#=#request.context[item]#">	
+			<cftry>
+				<cfset request.context[item]=url[item]>	
+				<cfset qrystr="#qrystr#&#item#=#url[item]#">	
 			<cfcatch ></cfcatch>
 			</cftry>
 		</cfloop>
