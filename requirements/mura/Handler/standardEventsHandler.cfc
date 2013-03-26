@@ -113,7 +113,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfelse>
 			<cfset arguments.event.setValue('isOnDisplay',application.contentUtility.isOnDisplay(arguments.event.getValue('contentBean').getdisplay(),arguments.event.getValue('contentBean').getdisplaystart(),arguments.event.getValue('contentBean').getdisplaystop(),arguments.event.getValue('siteID'),arguments.event.getValue('contentBean').getparentid(),"Page"))>
 		</cfif>
-	<cfelseif arguments.event.valueExists('previewID')>
+	<cfelseif arguments.event.valueExists('previewID') and arguments.event.getValue('previewID') eq arguments.event.getValue('contentBean').getContentHistID()>
 		<cfset arguments.event.setValue('isOnDisplay',1)>
 	<cfelseif arguments.event.getValue('contentBean').getapproved() eq 0>
 		<cfset arguments.event.setValue('track',0)>
