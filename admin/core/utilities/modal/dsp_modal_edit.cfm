@@ -149,6 +149,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfset variables.deleteLink = variables.deleteLink & "&amp;closeCompactDisplay=true">
 			<cfset variables.deleteLink = variables.deleteLink & "&amp;action=deleteall">
 			<cfset variables.deleteLink = variables.deleteLink & "&amp;startrow=1">
+
+
+			<cfset variables.approvalrequestlink = variables.adminBase & "#application.configBean.getContext()#/admin/index.cfm?muraAction=cArch.approvalmodal&compactDisplay=true&contenthistid=#$.content('contenthistid')#&siteid=#$.content('siteid')#&mode=frontend">
+		
 		</cfsilent>
 		<cfoutput>
 			<img src="#application.configBean.getContext()#/admin/assets/images/logo_small_feTools.png" id="frontEndToolsHandle" onclick="if (document.getElementById('frontEndTools').style.display == 'none') { createCookie('FETDISPLAY','',5); } else { createCookie('FETDISPLAY','none',5); } toggleAdminToolbar();" />
@@ -179,7 +183,45 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfif (request.r.perm eq 'editor' or listFind(session.mura.memberships,'S2')) and request.contentBean.getFilename() neq "" and not request.contentBean.getIslocked()>
 						<li id="adminDelete"><a href="#variables.deleteLink#" onclick="return confirm('#jsStringFormat(application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.deletecontentrecursiveconfirm'),request.contentBean.getMenutitle()))#');"><i class="icon-remove-sign"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.delete')#</a></li>
 					</cfif>
+
 					<cfif listFind(session.mura.memberships,'S2IsPrivate')><li id="adminSiteManager"><a href="#variables.adminLink#" target="admin"><i class="icon-list-alt"></i> #application.rbFactory.getKeyValue(session.rb,'layout.sitemanager')#</a></li></cfif>
+
+					<cfif not $.content('isNew')>
+						<li id="adminStatus">
+								<cfif $.content('active') gt 0 and  $.content('approved')  gt 0>
+									<cfif len($.content('approvalStatus'))>
+										<a href="#variables.approvalrequestlink#" #variables.targetHook#>
+											<i class="icon-ok"></i> 
+											#application.rbFactory.getKeyValue(session.rb,'layout.status')#:
+											#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
+										</a>
+									<cfelse>
+										<a href="##" onclick="return false;">
+										<i class="icon-ok"></i> 
+										#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
+										</a>
+									</cfif>				
+								<cfelseif len($.content('approvalStatus')) and $.content().requiresApproval() >
+										<a href="#variables.approvalrequestlink#" #variables.targetHook#>
+											<i class="icon-ok"></i> 
+											#application.rbFactory.getKeyValue(session.rb,'layout.status')#:
+											#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#$.content('approvalstatus')#")#
+										</a>
+								<cfelseif $.content('approved') lt 1>
+									<a href="##" onclick="return false;">
+									<i class="icon-ok"></i> 
+									#application.rbFactory.getKeyValue(session.rb,'layout.status')#:
+									#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draft")#
+									</a>
+								<cfelse>
+									<a href="##" onclick="return false;">
+									<i class="icon-ok"></i> 
+									#application.rbFactory.getKeyValue(session.rb,'layout.status')#:
+									#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.archived")#
+									</a>
+							</cfif>
+							</li>
+					</cfif>
 					
 				<cfelse>
 					<cfif listFind(session.mura.memberships,'S2IsPrivate')>
