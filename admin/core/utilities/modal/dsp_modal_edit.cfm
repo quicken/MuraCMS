@@ -190,7 +190,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<li id="adminStatus">
 								<cfif $.content('active') gt 0 and  $.content('approved')  gt 0>
 									<cfif len($.content('approvalStatus'))>
-										<a href="#variables.approvalrequestlink#" #variables.targetHook#>
+										<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook#>
 											<i class="icon-ok"></i> 
 											#application.rbFactory.getKeyValue(session.rb,'layout.status')#:
 											#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
@@ -203,7 +203,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 										</a>
 									</cfif>				
 								<cfelseif len($.content('approvalStatus')) and $.content().requiresApproval() >
-										<a href="#variables.approvalrequestlink#" #variables.targetHook#>
+										<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook#>
 											<i class="icon-ok"></i> 
 											#application.rbFactory.getKeyValue(session.rb,'layout.status')#:
 											#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#$.content('approvalstatus')#")#

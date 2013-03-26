@@ -116,11 +116,11 @@ $(document).ready(function(){
 		if(jQuery("##ProxyIFrame").length){
 			jQuery("##ProxyIFrame").load(
 				function(){
-					frontEndProxy.post({cmd:'setWidth',width:'500'});
+					frontEndProxy.post({cmd:'setWidth',width:'configurator'});
 				}
 			);	
 		} else {
-			frontEndProxy.post({cmd:'setWidth',width:'500'});
+			frontEndProxy.post({cmd:'setWidth',width:'configurator'});
 		}
 	}
 });
