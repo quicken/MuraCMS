@@ -198,6 +198,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 									<cfelse>
 										<a href="##" onclick="return false;">
 										<i class="icon-ok"></i> 
+										#application.rbFactory.getKeyValue(session.rb,'layout.status')#:
 										#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
 										</a>
 									</cfif>				
