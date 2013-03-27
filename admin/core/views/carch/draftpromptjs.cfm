@@ -15,7 +15,7 @@ function initDraftPrompt(){
 			  context: this,
 			  success: function(resp){
 				  if (resp.showdialog !== undefined && resp.showdialog === "true"){
-					jQuery(resp.message).dialog({
+					var dialog=jQuery(resp.message).dialog({
 						title:"#JSStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.title'))#",
 						modal:true,
 						width:"400px"
@@ -41,6 +41,13 @@ function initDraftPrompt(){
 						e.preventDefault();
 						var href = a.attr('href').replace(node.attr('data-contenthistid'),$(this).attr('data-contenthistid'));
 						window.location = href;
+					});
+
+					$(".draft-prompt-approval").click(function(e){
+						e.preventDefault();
+						preview($(this).attr('href'));
+						jQuery(dialog).dialog('close');
+						return false;
 					});
 				} else {
 					window.location = a.attr('href');

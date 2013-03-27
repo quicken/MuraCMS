@@ -89,7 +89,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfloop>	
 			</cfif>
 			<cfif draftprompdata.yourapprovals.recordcount>
-			
+			<cfset content=$.getBean('content').loadBy(contentid=rc.contentid)>
 			<!---
 <div class="btn-group btn-block">
 			  <a class="btn btn-large btn-block dropdown-toggle" data-toggle="dropdown" style="font-size: 14px !important;" href="##">
@@ -107,7 +107,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 --->
 			<h1><!--- <i class="icon-arrow-right"></i>  --->#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.theseversionsapproval')#</h1>
 				<cfloop query="draftprompdata.yourapprovals">
-					<a href="##" class="draft-prompt-option btn btn-large btn-block" data-contenthistid="#draftprompdata.yourapprovals.contenthistid#">#LSDateFormat(draftprompdata.yourapprovals.lastupdate)# #LSTimeFormat(draftprompdata.yourapprovals.lastupdate,"medium")#
+					<a href="#content.getURL(querystring="previewid=#draftprompdata.yourapprovals.contenthistid#")#" class="draft-prompt-approval btn btn-large btn-block">#LSDateFormat(draftprompdata.yourapprovals.lastupdate)# #LSTimeFormat(draftprompdata.yourapprovals.lastupdate,"medium")#
 					</a>
 				</cfloop>	
 			</cfif>
