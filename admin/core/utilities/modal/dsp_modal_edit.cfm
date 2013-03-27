@@ -175,6 +175,20 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						</li>
 					</cfif>
 
+					<cfif ListFindNoCase('editor,author',request.r.perm) or listFind("Page,Folder,Calendar,Gallery,File,Link",request.contentBean.getType())>
+														
+							<li id="adminAddContent"><a href="#variables.newLink#" #variables.targethook# data-configurator="true"><i class="icon-plus"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.add')#</a>
+						</li>
+					</cfif>
+
+					<cfif ListFindNoCase('editor,author',request.r.perm)>
+						<li id="adminVersionHistory"><a href="#variables.historyLink#" #variables.targethook#><i class="icon-book"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.versionhistory')#</a></li>
+					</cfif>
+
+					<cfif (request.r.perm eq 'editor' or listFind(session.mura.memberships,'S2')) and request.contentBean.getFilename() neq "" and not request.contentBean.getIslocked()>
+						<li id="adminDelete"><a href="#variables.deleteLink#" onclick="return confirm('#jsStringFormat(application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.deletecontentrecursiveconfirm'),request.contentBean.getMenutitle()))#');"><i class="icon-remove-sign"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.delete')#</a></li>
+					</cfif>
+
 					<li id="adminStatus">
 						<cfif $.content('active') gt 0 and  $.content('approved')  gt 0>
 							<cfif len($.content('approvalStatus'))>
@@ -210,20 +224,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 							</a>
 						</cfif>
 					</li>
-					
-					<cfif ListFindNoCase('editor,author',request.r.perm) or listFind("Page,Folder,Calendar,Gallery,File,Link",request.contentBean.getType())>
-														
-							<li id="adminAddContent"><a href="#variables.newLink#" #variables.targethook# data-configurator="true"><i class="icon-plus"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.add')#</a>
-						</li>
-					</cfif>
-
-					<cfif ListFindNoCase('editor,author',request.r.perm)>
-						<li id="adminVersionHistory"><a href="#variables.historyLink#" #variables.targethook#><i class="icon-book"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.versionhistory')#</a></li>
-					</cfif>
-
-					<cfif (request.r.perm eq 'editor' or listFind(session.mura.memberships,'S2')) and request.contentBean.getFilename() neq "" and not request.contentBean.getIslocked()>
-						<li id="adminDelete"><a href="#variables.deleteLink#" onclick="return confirm('#jsStringFormat(application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.deletecontentrecursiveconfirm'),request.contentBean.getMenutitle()))#');"><i class="icon-remove-sign"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.delete')#</a></li>
-					</cfif>
 
 					<cfif listFind(session.mura.memberships,'S2IsPrivate')><li id="adminSiteManager"><a href="#variables.adminLink#" target="admin"><i class="icon-list-alt"></i> #application.rbFactory.getKeyValue(session.rb,'layout.sitemanager')#</a></li>
 					</cfif>
