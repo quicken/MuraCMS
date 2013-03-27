@@ -103,7 +103,7 @@ function applyApprovalAction(requestid,action,comment,siteid){
 					pars,
 					function(data) {
 						//$('html').html(data);
-						window.location = top.location.replace(top.location);
+						window.location = top.location.replace(data.previewurl);
 					}
 				);
 			}
