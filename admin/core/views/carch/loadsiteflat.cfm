@@ -225,7 +225,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			
 			<div class="actions">
 				<ul class="siteSummary">
-					<cfif not listFindNoCase('none,read',verdict)>
+					<cfif not listFindNoCase('none,read',verdict) or $.event('report') eq 'mydrafts'>
 					 
 					    <li class="edit"><a title="Edit" class="draftprompt" href="#editLink#"><i class="icon-pencil"></i></a></li>
 						
@@ -276,7 +276,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			
 
 			<h2>
-				<cfif not listFindNoCase('none,read',verdict)>
+				<cfif not listFindNoCase('none,read',verdict) or $.event('report') eq 'mydrafts'>
 					<a title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.edit')#" class="draftprompt" href="index.cfm?muraAction=cArch.edit&contenthistid=#item.getContentHistID()#&contentid=#item.getContentID()#&type=#item.gettype()#&parentid=#item.getParentID()#&topid=#URLEncodedFormat(topID)#&siteid=#URLEncodedFormat(item.getSiteid())#&moduleid=#item.getmoduleid()#&startrow=#$.event('startrow')#">#HTMLEditFormat(item.getMenuTitle())# 
 						<cfif $.event('report') eq 'mydrafts'>
 							(
@@ -292,6 +292,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</a>
 				<cfelse>
 					#HTMLEditFormat(item.getMenuTitle())#
+					<!---
 					<cfif $.event('report') eq 'mydrafts'>
 						(
 						<cfif rsHasPendingApprovals.recordcount>
@@ -303,6 +304,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						</cfif>
 						)
 					</cfif>
+					--->
 				</cfif>	
 			</h2>
 			<cfif listFindNoCase("png,jpg,jpeg,gif",item.getFileExt())>

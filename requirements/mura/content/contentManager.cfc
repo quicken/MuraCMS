@@ -2185,6 +2185,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		<cfset var data = structNew() />
 		<cfset var cb = getBean("content").loadby(contentid=arguments.contentid,siteid=arguments.siteid) /> 
+		<cfset var verdict=getBean("permUtility").getPerm(contentid=arguments.contentid,siteid=arguments.siteid)>
 		<cfset var newDraft = "" />
 		<cfset var history = getDraftHist(arguments.contentid,arguments.siteid) />
 		<cfset var pending = "">
@@ -2203,17 +2204,19 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					union 
 					select contenthistid, lastupdate, approvalStatus from data.pendingchangesets
 				</cfquery>
-				<cfquery name="newDraft" dbtype="query">
-					select * from newDraft order by lastupdate desc
-				</cfquery>
-				<cfif newDraft.recordCount>
-					<cfset data.hasdraft=true>
-					<cfif newDraft.approvalStatus eq 'Pending'>
-						<cfset data.hasdraftpending=true>
-					</cfif>
-					<cfset data['historyID'] = newDraft.contentHistId[1] />
-				</cfif>
 
+				<cfif listFindNoCase('Author,Editor',verdict)>
+					<cfquery name="newDraft" dbtype="query">
+						select * from newDraft order by lastupdate desc
+					</cfquery>
+					<cfif newDraft.recordCount>
+						<cfset data.hasdraft=true>
+						<cfif newDraft.approvalStatus eq 'Pending'>
+							<cfset data.hasdraftpending=true>
+						</cfif>
+						<cfset data['historyID'] = newDraft.contentHistId[1] />
+					</cfif>
+				</cfif>
 			
 				<cfquery name="data.yourapprovals" dbtype="query">
 					select contenthistid, lastupdate, approvalStatus, approvalGroupID, '' changesetID, '' changesetName from history
@@ -2228,6 +2231,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						select * from data.yourapprovals
 						where approvalGroupID in (<cfqueryparam list='true' cfsqltype='cf_sql_varchar' value='#session.mura.membershipids#'>) order by lastupdate asc
 					</cfquery>
+				<cfelseif not listFindNoCase('Author,Editor',verdict)>
+					<cfset data.pendingchangesets=queryNew("empty")>
 				</cfif>
 		
 				<cfif data.yourapprovals.recordcount>
@@ -2247,7 +2252,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</cfif>
 		</cfif>
 		
-		<cfset data.showdialog = data.hasdraft or data.pendingchangesets.recordcount/>
+		<cfset data.showdialog = data.hasdraft or data.pendingchangesets.recordcount or data.yourapprovals.recordcount/>
 			
 		<cfreturn data />
 	</cffunction>

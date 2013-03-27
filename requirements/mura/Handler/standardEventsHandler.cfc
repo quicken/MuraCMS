@@ -143,7 +143,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfif arguments.event.valueExists('previewID')>
 		<cfset arguments.event.getHandler("standardSetPreview").handle(arguments.event)>
-		<cfset arguments.event.showMeta(1)>
+		<cfset arguments.event.setValue('showMeta',1)>
 	<cfelse>
 		<cfset arguments.event.getHandler("standardSetAdTracking").handle(arguments.event)>
 		
