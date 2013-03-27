@@ -94,7 +94,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 				<cfquery name="rsPage" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 					select #variables.fieldlist#, tfiles.fileSize, 
 					tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename,
-					tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID
+					tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID,tapprovalrequests.groupid as approvalGroupID
 					 from tcontent 
 					left join tfiles on (tcontent.fileid=tfiles.fileid)
 					left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
@@ -118,7 +118,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 				<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" name="rsContent"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 					select #variables.fieldlist#, tfiles.fileSize, 
 					tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename,
-					tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID
+					tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID,tapprovalrequests.groupid as approvalGroupID
 					from tcontent 
 					left join tfiles on (tcontent.fileid=tfiles.fileid)
 					left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
@@ -181,7 +181,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 				<cfquery name="rsPage" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 					select #variables.fieldlist#, tfiles.fileSize,
 					tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename,
-					tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID
+					tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID,tapprovalrequests.groupid as approvalGroupID
 					from tcontent 
 					left join tfiles on (tcontent.fileid=tfiles.fileid)
 					left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
@@ -207,7 +207,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 				<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" name="rsContent"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 					select #variables.fieldlist#, tfiles.fileSize,
 					tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename,
-				tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID
+				tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID,tapprovalrequests.groupid as approvalGroupID
 					from tcontent 
 					left join tfiles on (tcontent.fileid=tfiles.fileid)
 					left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
@@ -265,7 +265,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 			<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" name="rsContent"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 				select #variables.fieldlist#, tfiles.fileSize,
 				tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename,
-				tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID
+				tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID,tapprovalrequests.groupid as approvalGroupID
 				from tcontent 
 				left join tfiles on (tcontent.fileid=tfiles.fileid)
 				left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
@@ -319,7 +319,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 			<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" name="rsContent"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 				select #variables.fieldlist#, tfiles.fileSize,
 				tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename,
-				tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID
+				tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID,tapprovalrequests.groupid as approvalGroupID
 				from tcontent 
 				left join tfiles on (tcontent.fileid=tfiles.fileid)
 				left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
@@ -373,7 +373,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 			<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" name="rsContent"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 				select #variables.fieldlist#, tfiles.fileSize,
 				tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename,
-				tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID
+				tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID,tapprovalrequests.groupid as approvalGroupID
 				from tcontent 
 				left join tfiles on (tcontent.fileid=tfiles.fileid)
 				left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
@@ -426,7 +426,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" name="rsContent"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 			select #variables.fieldlist#, tfiles.fileSize,
 			tfiles.contentType, tfiles.contentSubType, tfiles.fileExt,tfiles.filename as assocFilename,
-			tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID
+			tapprovalrequests.status as approvalStatus, tapprovalrequests.requestID,tapprovalrequests.groupid as approvalGroupID
 			from tcontent 
 			left join tfiles on (tcontent.fileid=tfiles.fileid)
 			left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
