@@ -338,21 +338,37 @@
 		<cfset var it=getAssignmentsIterator(argumentCollection=arguments)>
 		<cfset var item="">
 		<cfset var changeset="">
-		<cfset var previousHistID="">
-		<cfset var changesetHistID="">
+		<cfset var requestID="">
+		<cfset var contentHistID="">
+		<cfset var approvalRequest="">
 		<cfset var rollback="">
 		<cfset var current="">
+		<cfset var previous="">
+
 		<cfloop condition="it.hasNext()">
 			<cfset item=it.next()>
 			<cfset item.setApproved(1)>
-			<cfset current=getBean('content').loadBy(contentID=item.getContentID(),siteID=item.getSiteID())>
-			
+			<cfset item.setApprovalChainOverride(true)>
+
 			<cfif arguments.byDate>
 				<cfset item.setLastUpdateBy("System")>
 				<cfset item.setLastUpdateByID("")>
 			</cfif>
 
+			<cfset current=getBean('content').loadBy(contentID=item.getContentID(),siteID=item.getSiteID())>
+			<cfset requestID=item.getRequestID()>
+			<cfset contentHistID=item.getContentHistID()>
+
 			<cfset item.save()>
+
+			<cfif len(requestID)>
+				<cfset getBean('approvalRequest').loadBy(requestID=requestID).setContentHistID(item.getContentHistID()).save()>
+				<cfset previous=getBean('content').loadBy(contentHistID=contentHistID,siteID=item.getSiteID())>
+				
+				<cfif not previous.getIsNew()>
+					<cfset previous.deleteVersion()>
+				</cfif>
+			</cfif>
 
 			<cfset rollback=getBean('changesetRollBack').loadBy(
 					changesetHistID=item.getContentHistID(), 

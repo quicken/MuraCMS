@@ -1300,6 +1300,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfloop>
 				</cfif>
 
+				<cfset getBean('contentSourceMap')
+						.setContentHistID(newBean.getContentHistID())
+						.setSourceID(arguments.data.sourceID)
+						.setSiteID(newBean.getSiteID())
+						.setCreated(now())
+						.save()>
+
 				<!---
 				<cfif len(newBean.getChangesetID())>
 					variables.changesetManager.setSessionPreviewData(newBean.getChangeSetID())>

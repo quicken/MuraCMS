@@ -5,4 +5,5 @@
 	getBean('approvalAction').checkSchema();
 	getBean('approvalChainAssignment').checkSchema();
 	getBean('changesetRollBack').checkSchema();
+	getBean('contentSourceMap').checkSchema();
 </cfscript>

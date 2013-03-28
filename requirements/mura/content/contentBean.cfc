@@ -136,7 +136,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<cfset variables.instance.ContentHistID = "" />
 	<cfset variables.instance.Contentid = "" />
-	<cfset variables.instance.sourceID = "" />
 	<cfset variables.instance.Active = 0 />
 	<cfset variables.instance.OrderNo = 1 />
 	<cfset variables.instance.MetaDesc = "" />
@@ -1189,6 +1188,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>
 
 <cffunction name="getSourceVersion" output="false">
-	<cfreturn getBean('content').loadBy(contenthistid=getValue('sourceID'))>
+	<cfreturn getBean('contentSourceMap').loadBy(contenthistid=getValue('contenthistID')).getSource()>
 </cffunction>
 </cfcomponent>

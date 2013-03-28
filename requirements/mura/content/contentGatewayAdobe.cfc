@@ -388,7 +388,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				,tcontentstats.rating,tcontentstats.totalVotes,tcontentstats.downVotes,tcontentstats.upVotes
 				,tcontentstats.comments, '' as parentType, <cfif doKids> qKids.kids<cfelse>null as kids</cfif>,tcontent.path, tcontent.created, tcontent.nextn,
 				tcontent.majorVersion, tcontent.minorVersion, tcontentstats.lockID, tcontent.expires,
-				tfiles.filename as AssocFilename,tcontent.displayInterval,tcontent.display, tcontent.sourceID
+				tfiles.filename as AssocFilename,tcontent.displayInterval,tcontent.display
 				
 				FROM tcontent 
 				Left Join tfiles #tableModifier# ON (tcontent.fileID=tfiles.fileID)
@@ -1045,7 +1045,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		tcontent.target,tcontent.targetParams,tcontent.islocked,tcontent.sortBy,tcontent.sortDirection,tcontent.releaseDate,
 		tfiles.fileSize,tfiles.FileExt,tfiles.ContentType,tfiles.ContentSubType, tcontent.created, tcontent.siteID, tcontent.featureStart,tcontent.featureStop,tcontent.template,tcontent.childTemplate,
 		tcontent.majorVersion, tcontent.minorVersion, tcontentstats.lockID, tcontent.expires,
-		tcontentstats.rating,tcontentstats.totalVotes, tcontentstats.comments,tfiles.filename,tcontent.displayInterval, tcontent.sourceID
+		tcontentstats.rating,tcontentstats.totalVotes, tcontentstats.comments,tfiles.filename,tcontent.displayInterval
 		<cfif isExtendedSort>
 			,qExtendedSort.extendedSort	
 		</cfif>
@@ -1172,7 +1172,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	select tcontent.menutitle, tcontent.siteid, tcontent.contentid, tcontent.contenthistid, tcontent.fileID, tcontent.type, tcontent.lastupdateby, tcontent.active, tcontent.approved, tcontent.lastupdate, 
 	tcontent.display, tcontent.displaystart, tcontent.displaystop, tcontent.moduleid, tcontent.isnav, tcontent.notes,tcontent.isfeature,tcontent.featurestart,tcontent.featurestop,tcontent.inheritObjects,tcontent.filename,tcontent.targetParams,tcontent.releaseDate,
 	tcontent.changesetID, tchangesets.name changesetName, tchangesets.published changsetPublished,tchangesets.publishDate changesetPublishDate , 
-	tcontent.majorVersion,tcontent.minorVersion, tcontent.sourceID, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID, tapprovalrequests.groupid approvalGroupID
+	tcontent.majorVersion,tcontent.minorVersion, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID, tapprovalrequests.groupid approvalGroupID
 	from tcontent 
 	left Join tchangesets on (tcontent.changesetID=tchangesets.changesetID)
 	left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)

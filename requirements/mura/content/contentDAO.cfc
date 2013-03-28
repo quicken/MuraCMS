@@ -515,8 +515,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	  majorVersion,
 	  minorVersion,
 	  expires,
-	  displayInterval,
-	  sourceID)
+	  displayInterval)
       VALUES (
 	  	 <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentBean.getContentHistID()#">, 
          <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentBean.getContentID()#">,
@@ -648,8 +647,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		<cfelse>
 			null
 		</cfif>,
-		<cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.contentBean.getDisplayInterval() neq '',de('no'),de('yes'))#" value="#arguments.contentBean.getDisplayInterval()#">,
-		<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentBean.getSourceID()#">
+		<cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.contentBean.getDisplayInterval() neq '',de('no'),de('yes'))#" value="#arguments.contentBean.getDisplayInterval()#">
 		)
  </CFQUERY>
 
