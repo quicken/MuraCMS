@@ -1308,10 +1308,14 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	where 
 	contentid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentid#">
 	and siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteid#">
-	and created < (select min(lastupdate) from tcontent 
+	and (
+			created < (select min(lastupdate) from tcontent 
 					where contentid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentid#">
 					and siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteid#">
 				)
+			or contentid not in (select distinct contentid from tcontent where siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteid#">)
+		)
+
 	</cfquery>
 
 </cffunction>
