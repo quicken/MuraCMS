@@ -1304,6 +1304,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						.setContentHistID(newBean.getContentHistID())
 						.setSourceID(arguments.data.sourceID)
 						.setSiteID(newBean.getSiteID())
+						.setContentID(newBean.getContentID())
 						.setCreated(now())
 						.save()>
 

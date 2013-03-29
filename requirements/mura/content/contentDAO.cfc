@@ -720,6 +720,8 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		and contenthistid in (<cfloop query="rslist"><cfqueryparam cfsqltype="cf_sql_varchar" value="#rslist.contentHistID#" /> <cfif rslist.currentrow lt rslist.recordcount>,</cfif></cfloop>)
 		</cfquery>
 	</cfif>
+
+	<cfset deleteOldSourceMaps(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="deleteDraftHistAll" access="public" returntype="void" output="false" hint="I delete all draft versions">
@@ -773,6 +775,8 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	and approved=0 and changesetID is null
 	</cfquery>
 	
+	<cfset deleteOldSourceMaps(argumentCollection=arguments)>
+
 </cffunction>
 
 <cffunction name="archiveActive" access="public" returntype="void" output="false">
@@ -1292,5 +1296,23 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	and type='expire'
 </cfquery>
 <cfreturn rs>
+</cffunction>
+
+
+<cffunction name="deleteOldSourceMaps" output="false">
+	<cfargument name="contentid">
+	<cfargument name="siteid">
+	
+	<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+    delete from tcontentsourcemaps
+	where 
+	contentid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentid#">
+	and siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteid#">
+	and created < (select min(lastupdate) from tcontent 
+					where contentid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentid#">
+					and siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteid#">
+				)
+	</cfquery>
+
 </cffunction>
 </cfcomponent>
