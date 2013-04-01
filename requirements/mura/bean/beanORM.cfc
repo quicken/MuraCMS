@@ -294,7 +294,7 @@ component extends="mura.bean.bean" {
 					       	 		variables.synthedFunctions['has#prop.singularname#']=variables.synthedFunctions['has#prop.name#'];
 					       	 		variables.synthedFunctions['remove#prop.singularname#']=variables.synthedFunctions['remove#prop.name#'];
 					       	 	}
-			       	 		} else if (prop.fieldtype eq 'many-to-one'){
+			       	 		} else if (prop.fieldtype eq 'many-to-one' or prop.fieldtype eq 'one-to-one'){
 			       	 			if(prop.fkcolumn eq 'siteid'){
 			       	 				variables.synthedFunctions['get#prop.name#']={exp='getBean("settingsManager").getSite(getValue("siteID"))',args={prop=prop.name,functionType='getEntity'}};
 			       	 				variables.synthedFunctions['set#prop.name#']={exp='setValue("siteID",arguments.MissingMethodArguments[1].getSiteID()))',args={prop=prop.name,functionType='setEntity'}};

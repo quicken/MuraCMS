@@ -349,12 +349,9 @@
 			<cfset item=it.next()>
 			<cfset item.setApproved(1)>
 			<cfset item.setApprovalChainOverride(true)>
-
-			<cfif arguments.byDate>
-				<cfset item.setLastUpdateBy("System")>
-				<cfset item.setLastUpdateByID("")>
-			</cfif>
-
+			<cfset item.setLastUpdateBy(item.getLastUpdateBy())>
+			<cfset item.setLastUpdateByID(item.getLastUpdateByID())>
+			
 			<cfset current=getBean('content').loadBy(contentID=item.getContentID(),siteID=item.getSiteID())>
 			<cfset requestID=item.getRequestID()>
 			<cfset contentHistID=item.getContentHistID()>
@@ -400,7 +397,8 @@
 <cfargument name="moduleid" default="">
 	<cfset var rs="">
 	<cfquery name="rs" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
-	select tcontent.menutitle, tcontent.siteid, tcontent.parentID, tcontent.path, tcontent.contentid, tcontent.contenthistid, tcontent.fileID, tcontent.type, tcontent.subtype, tcontent.lastupdateby, tcontent.active, tcontent.approved, tcontent.lastupdate, 
+	select tcontent.menutitle, tcontent.siteid, tcontent.parentID, tcontent.path, tcontent.contentid, tcontent.contenthistid, tcontent.fileID, tcontent.type, tcontent.subtype, tcontent.lastupdateby, tcontent.active, tcontent.approved, tcontent.lastupdate,
+	tcontent.lastupdateby, tcontent.lastupdatebyid, 
 	tcontent.display, tcontent.displaystart, tcontent.displaystop, tcontent.moduleid, tcontent.isnav, tcontent.notes,tcontent.isfeature,tcontent.inheritObjects,tcontent.filename,tcontent.targetParams,tcontent.releaseDate,
 	tcontent.changesetID, tfiles.fileExt, tcontent.title, tcontent.menutitle, tapprovalrequests.status approvalStatus, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID
 	from tcontent 

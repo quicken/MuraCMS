@@ -1187,13 +1187,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfreturn getBean('approvalRequest').loadBy(contenthistid=getValue('contenthistid'),chainID=getValue('chainID'),siteID=getValue('siteID'))>
 </cffunction>
 
-<cffunction name="getSourceVersion" output="false">
-	<cfset var  map=getBean('contentSourceMap').loadBy(contenthistid=getValue('contenthistID'))>
+<cffunction name="getSource" output="false">
+	<cfset var map=getBean('contentSourceMap').loadBy(contenthistid=getValue('contenthistID'),siteid=getValue('siteid'))>
 	<cfset var source=map.getSource()>
 
 	<cfif source.getIsNew() and not map.getIsNew()>	
 		<cfloop condition="source.getIsNew() and not map.getIsNew()">
-			<cfset map=getBean('contentSourceMap').loadBy(contenthistid=map.getSourceID())>
+			<cfset map=getBean('contentSourceMap').loadBy(contenthistid=map.getSourceID(),siteid=map.getSiteID())>
 			<cfset source=map.getSource()>
 		</cfloop>
 	</cfif>

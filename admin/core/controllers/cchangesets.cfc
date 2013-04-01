@@ -71,12 +71,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset feed.setSiteID(arguments.rc.siteid)>
 
 <cfif isDate(rc.startdate)>
-	<cfset feed.addParam(column='publishdate',criteria=arguments.rc.startdate,condition=">=")>	
+	<cfset feed.addParam(column='publishdate',datatype='date',criteria=arguments.rc.startdate,condition=">=")>	
 </cfif>
 
 
 <cfif isDate(rc.stopdate)>
-	<cfset feed.addParam(column='publishdate',criteria=arguments.rc.stopdate,condition="<=")>	
+	<cfset feed.addParam(column='publishdate',datatype='date',criteria=arguments.rc.stopdate,condition="<=")>
+	<cfif not isDate(rc.startdate)>
+		<cfset feed.addParam(column='publishdate',datatype='date',criteria=dateAdd('yyyy',100,now()),condition=">=")>	
+	</cfif>
 </cfif>
 
 <cfif len(rc.keywords)>

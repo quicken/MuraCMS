@@ -321,7 +321,12 @@
 
 <cffunction name="hist" ouput="false">
 	<cfargument name="rc">
-	<cfset arguments.rc.rshist=variables.contentManager.getHist(arguments.rc.contentid,arguments.rc.siteid) />
+	<cfset arguments.rc.contentBean=variables.contentManager.getActiveContent(arguments.rc.contentid,arguments.rc.siteid) />
+	<cfset arguments.rc.rsCount=variables.contentManager.getItemCount(arguments.rc.contentid,arguments.rc.siteid) />
+</cffunction>
+
+<cffunction name="audit" ouput="false">
+	<cfargument name="rc">
 	<cfset arguments.rc.contentBean=variables.contentManager.getActiveContent(arguments.rc.contentid,arguments.rc.siteid) />
 	<cfset arguments.rc.rsCount=variables.contentManager.getItemCount(arguments.rc.contentid,arguments.rc.siteid) />
 </cffunction>

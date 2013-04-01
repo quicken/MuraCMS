@@ -47,6 +47,8 @@ component extends="mura.bean.beanORM"  table="tapprovalrequests"{
 						      		'contentHistID', 
 						      		content
 							      		.setApproved(1)
+							      		.setLastUpdateBy(content.getLastUpdateBy())
+							      		.setLastUpdateByID(content.getLastUpdateByID())
 							      		.save()
 							      		.getContentHistID()
 						      	);
