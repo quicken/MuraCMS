@@ -458,6 +458,11 @@
 	<cfreturn iterator>
 </cffunction>
 
+<cffunction name="getFeed" access="public" returntype="any" output="false">
+<cfargument name="siteID">
+	<cfreturn getBean("beanFeed").setBeanClass('changeset').setTable('tchangesets')>
+</cffunction>
+
 <cffunction name="rollback" output="false">
 	<cfargument name="changesetID">
 	<cfset read(changesetID=arguments.changesetID).rollback()>	

@@ -58,13 +58,33 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset secure(arguments.rc)>
 	</cfif>
 	<cfparam name="arguments.rc.startrow" default="1"/>
+	<cfparam name="arguments.rc.startdate" default=""/>
+	<cfparam name="arguments.rc.stopdate" default=""/>
 	<cfparam name="arguments.rc.page" default="1"/>
 	<cfparam name="arguments.rc.keywords" default=""/>
 </cffunction>
 
 <cffunction name="list" output="false">
 <cfargument name="rc">
-<cfset rc.changesets=variables.changesetManager.getIterator(argumentCollection=rc)>
+<cfset var feed=variables.changesetManager.getFeed(argumentCollection=rc)>
+
+<cfset feed.setSiteID(arguments.rc.siteid)>
+
+<cfif isDate(rc.startdate)>
+	<cfset feed.addParam(column='publishdate',criteria=arguments.rc.startdate,condition=">=")>	
+</cfif>
+
+
+<cfif isDate(rc.stopdate)>
+	<cfset feed.addParam(column='publishdate',criteria=arguments.rc.stopdate,condition="<=")>	
+</cfif>
+
+<cfif len(rc.keywords)>
+	<cfset feed.addParam(column='name',criteria=arguments.rc.keywords,condition="contains")>	
+</cfif>
+
+<cfset rc.changesets=feed.getIterator()>
+
 <cfset rc.changesets.setNextN(20)>
 <cfset rc.changesets.setPage(rc.page)>
 </cffunction>

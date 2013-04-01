@@ -45,6 +45,7 @@ modified version; it is your choice whether to do so, or to make such modified v
 version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS.
 --->
 <cfoutput>
+<!---
 <form class="form-inline" novalidate="novalidate" id="changesetSearch" name="changesetSearch" method="get">
 	<div class="input-append">
 	<input name="keywords" value="#HTMLEditFormat(rc.keywords)#" type="text" class="text" maxlength="50" />
@@ -53,15 +54,45 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<input type="hidden" name="siteid" value="#HTMLEditFormat(rc.siteid)#">
 	</div>
 </form>
+--->
 
 <h1>#application.rbFactory.getKeyValue(session.rb,"changesets")#</h1>
 
 <cfinclude template="dsp_secondary_menu.cfm">
 
-<!--- <h2>#application.rbFactory.getKeyValue(session.rb,'changesets.filterview')#:</h2> --->
-<!---
-<h3 class="alt">#application.rbFactory.getKeyValue(session.rb,'changesets.filterviewnotice')#</h3>
---->
+<form novalidate="novalidate" name="searchFrm" onsubmit="return validate(this);" class="fieldset-wrap">
+<div class="fieldset">
+	<div class="control-group">
+		<div class="span2">
+		<label class="control-label">#application.rbFactory.getKeyValue(session.rb,"params.from")#</label>
+	      <div class="controls">
+			<input type="text" class="datepicker span12" name="startDate" value="#LSDateFormat(rc.startDate,session.dateKeyFormat)#" validate="date" message="The 'From' date is required." />
+	     </div>
+	</div>
+	
+		<div class="span2">
+		<label class="control-label">#application.rbFactory.getKeyValue(session.rb,"params.to")#</label>
+	      <div class="controls">
+			<input type="text" class="datepicker span12" name="stopDate" value="#LSDateFormat(rc.stopDate,session.dateKeyFormat)#" validate="date" message="The 'To' date is required." />
+	     </div>
+	</div>
+	 
+		<div class="span2">
+		<label class="control-label">#application.rbFactory.getKeyValue(session.rb,"params.keywords")#</label>
+	      <div class="controls">
+	      		<input name="keywords" value="#HTMLEditFormat(rc.keywords)#" type="text" class="text" maxlength="50" />
+		</div>
+	</div>
+	</div>
+</div>
+<div class="form-actions">
+	<input type="button" class="btn" onclick="submitForm(document.forms.searchFrm);" value="#application.rbFactory.getKeyValue(session.rb,"params.search")#" /></dd>
+</div>
+
+<input type="hidden" value="#HTMLEditFormat(rc.siteid)#" name="siteID"/>
+<input type="hidden" name="muraAction" value="cChangesets.list">
+</form>
+
 
 <table class="table table-striped table-condensed table-bordered mura-table-grid"> 
 <tr>
@@ -105,7 +136,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<ul class="moreResults">
 		<cfif rc.changesets.getPageIndex() gt 1>
 		<li>
-			<a href="index.cfm?muraAction=cChangesets.list&page=#evaluate('#rc.changesets.getPageIndex()#-1')#&siteid=#URLEncodedFormat(rc.siteid)#&keywords=#URLEncodedFormat(rc.keywords)#">&laquo;&nbsp;#application.rbFactory.getKeyValue(session.rb,'user.prev')#</a>
+			<a href="index.cfm?muraAction=cChangesets.list&page=#evaluate('#rc.changesets.getPageIndex()#-1')#&siteid=#URLEncodedFormat(rc.siteid)#&keywords=#URLEncodedFormat(rc.keywords)#&startdate=#URLEncodedFormat(rc.startdate)#&stopdate=#URLEncodedFormat(rc.stopdate)#">&laquo;&nbsp;#application.rbFactory.getKeyValue(session.rb,'user.prev')#</a>
 		</li>
 		</cfif>
 		<cfloop from="1"  to="#rc.changesets.pageCount()#" index="i">
@@ -113,13 +144,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<li class="active"><a href="##">#i#</a></li>
 			<cfelse> 
 				<li>
-					<a href="index.cfm?muraAction=cChangesets.list&page=#i#&siteid=#URLEncodedFormat(rc.siteid)#keywords=#URLEncodedFormat(rc.keywords)#">#i#</a>
+					<a href="index.cfm?muraAction=cChangesets.list&page=#i#&siteid=#URLEncodedFormat(rc.siteid)#keywords=#URLEncodedFormat(rc.keywords)#&startdate=#URLEncodedFormat(rc.startdate)#&stopdate=#URLEncodedFormat(rc.stopdate)#">#i#</a>
 				</li>
 			</cfif>
 		</cfloop>
 		<cfif rc.changesets.getPageIndex() lt rc.changesets.pagecount()>
 			<li>
-				<a href="index.cfm?muraAction=cChangesets.list&page=#evaluate('#rc.changesets.getPageIndex()#+1')#&siteid=#URLEncodedFormat(rc.siteid)#&keywords=#URLEncodedFormat(rc.keywords)#">&laquo;&nbsp;#application.rbFactory.getKeyValue(session.rb,'user.next')#</a>
+				<a href="index.cfm?muraAction=cChangesets.list&page=#evaluate('#rc.changesets.getPageIndex()#+1')#&siteid=#URLEncodedFormat(rc.siteid)#&keywords=#URLEncodedFormat(rc.keywords)#&startdate=#URLEncodedFormat(rc.startdate)#&stopdate=#URLEncodedFormat(rc.stopdate)#">&laquo;&nbsp;#application.rbFactory.getKeyValue(session.rb,'user.next')#</a>
 			</li>
 		</cfif>
 		</ul>
