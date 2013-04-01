@@ -6,4 +6,7 @@
 	getBean('approvalChainAssignment').checkSchema();
 	getBean('changesetRollBack').checkSchema();
 	getBean('contentSourceMap').checkSchema();
+
+	dbUtility.setTable("tclassextend")
+	.addColumn(column="iconclass",dataType="varchar",length="50");
 </cfscript>

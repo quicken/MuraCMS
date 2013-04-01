@@ -90,6 +90,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfelse>
 		tclassextend.availableSubTypes
 	</cfif>
+	,tclassextend.iconclass
 	from tclassextend
 	inner join tclassextendsets on (tclassextend.subtypeid=tclassextendsets.subtypeid)
 	inner join tclassextendattributes on (tclassextendsets.extendsetid=tclassextendattributes.extendsetid)
@@ -1260,7 +1261,7 @@ and tclassextendattributes.type='File'
 	<cfset destSubType.setHasBody(sourceSubType.getHasBody())>
 	<cfset destSubType.setDescription(sourceSubType.getDescription())>
 	<cfset destSubType.setAvailableSubTypes(sourceSubType.getAvailableSubTypes())>
-	
+	<cfset destSubType.setIconClass(sourceSubType.getIconClass())>
 	<cfset destSubType.save()>
 	
 	<cfset extendSets=sourceSubType.getExtendSets(activeOnly=false)>
@@ -1365,6 +1366,10 @@ and tclassextendattributes.type='File'
 
 			if(isDefined("extXML.xmlAttributes.isactive")){
 				subType.setIsActive( extXML.xmlAttributes.isactive );
+			}
+
+			if(isDefined("extXML.xmlAttributes.iconClass")){
+				subType.setIconClass( extXML.xmlAttributes.iconClass );
 			}
 				      	
 			subType.setSiteID( arguments.siteID );
