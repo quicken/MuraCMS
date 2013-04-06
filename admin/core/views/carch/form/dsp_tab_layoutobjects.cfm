@@ -12,17 +12,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Mura CMS. If not, see <http://www.gnu.org/licenses/>.
 
-Linking Mura CMS statically or dynamically with other modules constitutes the preparation of a derivative work based on 
+Linking Mura CMS statically or dynamically with other modules constitutes the preparation of a derivative work based on
 Mura CMS. Thus, the terms and conditions of the GNU General Public License version 2 ("GPL") cover the entire combined work.
 
 However, as a special exception, the copyright holders of Mura CMS grant you permission to combine Mura CMS with programs
 or libraries that are released under the GNU Lesser General Public License version 2.1.
 
-In addition, as a special exception, the copyright holders of Mura CMS grant you permission to combine Mura CMS with 
-independent software modules (plugins, themes and bundles), and to distribute these plugins, themes and bundles without 
-Mura CMS under the license of your choice, provided that you follow these specific guidelines: 
+In addition, as a special exception, the copyright holders of Mura CMS grant you permission to combine Mura CMS with
+independent software modules (plugins, themes and bundles), and to distribute these plugins, themes and bundles without
+Mura CMS under the license of your choice, provided that you follow these specific guidelines:
 
-Your custom code 
+Your custom code
 
 • Must not alter any default objects in the Mura CMS database and
 • May not alter the default display of the Mura CMS logo within Mura CMS and
@@ -36,16 +36,16 @@ Your custom code
  /index.cfm
  /MuraProxy.cfc
 
-You may copy and distribute Mura CMS with a plug-in, theme or bundle that meets the above guidelines as a combined work 
-under the terms of GPL for Mura CMS, provided that you include the source code of that other code when and as the GNU GPL 
+You may copy and distribute Mura CMS with a plug-in, theme or bundle that meets the above guidelines as a combined work
+under the terms of GPL for Mura CMS, provided that you include the source code of that other code when and as the GNU GPL
 requires distribution of source code.
 
-For clarity, if you create a modified version of Mura CMS, you are not obligated to grant this special exception for your 
-modified version; it is your choice whether to do so, or to make such modified version available under the GNU General Public License 
+For clarity, if you create a modified version of Mura CMS, you are not obligated to grant this special exception for your
+modified version; it is your choice whether to do so, or to make such modified version available under the GNU General Public License
 version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS.
 --->
 
-<cfloop from="1" to="#application.settingsManager.getSite('siteID').getColumnCount()#" index="i">
+<cfloop from="1" to="#application.settingsManager.getSite(siteID).getColumnCount()#" index="i">
   <cfparam name="request.rsContentObjects#i#.recordcount" default=0>
 </cfloop>
 <cfset tabLabelList=listAppend(tabLabelList,application.rbFactory.getKeyValue(session.rb,"sitemanager.content.tabs.layoutobjects"))/>
@@ -57,9 +57,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
   <span id="extendset-container-tablayoutobjectstop" class="extendset-container"></span>
 
   <div class="fieldset">
-  
+
       <div class="control-group">
-      
+
         <div class="span6">
               <label class="control-label">
                 <cfoutput><a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"tooltip.layoutTemplate"))#">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.layouttemplate')# <i class="icon-question-sign"></i></a></cfoutput>
@@ -98,7 +98,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
         </div>
 
       </div>
- 
+
     <div class="control-group">
       <label class="control-label"> <a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"tooltip.inheritanceRules"))#"> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.inheritancerules')# <i class="icon-question-sign"></i> </a> </label>
       <div class="controls">
@@ -113,7 +113,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.donotinheritcascade')#           </label>
       </div>
     </div>
-    
+
     <div class="control-group">
       <label class="control-label">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.contentobjects')#</label>
       <div class="controls" id="editObjects">
@@ -172,7 +172,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
                   <cfloop query="request.rsContentObjects#r#">
                     <option  value="#request["rsContentObjects#r#"].object#~#HTMLEditFormat(request["rsContentObjects#r#"].name)#~#request["rsContentObjects#r#"].objectid#~#HTMLEditFormat(request["rsContentObjects#r#"].params)#">
                     #request["rsContentObjects#r#"].name#
-						      
+
                     </option>
                     <cfset variables["objectlist#r#"]=listappend(variables["objectlist#r#"],"#request["rsContentObjects#r#"].object#~#HTMLEditFormat(request["rsContentObjects#r#"].name)#~#request["rsContentObjects#r#"].objectid#~#HTMLEditFormat(request["rsContentObjects#r#"].params)#","^")>
                   </cfloop>
@@ -187,8 +187,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
       </div> <!--- /#editObjects--->
     </div> <!--- /.control-group --->
 
-  
-  </div>  
+
+  </div>
 
   <span id="extendset-container-layoutobjects" class="extendset-container"></span>
   <span id="extendset-container-tablayoutobjectsbottom" class="extendset-container"></span>
